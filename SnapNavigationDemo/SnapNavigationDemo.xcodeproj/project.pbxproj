@@ -12,6 +12,7 @@
 
 /* Begin PBXFileReference section */
 		5A5D52E32C6F63B400F14BEA /* SnapNavigationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapNavigationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A91E4E02C6F65C7005B0688 /* SnapNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapNavigation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,6 +34,7 @@
 		5A5D52DA2C6F63B400F14BEA = {
 			isa = PBXGroup;
 			children = (
+				5A91E4E12C6F65C7005B0688 /* SnapNavigation */,
 				5A5D52E52C6F63B400F14BEA /* SnapNavigationDemo */,
 				5A5D52E42C6F63B400F14BEA /* Products */,
 			);
@@ -44,6 +46,15 @@
 				5A5D52E32C6F63B400F14BEA /* SnapNavigationDemo.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		5A91E4E12C6F65C7005B0688 /* SnapNavigation */ = {
+			isa = PBXGroup;
+			children = (
+				5A91E4E02C6F65C7005B0688 /* SnapNavigation.swift */,
+			);
+			name = SnapNavigation;
+			path = ../Sources/SnapNavigation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
