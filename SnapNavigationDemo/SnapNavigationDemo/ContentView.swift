@@ -6,19 +6,33 @@
 //
 
 import SwiftUI
+import SnapNavigation
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
+	
+	let style: SnapNavigationStyle
+	
+	var body: some View {
+		SnapNavigationContainer(
+			items: NavigationItem.itemsForTabBar,
+			initial: .rectangle,
+			style: style
+		)
+	}
 }
 
-#Preview {
-    ContentView()
+#Preview("Adaptable") {
+	ContentView(style: .adaptable)
+}
+
+#Preview("Sidebar") {
+	ContentView(style: .sidebar)
+}
+
+#Preview("Tab") {
+	ContentView(style: .tab)
+}
+
+#Preview("Dynamic") {
+	ContentView(style: .dynamic)
 }
