@@ -10,14 +10,33 @@ import SnapNavigation
 
 struct ContentView: View {
 	
-	let style: SnapNavigationStyle
-	
+    let style: SnapNavigation.Style
+
+    @State private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar)
+
 	var body: some View {
-		SnapNavigationContainer(
-			items: NavigationItem.itemsForTabBar,
-			initial: .rectangle,
+        SnapNavigationView(
+            state: $state,
 			style: style
 		)
+        .tabViewSidebarHeader {
+            Text("Header")
+                .font(.headline)
+                .fontWeight(.bold)
+        }
+        .tabViewSidebarFooter {
+            Text("Footer")
+                .font(.footnote)
+        }
+        .tabViewSidebarBottomBar {
+            Button {
+                state.selected = .circle
+                state.setPath([.triangle, .rectangle], for: .circle)
+            } label: {
+                Text("Circle > Tri > Rect")
+            }
+        }
+        .tint(.green)
 	}
 }
 
