@@ -3,8 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
+
+/* Begin PBXBuildFile section */
+		5A91E4DC2C6F64CA005B0688 /* SnapNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91E4DB2C6F64CA005B0688 /* SnapNavigation */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5A5D52E32C6F63B400F14BEA /* SnapNavigationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapNavigationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -19,6 +23,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A91E4DC2C6F64CA005B0688 /* SnapNavigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +66,7 @@
 			);
 			name = SnapNavigationDemo;
 			packageProductDependencies = (
+				5A91E4DB2C6F64CA005B0688 /* SnapNavigation */,
 			);
 			productName = SnapNavigationDemo;
 			productReference = 5A5D52E32C6F63B400F14BEA /* SnapNavigationDemo.app */;
@@ -90,6 +96,9 @@
 				Base,
 			);
 			mainGroup = 5A5D52DA2C6F63B400F14BEA;
+			packageReferences = (
+				5A91E4DA2C6F64CA005B0688 /* XCLocalSwiftPackageReference "../../snap-navigation" */,
+			);
 			productRefGroup = 5A5D52E42C6F63B400F14BEA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -334,6 +343,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		5A91E4DA2C6F64CA005B0688 /* XCLocalSwiftPackageReference "../../snap-navigation" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../snap-navigation";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5A91E4DB2C6F64CA005B0688 /* SnapNavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SnapNavigation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5A5D52DB2C6F63B400F14BEA /* Project object */;
 }
