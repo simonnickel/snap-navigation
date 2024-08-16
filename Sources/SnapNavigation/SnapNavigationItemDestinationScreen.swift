@@ -1,5 +1,5 @@
 //
-//  SnapNavigationItemScreen.swift
+//  SnapNavigationItemDestinationScreen.swift
 //  SnapNavigation
 //
 //  Created by Simon Nickel on 16.08.24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SnapNavigationItemScreen<Item: SnapNavigationItem>: View {
+struct SnapNavigationItemDestinationScreen<Item: SnapNavigationItem>: View {
 	
 	let item: Item
 	

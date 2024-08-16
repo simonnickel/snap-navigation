@@ -63,9 +63,9 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
                 Tab(value: item, role: nil) {
                     NavigationStack(path: pathBinding(for: item)) {
-                        SnapNavigationItemScreen(item: item)
+                        SnapNavigationItemDestinationScreen(item: item)
                             .navigationDestination(for: Item.self) { item in
-                                SnapNavigationItemScreen(item: item)
+                                SnapNavigationItemDestinationScreen(item: item)
                             }
                     }
                 } label: {
@@ -89,9 +89,9 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
         } detail: {
             NavigationStack {
                 if let selection = state.selected.wrappedValue {
-                    SnapNavigationItemScreen(item: selection)
+                    SnapNavigationItemDestinationScreen(item: selection)
                         .navigationDestination(for: Item.self) { item in
-                            SnapNavigationItemScreen(item: item)
+                            SnapNavigationItemDestinationScreen(item: item)
                         }
                 }
             }

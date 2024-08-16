@@ -14,10 +14,10 @@
 		1FC0EB722C6F85D8002F2D8D /* SnapNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapNavigation.swift; sourceTree = "<group>"; };
 		1FC0EB732C6F86DA002F2D8D /* SnapNavigation+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnapNavigation+State.swift"; sourceTree = "<group>"; };
 		1FC0EB742C6F8990002F2D8D /* SnapNavigation+Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SnapNavigation+Style.swift"; sourceTree = "<group>"; };
+		1FC0EB752C6F932C002F2D8D /* SnapNavigationItemDestinationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapNavigationItemDestinationScreen.swift; sourceTree = "<group>"; };
 		5A5D52E32C6F63B400F14BEA /* SnapNavigationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapNavigationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A91E4FB2C6F6949005B0688 /* SnapNavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapNavigationItem.swift; sourceTree = "<group>"; };
 		5A91E4FF2C6F69D4005B0688 /* SnapNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapNavigationView.swift; sourceTree = "<group>"; };
-		5A91E5002C6F69FA005B0688 /* SnapNavigationItemScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapNavigationItemScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -59,9 +59,9 @@
 				1FC0EB722C6F85D8002F2D8D /* SnapNavigation.swift */,
 				1FC0EB732C6F86DA002F2D8D /* SnapNavigation+State.swift */,
 				1FC0EB742C6F8990002F2D8D /* SnapNavigation+Style.swift */,
-				5A91E4FF2C6F69D4005B0688 /* SnapNavigationView.swift */,
 				5A91E4FB2C6F6949005B0688 /* SnapNavigationItem.swift */,
-				5A91E5002C6F69FA005B0688 /* SnapNavigationItemScreen.swift */,
+				1FC0EB752C6F932C002F2D8D /* SnapNavigationItemDestinationScreen.swift */,
+				5A91E4FF2C6F69D4005B0688 /* SnapNavigationView.swift */,
 			);
 			name = SnapNavigation;
 			path = ../Sources/SnapNavigation;
