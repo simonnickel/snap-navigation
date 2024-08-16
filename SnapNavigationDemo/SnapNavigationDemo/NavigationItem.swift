@@ -11,23 +11,58 @@ import SnapNavigation
 enum NavigationItem: String, SnapNavigationItem {
 	var id: String { self.rawValue }
 		
-	case rectangle, circle, triangle
-	
-	static var itemsForTabBar: [Self] { [.rectangle, .circle] }
-	
+	case triangle, rectangle, circle
+    case circle1, circle2, circle3
+    case infinity
+
+    static var itemsForTabBar: [Self] { [.triangle, .rectangle, .circle] }
+
+    var items: [Self] {
+        switch self {
+            case .circle: [.circle1, .circle2, .circle3]
+            default: []
+        }
+    }
+
+    var title: String {
+        switch self {
+            case .rectangle: "Rectangle"
+            case .triangle: "Triangle"
+            case .circle: "Circle"
+
+            case .circle1: "Circle 1"
+            case .circle2: "Circle 2"
+            case .circle3: "Circle 3"
+
+            case .infinity: "Infinity"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+            case .rectangle: "rectangle"
+            case .circle: "circle"
+            case .triangle: "triangle"
+
+            case .circle1: "1.circle"
+            case .circle2: "2.circle"
+            case .circle3: "3.circle"
+            
+            case .infinity: "infinity"
+        }
+    }
+
 	var label: any View {
-		switch self {
-			case .rectangle: Label("Rectangle", systemImage: "rectangle")
-			case .circle: Label("Circle", systemImage: "circle")
-			case .triangle: Label("Triangle", systemImage: "triangle")
-		}
+        Label(title, systemImage: systemImage)
 	}
 	
 	var destination: any View {
 		switch self {
-			case .rectangle: ItemScreen(item: self)
-			case .circle: ItemScreen(item: self)
-			case .triangle: ItemScreen(item: self)
+            case .triangle: ItemScreen(item: self)
+            case .rectangle: ItemScreen(item: self)
+            case .circle: ItemList(item: self)
+
+            default: ItemScreen(item: self)
 		}
 	}
 	

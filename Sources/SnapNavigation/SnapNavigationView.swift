@@ -22,7 +22,12 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
     }
 
     private func pathBinding(for item: Item) -> Binding<Path> {
-        var path: Path = state.wrappedValue.getPath(for: item)
+        let stateValue = state.wrappedValue
+        var path: Path = stateValue.getPath(for: item)
+        // Insert item if not on top level of items. The parent will be the root of the navigation stack, see SnapNavigationView.
+        if stateValue.parent(of: item) != nil {
+            path.insert(item, at: 0)
+        }
 
         return Binding<Path> {
             path
@@ -55,24 +60,47 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
     // MARK: Tab
 
+    @Environment(\.horizontalSizeClass) var horizontalSize
+
     private var tabView: some View {
 
         TabView(selection: state.selected) {
 
             ForEach(state.wrappedValue.items) { item in
 
-                Tab(value: item, role: nil) {
-                    NavigationStack(path: pathBinding(for: item)) {
-                        SnapNavigationItemDestinationScreen(item: item)
-                            .navigationDestination(for: Item.self) { item in
-                                SnapNavigationItemDestinationScreen(item: item)
-                            }
+                if item.items.isEmpty || horizontalSize == .compact {
+                    Tab(value: item, role: nil) {
+                        NavigationStack(path: pathBinding(for: item)) {
+                            SnapNavigationItemDestinationScreen(item: item)
+                                .navigationDestination(for: Item.self) { item in
+                                    SnapNavigationItemDestinationScreen(item: item)
+                                }
+                        }
+                    } label: {
+                        AnyView(item.label)
                     }
-                } label: {
-                    AnyView(item.label)
+                } else {
+                    TabSection(item.title) {
+
+                        ForEach(item.items) { subitem in
+                            Tab(value: subitem, role: nil) {
+                                NavigationStack(path: pathBinding(for: subitem)) {
+                                    // Show the actual parent screen, the subitem is added to the path, see SnapNavigation+State
+                                    SnapNavigationItemDestinationScreen(item: item)
+                                        .navigationDestination(for: Item.self) { item in
+                                            SnapNavigationItemDestinationScreen(item: item)
+                                        }
+                                }
+                            } label: {
+                                AnyView(subitem.label)
+                            }
+
+                        }
+                    }
                 }
 
             }
+
         }
 
     }

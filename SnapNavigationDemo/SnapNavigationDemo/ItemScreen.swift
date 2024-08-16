@@ -12,8 +12,8 @@ struct ItemScreen: View {
 	let item: NavigationItem
 	
 	var body: some View {
-		NavigationLink(value: NavigationItem.triangle) {
-			AnyView(NavigationItem.triangle.label)
+        NavigationLink(value: NavigationItem.infinity) {
+            AnyView(NavigationItem.infinity.label)
 		}
 		.navigationTitle(item.rawValue)
 	}

@@ -1,3 +1,9 @@
+//
+//  SnapNavigation+State.swift
+//  SnapNavigation
+//
+//  Created by Simon Nickel on 16.08.24.
+//
 
 import Foundation
 
@@ -26,6 +32,11 @@ public extension SnapNavigation {
             pathForItem[item] = path
         }
 
+        public func parent(of item: Item) -> Item? {
+            guard !items.contains(item) else { return nil }
+
+            return items.first { $0.items.contains(item) }
+        }
     }
     
 }
