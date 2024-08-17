@@ -71,12 +71,7 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
                 if item.items.isEmpty || horizontalSize == .compact {
                     Tab(value: item, role: nil) {
-                        NavigationStack(path: pathBinding(for: item)) {
-                            SnapNavigationItemDestinationScreen(item: item)
-                                .navigationDestination(for: Item.self) { item in
-                                    SnapNavigationItemDestinationScreen(item: item)
-                                }
-                        }
+                        SnapNavigationStack(path: pathBinding(for: item), root: item)
                     } label: {
                         AnyView(item.label)
                     }
@@ -85,13 +80,8 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
                         ForEach(item.items) { subitem in
                             Tab(value: subitem, role: nil) {
-                                NavigationStack(path: pathBinding(for: subitem)) {
-                                    // Put the actual parent screen at root, the subitem is added to the path.
-                                    SnapNavigationItemDestinationScreen(item: item)
-                                        .navigationDestination(for: Item.self) { item in
-                                            SnapNavigationItemDestinationScreen(item: item)
-                                        }
-                                }
+                                // Put the actual parent screen at root, the subitem is added to the path.
+                                SnapNavigationStack(path: pathBinding(for: subitem), root: item)
                             } label: {
                                 AnyView(subitem.label)
                             }
@@ -128,9 +118,9 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
         } detail: {
             NavigationStack {
                 if let selection = state.selected.wrappedValue {
-                    SnapNavigationItemDestinationScreen(item: selection)
+                    SnapNavigationDestinationScreen(item: selection)
                         .navigationDestination(for: Item.self) { item in
-                            SnapNavigationItemDestinationScreen(item: item)
+                            SnapNavigationDestinationScreen(item: item)
                         }
                 }
             }
