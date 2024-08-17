@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public protocol SnapNavigationItem: Identifiable, Hashable {
+public protocol SnapNavigationItem: Identifiable, Hashable, Equatable {
 	
     var items: [Self] { get }
     var title: String { get }

@@ -9,14 +9,14 @@ import SwiftUI
 
 public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
-    public typealias State = SnapNavigation.State<Item>
-    public typealias Path = State.Path
+    public typealias NavState = SnapNavigation.State<Item>
+    public typealias Path = NavState.Path
 
     private let style: SnapNavigation.Style
 
-    private var state: Binding<State>
+    private var state: Binding<NavState>
 
-    public init(state: Binding<State>, style: SnapNavigation.Style) {
+    public init(state: Binding<NavState>, style: SnapNavigation.Style) {
         self.state = state
         self.style = style
     }
@@ -45,22 +45,6 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
     // MARK: Tab
 
-    private func pathBinding(for item: Item) -> Binding<Path> {
-        let stateValue = state.wrappedValue
-        var path: Path = stateValue.getPath(for: item)
-
-        // Insert item if not on top level of items. The parent will be the root of the navigation stack, see tabView.
-        if stateValue.parent(of: item) != nil {
-            path.insert(item, at: 0)
-        }
-
-        return Binding<Path> {
-            path
-        } set: { path in
-            state.wrappedValue.setPath(path, for: item)
-        }
-    }
-
     @Environment(\.horizontalSizeClass) var horizontalSize
 
     private var tabView: some View {
@@ -71,7 +55,7 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
                 if item.items.isEmpty || horizontalSize == .compact {
                     Tab(value: item, role: nil) {
-                        SnapNavigationStack(path: pathBinding(for: item), root: item)
+                        SnapNavigationStack(path: state.wrappedValue.pathBinding(for: item), root: item)
                     } label: {
                         AnyView(item.label)
                     }
@@ -81,7 +65,7 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
                         ForEach(item.items) { subitem in
                             Tab(value: subitem, role: nil) {
                                 // Put the actual parent screen at root, the subitem is added to the path.
-                                SnapNavigationStack(path: pathBinding(for: subitem), root: item)
+                                SnapNavigationStack(path: state.wrappedValue.pathBinding(for: subitem), root: item)
                             } label: {
                                 AnyView(subitem.label)
                             }
@@ -94,14 +78,25 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
         }
         .onChange(of: horizontalSize) { oldValue, newValue in
-            guard oldValue == .regular && newValue == .compact else { return }
+            let stateValue = state.wrappedValue
+            guard let selected = stateValue.selected else { return }
 
-//            if !state.isChildSelected {
-//
-//            }
-        }
-        .onChange(of: state.wrappedValue.selected) { oldValue, newValue in
+            switch newValue {
+                case .regular:
+                    let path = stateValue.getPath(for: selected)
+                    if let firstPathItem = path.first, selected.items.contains(firstPathItem) {
+                        state.wrappedValue.setPath(path, for: firstPathItem)
+                        state.wrappedValue.selected = firstPathItem
+                    }
 
+                case .compact:
+                    if stateValue.isChildSelected, let parent = stateValue.parent(of: selected) {
+                        state.wrappedValue.setPath(stateValue.getPath(for: selected), for: parent)
+                        state.wrappedValue.selected = parent
+                    }
+
+                case .none, .some(_): break
+            }
         }
 
     }
