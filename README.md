@@ -7,7 +7,7 @@
 
 # SnapNavigation
 
-Short description ...
+The package provides `SnapNavigationItem` to define the structure of an app and `SnapNavigationView` presents it in different navigation approaches. 
 
 [![Documentation][documentation badge]][documentation] 
 
