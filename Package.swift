@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "snap-Navigation",
+    name: "snap-navigation",
 	platforms: [
 		.iOS(.v18), .macOS(.v15)
 	],
