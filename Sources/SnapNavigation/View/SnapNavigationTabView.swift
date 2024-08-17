@@ -64,7 +64,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
                     }
 
                 case .compact:
-                    if stateValue.isChildSelected, let parent = stateValue.parent(of: selected) {
+                    if let parent = stateValue.parent(of: selected) {
                         state.wrappedValue.setPath(stateValue.getPath(for: selected), for: parent)
                         state.wrappedValue.selected = parent
                     }

@@ -31,11 +31,6 @@ public extension SnapNavigation {
             return items.first { $0.items.contains(item) }
         }
 
-        public var isChildSelected: Bool {
-            guard let selected, let parent = parent(of: selected) else { return false }
-            return true
-        }
-
 
         // MARK: Path
 
@@ -57,7 +52,7 @@ public extension SnapNavigation {
             }
 
             // Insert item if not on top level of items. The parent will be the root of the navigation stack, see tabView.
-            if isChildSelected {
+			if let parent = parent(of: item) {
                 var path: Path = getPath(for: item)
                 path.insert(item, at: 0)
                 setPath(path, for: item)
