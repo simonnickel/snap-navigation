@@ -7,13 +7,17 @@
 
 import SwiftUI
 
-struct SnapNavigationSplitView<Item: SnapNavigationItem>: View {
+public struct SnapNavigationSplitView<Item: SnapNavigationItem>: View {
 
-    typealias NavState = SnapNavigation.State<Item>
+    public typealias NavState = SnapNavigation.State<Item>
 
-    let state: Binding<NavState>
+    private let state: Binding<NavState>
 
-    var body: some View {
+    public init(state: Binding<NavState>) {
+        self.state = state
+    }
+
+    public var body: some View {
         NavigationSplitView {
             List(state.wrappedValue.items, id: \.self, selection: state.selected) { item in
                 AnyView(item.label)

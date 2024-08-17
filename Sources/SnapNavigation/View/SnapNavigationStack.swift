@@ -20,4 +20,5 @@ internal struct SnapNavigationStack<Item: SnapNavigationItem>: View {
                 }
         }
     }
+    
 }

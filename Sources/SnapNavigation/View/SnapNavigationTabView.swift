@@ -7,15 +7,19 @@
 
 import SwiftUI
 
-struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
+public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 
-    typealias NavState = SnapNavigation.State<Item>
+    public typealias NavState = SnapNavigation.State<Item>
 
-    let state: Binding<NavState>
+    @Environment(\.horizontalSizeClass) private var horizontalSize
 
-    @Environment(\.horizontalSizeClass) var horizontalSize
+    private let state: Binding<NavState>
 
-    var body: some View {
+    public init(state: Binding<NavState>) {
+        self.state = state
+    }
+
+    public var body: some View {
 
         TabView(selection: state.selected) {
             ForEach(state.wrappedValue.items) { item in
