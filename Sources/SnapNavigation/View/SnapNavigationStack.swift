@@ -13,7 +13,7 @@ internal struct SnapNavigationStack<Item: SnapNavigationItem>: View {
     let root: Item
 
     var body: some View {
-        NavigationStack(path: path) {
+        NavigationStack {
             SnapNavigationDestinationScreen(item: root)
                 .navigationDestination(for: Item.self) { item in
                     SnapNavigationDestinationScreen(item: item)

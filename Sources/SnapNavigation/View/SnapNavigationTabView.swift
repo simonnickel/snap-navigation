@@ -18,10 +18,12 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
     public init(state: Binding<NavState>) {
         self.state = state
     }
+	
+	@State private var selected: Item?
 
     public var body: some View {
 
-        TabView(selection: state.selected) {
+        TabView(selection: $selected) {
             ForEach(state.wrappedValue.items) { item in
 
                 if item.items.isEmpty || horizontalSize == .compact {
@@ -39,7 +41,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 
                             Tab(value: subitem, role: nil) {
                                 // Put the actual parent screen at root, the subitem is added to the path.
-                                SnapNavigationStack(path: state.wrappedValue.pathBinding(for: subitem), root: item)
+                                SnapNavigationStack(path: state.wrappedValue.pathBinding(for: subitem), root: subitem)
                             } label: {
                                 AnyView(subitem.label)
                             }
