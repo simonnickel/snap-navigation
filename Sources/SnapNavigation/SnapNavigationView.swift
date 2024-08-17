@@ -21,21 +21,6 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
         self.style = style
     }
 
-    private func pathBinding(for item: Item) -> Binding<Path> {
-        let stateValue = state.wrappedValue
-        var path: Path = stateValue.getPath(for: item)
-        // Insert item if not on top level of items. The parent will be the root of the navigation stack, see SnapNavigationView.
-        if stateValue.parent(of: item) != nil {
-            path.insert(item, at: 0)
-        }
-
-        return Binding<Path> {
-            path
-        } set: { path in
-            state.wrappedValue.setPath(path, for: item)
-        }
-    }
-
 
     // MARK: - Body
 
@@ -59,6 +44,22 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
 
     // MARK: Tab
+
+    private func pathBinding(for item: Item) -> Binding<Path> {
+        let stateValue = state.wrappedValue
+        var path: Path = stateValue.getPath(for: item)
+
+        // Insert item if not on top level of items. The parent will be the root of the navigation stack, see tabView.
+        if stateValue.parent(of: item) != nil {
+            path.insert(item, at: 0)
+        }
+
+        return Binding<Path> {
+            path
+        } set: { path in
+            state.wrappedValue.setPath(path, for: item)
+        }
+    }
 
     @Environment(\.horizontalSizeClass) var horizontalSize
 
@@ -85,7 +86,7 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
                         ForEach(item.items) { subitem in
                             Tab(value: subitem, role: nil) {
                                 NavigationStack(path: pathBinding(for: subitem)) {
-                                    // Show the actual parent screen, the subitem is added to the path, see SnapNavigation+State
+                                    // Put the actual parent screen at root, the subitem is added to the path.
                                     SnapNavigationItemDestinationScreen(item: item)
                                         .navigationDestination(for: Item.self) { item in
                                             SnapNavigationItemDestinationScreen(item: item)
@@ -100,6 +101,16 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
                 }
 
             }
+
+        }
+        .onChange(of: horizontalSize) { oldValue, newValue in
+            guard oldValue == .regular && newValue == .compact else { return }
+
+//            if !state.isChildSelected {
+//
+//            }
+        }
+        .onChange(of: state.wrappedValue.selected) { oldValue, newValue in
 
         }
 
