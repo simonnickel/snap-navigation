@@ -7,6 +7,8 @@
 
 # SnapNavigation
 
+Decouple your SwiftUI app navigation structure from it's presentation.
+
 The package provides `SnapNavigationItem` to define the structure of an app and `SnapNavigationView` presents it in different navigation approaches. 
 
 [![Documentation][documentation badge]][documentation] 
@@ -18,6 +20,10 @@ The package provides `SnapNavigationItem` to define the structure of an app and 
 ## Setup
 
 Steps to setup the package ...
+
+Setup GitHub page: Add Description and Topics, uncheck Packages and Deployments
+Add to Swift Package Index
+Update Badge and Documentation urls in README.md
 
 
 ## Demo project
