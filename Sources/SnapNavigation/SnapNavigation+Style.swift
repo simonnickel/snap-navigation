@@ -1,5 +1,5 @@
 //
-//  SNAP - https://github.com/simonnickel/snap-abstract
+//  SNAP - https://github.com/simonnickel/snap
 //  Created by Simon Nickel
 //
 
