@@ -13,7 +13,7 @@ The package provides `SnapNavigationItem` to define the structure of an app and 
 
 [![Documentation][documentation badge]][documentation] 
 
-[documentation]: https://swiftpackageindex.com/simonnickel/snap-core/main/documentation/snapcore
+[documentation]: https://swiftpackageindex.com/simonnickel/snap-navigation/main/documentation/snapnavigation
 [documentation badge]: https://img.shields.io/badge/Documentation-DocC-blue
 
 
