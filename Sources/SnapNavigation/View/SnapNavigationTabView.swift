@@ -1,8 +1,6 @@
 //
-//  SnapNavigationTabView.swift
-//  SnapNavigation
-//
-//  Created by Simon Nickel on 17.08.24.
+//  SNAP - https://github.com/simonnickel/snap-abstract
+//  Created by Simon Nickel
 //
 
 import SwiftUI

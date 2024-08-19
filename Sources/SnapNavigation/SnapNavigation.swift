@@ -1,10 +1,7 @@
 //
-//  SnapNavigation.swift
-//  SnapNavigation
+//  SNAP - https://github.com/simonnickel/snap-abstract
+//  Created by Simon Nickel
 //
-//  Created by Simon Nickel on 16.08.24.
-//
-
 import SwiftUI
 
 public enum SnapNavigation { }

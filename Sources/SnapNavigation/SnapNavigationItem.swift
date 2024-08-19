@@ -1,8 +1,6 @@
 //
-//  SnapNavigationItem.swift
-//  SnapNavigation
-//
-//  Created by Simon Nickel on 16.08.24.
+//  SNAP - https://github.com/simonnickel/snap-abstract
+//  Created by Simon Nickel
 //
 
 import SwiftUI
