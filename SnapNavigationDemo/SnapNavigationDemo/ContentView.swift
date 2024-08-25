@@ -14,7 +14,7 @@ struct ContentView: View {
 
 	var body: some View {
         SnapNavigationView(
-            state: $state,
+            state: state,
 			style: style
 		)
         .tabViewSidebarHeader {

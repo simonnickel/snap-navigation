@@ -11,9 +11,9 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
     private let style: SnapNavigation.Style
 
-    private let state: Binding<NavState>
+    private let state: NavState
 
-    public init(state: Binding<NavState>, style: SnapNavigation.Style) {
+    public init(state: NavState, style: SnapNavigation.Style) {
         self.state = state
         self.style = style
     }

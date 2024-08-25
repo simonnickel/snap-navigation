@@ -9,20 +9,20 @@ public struct SnapNavigationSplitView<Item: SnapNavigationItem>: View {
 
     public typealias NavState = SnapNavigation.State<Item>
 
-    private let state: Binding<NavState>
+    private let state: NavState
 
-    public init(state: Binding<NavState>) {
+    public init(state: NavState) {
         self.state = state
     }
 
     public var body: some View {
         NavigationSplitView {
-            List(state.wrappedValue.items, id: \.self, selection: state.selected) { item in
+            List(state.items, id: \.self, selection: state.selectedBinding) { item in
                 AnyView(item.label)
             }
         } detail: {
             NavigationStack {
-                if let selection = state.selected.wrappedValue {
+                if let selection = state.selected {
                     SnapNavigationDestinationScreen(item: selection)
                         .navigationDestination(for: Item.self) { item in
                             SnapNavigationDestinationScreen(item: item)

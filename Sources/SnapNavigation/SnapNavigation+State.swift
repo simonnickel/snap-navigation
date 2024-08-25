@@ -23,6 +23,14 @@ public extension SnapNavigation {
 
         public var selected: Item?
 
+        public var selectedBinding: Binding<Item?> {
+            Binding(get: { [weak self] in
+                self?.selected
+            }, set: { [weak self] value in
+                self?.selected = value
+            })
+        }
+
         public func parent(of item: Item) -> Item? {
             guard !items.contains(item) else { return nil }
 
