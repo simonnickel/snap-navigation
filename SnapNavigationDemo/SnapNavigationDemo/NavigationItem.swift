@@ -14,6 +14,7 @@ enum NavigationItem: String, SnapNavigationItem {
     case infinity
 
     static var itemsForTabBar: [Self] { [.triangle, .rectangle, .circle] }
+    static var initial: NavigationItem { .rectangle }
 
     var items: [Self] {
         switch self {

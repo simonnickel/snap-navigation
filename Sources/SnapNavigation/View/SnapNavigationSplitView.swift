@@ -13,6 +13,7 @@ public struct SnapNavigationSplitView<Item: SnapNavigationItem>: View {
 
     public init(state: NavState) {
         self.state = state
+        _selected = State(initialValue: state.selected)
     }
 
     /// SnapNavigationSplitView would benefit of NavState being @Observable.

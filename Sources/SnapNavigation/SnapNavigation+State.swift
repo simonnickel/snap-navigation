@@ -14,6 +14,7 @@ public extension SnapNavigation {
 
         public init(items: [Item]) {
             self.items = items
+            self.selected = Item.initial
         }
 
 
