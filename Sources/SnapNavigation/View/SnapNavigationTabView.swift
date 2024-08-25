@@ -25,7 +25,10 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
                 if item.items.isEmpty || horizontalSize == .compact {
 
                     Tab(value: item, role: nil) {
-                        SnapNavigationStack(path: state.wrappedValue.pathBinding(for: item), root: item)
+                        SnapNavigationStack(
+                            path: state.wrappedValue.pathBinding(for: item),
+                            root: item
+                        )
                     } label: {
                         AnyView(item.label)
                     }
@@ -37,7 +40,10 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 
                             Tab(value: subitem, role: nil) {
                                 // Put the actual parent screen at root, the subitem is added to the path.
-                                SnapNavigationStack(path: state.wrappedValue.pathBinding(for: subitem), root: item)
+                                SnapNavigationStack(
+                                    path: state.wrappedValue.pathBinding(for: subitem),
+                                    root: item
+                                )
                             } label: {
                                 AnyView(subitem.label)
                             }
@@ -50,20 +56,19 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
             }
         }
         .onChange(of: horizontalSize) { oldValue, newValue in
-            let stateValue = state.wrappedValue
-            guard let selected = stateValue.selected else { return }
+            guard let selected = state.wrappedValue.selected else { return }
 
             switch newValue {
                 case .regular:
-                    let path = stateValue.getPath(for: selected)
+                    let path = state.wrappedValue.getPath(for: selected)
                     if let firstPathItem = path.first, selected.items.contains(firstPathItem) {
                         state.wrappedValue.setPath(path, for: firstPathItem)
                         state.wrappedValue.selected = firstPathItem
                     }
 
                 case .compact:
-                    if let parent = stateValue.parent(of: selected) {
-                        state.wrappedValue.setPath(stateValue.getPath(for: selected), for: parent)
+                    if let parent = state.wrappedValue.parent(of: selected) {
+                        state.wrappedValue.setPath(state.wrappedValue.getPath(for: selected), for: parent)
                         state.wrappedValue.selected = parent
                     }
 
