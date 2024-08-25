@@ -9,7 +9,7 @@ import SwiftUI
 struct SnapNavigationDemoApp: App {
     var body: some Scene {
         WindowGroup {
-			ContentView(style: .adaptable)
+			ContentView()
         }
     }
 }

@@ -7,15 +7,17 @@ import SwiftUI
 import SnapNavigation
 
 struct ContentView: View {
-	
-    let style: SnapNavigation.Style
+
+    @StateObject private var appState: AppState = AppState()
 
     @State private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar)
+
+    @State private var navigationStyle: SnapNavigation.Style = .adaptable
 
 	var body: some View {
         SnapNavigationView(
             state: state,
-			style: style
+            style: appState.navigationStyle
 		)
         .tabViewSidebarHeader {
             Text("Header")
@@ -35,21 +37,10 @@ struct ContentView: View {
             }
         }
         .tint(.green)
+        .environmentObject(appState)
 	}
 }
 
-#Preview("Adaptable") {
-	ContentView(style: .adaptable)
-}
-
-#Preview("Sidebar") {
-	ContentView(style: .sidebar)
-}
-
-#Preview("Tab") {
-	ContentView(style: .tab)
-}
-
-#Preview("Dynamic") {
-	ContentView(style: .dynamic)
+#Preview() {
+	ContentView()
 }

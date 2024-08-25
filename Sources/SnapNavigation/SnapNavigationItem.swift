@@ -12,6 +12,8 @@ public protocol SnapNavigationItem: Identifiable, Hashable, Equatable {
     var items: [Self] { get }
     var title: String { get }
     var label: any View { get }
+
+    @MainActor
     var destination: any View { get }
 
 }

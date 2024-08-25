@@ -54,7 +54,8 @@ enum NavigationItem: String, SnapNavigationItem {
 	var label: any View {
         Label(title, systemImage: systemImage)
 	}
-	
+
+    @MainActor
 	var destination: any View {
 		switch self {
             case .triangle: ItemScreen(item: self)
