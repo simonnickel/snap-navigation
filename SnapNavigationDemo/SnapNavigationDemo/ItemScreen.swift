@@ -27,6 +27,7 @@ struct ItemScreen: View {
                 }
                 .popover(isPresented: $showConfig, attachmentAnchor: .point(.bottom), arrowEdge: .bottom, content: {
                     ConfigView()
+                        .padding()
                         .presentationCompactAdaptation(.popover)
                 })
             }

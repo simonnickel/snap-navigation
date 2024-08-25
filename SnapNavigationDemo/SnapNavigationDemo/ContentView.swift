@@ -10,7 +10,7 @@ struct ContentView: View {
 
     @StateObject private var appState: AppState = AppState()
 
-    @State private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar)
+    private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar)
 
     @State private var navigationStyle: SnapNavigation.Style = .adaptable
 
