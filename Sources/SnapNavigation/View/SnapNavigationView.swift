@@ -9,10 +9,10 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
     public typealias NavState = SnapNavigation.State<Item>
 
-    @StateObject private var state: NavState
+    private let state: NavState
 
     public init(state: NavState) {
-        _state = StateObject(wrappedValue: state)
+        self.state = state
     }
 
 

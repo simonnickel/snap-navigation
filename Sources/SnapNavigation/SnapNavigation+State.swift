@@ -8,9 +8,14 @@ import SwiftUI
 public extension SnapNavigation {
 
     @MainActor
-    public class State<Item: SnapNavigationItem>: ObservableObject {
+    @Observable
+    public class State<Item: SnapNavigationItem> {
 
         public typealias Path = [Item]
+
+        public var style: Style
+
+        public var selected: Item?
 
         public init(items: [Item], style: Style) {
             self.items = items
@@ -18,22 +23,10 @@ public extension SnapNavigation {
             self.selected = Item.initial
         }
 
-        @Published public var style: Style
-
 
         // MARK: Items
 
         internal let items: [Item]
-
-        public var selected: Item?
-
-        public var selectedBinding: Binding<Item?> {
-            Binding(get: { [weak self] in
-                self?.selected
-            }, set: { [weak self] value in
-                self?.selected = value
-            })
-        }
 
         public func parent(of item: Item) -> Item? {
             guard !items.contains(item) else { return nil }
@@ -44,6 +37,7 @@ public extension SnapNavigation {
 
         // MARK: Path
 
+        @ObservationIgnored
         private var pathForItem: [Item : Path] = [:]
 
         public func getPath(for item: Item) -> Path {
@@ -54,6 +48,7 @@ public extension SnapNavigation {
             pathForItem[item] = path
         }
 
+        @ObservationIgnored
         private var pathBindingsForItem: [Item: Binding<Path>] = [:]
 
         public func pathBinding(for item: Item) -> Binding<Path> {

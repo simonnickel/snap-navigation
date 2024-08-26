@@ -11,7 +11,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 
     @Environment(\.horizontalSizeClass) private var horizontalSize
 
-    private let state: NavState
+    @Bindable private var state: NavState
 
     public init(state: NavState) {
         self.state = state
@@ -19,7 +19,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 
     public var body: some View {
 
-        TabView(selection: state.selectedBinding) {
+        TabView(selection: $state.selected) {
             ForEach(state.items) { item in
 
                 if item.items.isEmpty || horizontalSize == .compact {
@@ -63,13 +63,21 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
                     let path = state.getPath(for: selected)
                     if let firstPathItem = path.first, selected.items.contains(firstPathItem) {
                         state.setPath(path, for: firstPathItem)
-                        state.selected = firstPathItem
+
+                        // Without AsyncAfter animations of the NavigationStack are broken afterwards.
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                            state.selected = firstPathItem
+                        }
                     }
 
                 case .compact:
                     if let parent = state.parent(of: selected) {
                         state.setPath(state.getPath(for: selected), for: parent)
-                        state.selected = parent
+
+                        // Without AsyncAfter animations of the NavigationStack are broken afterwards.
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                            state.selected = parent
+                        }
                     }
 
                 case .none, .some(_): break
