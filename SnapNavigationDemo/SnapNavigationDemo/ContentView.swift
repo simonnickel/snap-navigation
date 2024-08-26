@@ -27,10 +27,10 @@ struct ContentView: View {
         }
         .tabViewSidebarBottomBar {
             Button {
+                state.setPath([.rectangle, .circle], for: .triangle)
                 state.selected = .circle
-                state.setPath([.triangle, .rectangle], for: .circle)
             } label: {
-                Text("Circle > Tri > Rect")
+                Text("Tri > Rect > Circ")
             }
         }
         .tint(.green)
