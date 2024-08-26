@@ -16,7 +16,7 @@ enum NavigationItem: String, SnapNavigationItem {
     static var itemsForTabBar: [Self] { [.triangle, .rectangle, .circle] }
     static var initial: NavigationItem { .rectangle }
 
-    var items: [Self] {
+    var subitems: [Self] {
         switch self {
             case .circle: [.circle1, .circle2, .circle3]
             default: []

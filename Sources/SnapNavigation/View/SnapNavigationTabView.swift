@@ -22,7 +22,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
         TabView(selection: $state.selected) {
             ForEach(state.items) { item in
 
-                if item.items.isEmpty || horizontalSize == .compact {
+                if item.subitems.isEmpty || horizontalSize == .compact {
 
                     Tab(value: item, role: nil) {
                         SnapNavigationStack(
@@ -36,7 +36,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
                 } else {
 
                     TabSection(item.title) {
-                        ForEach(item.items) { subitem in
+                        ForEach(item.subitems) { subitem in
 
                             Tab(value: subitem, role: nil) {
                                 // Put the actual parent screen at root, the subitem is added to the path.
@@ -61,7 +61,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
             switch newValue {
                 case .regular:
                     let path = state.getPath(for: selected)
-                    if let firstPathItem = path.first, selected.items.contains(firstPathItem) {
+                    if let firstPathItem = path.first, selected.subitems.contains(firstPathItem) {
                         state.setPath(path, for: firstPathItem)
 
                         // Without AsyncAfter animations of the NavigationStack are broken afterwards.

@@ -10,9 +10,9 @@ struct ItemList: View {
     let item: NavigationItem
 
     var body: some View {
-        List(item.items) { item in
-            NavigationLink(value: item) {
-                AnyView(item.label)
+        List(item.subitems) { subitem in
+            NavigationLink(value: subitem) {
+                AnyView(subitem.label)
             }
         }
         .navigationTitle(item.rawValue)

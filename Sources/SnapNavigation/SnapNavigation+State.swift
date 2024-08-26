@@ -31,7 +31,7 @@ public extension SnapNavigation {
         public func parent(of item: Item) -> Item? {
             guard !items.contains(item) else { return nil }
 
-            return items.first { $0.items.contains(item) }
+            return items.first { $0.subitems.contains(item) }
         }
 
 
