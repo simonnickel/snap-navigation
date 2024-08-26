@@ -8,14 +8,17 @@ import SwiftUI
 public extension SnapNavigation {
 
     @MainActor
-    public class State<Item: SnapNavigationItem> {
+    public class State<Item: SnapNavigationItem>: ObservableObject {
 
         public typealias Path = [Item]
 
-        public init(items: [Item]) {
+        public init(items: [Item], style: Style) {
             self.items = items
+            self.style = style
             self.selected = Item.initial
         }
+
+        @Published public var style: Style
 
 
         // MARK: Items

@@ -10,14 +10,11 @@ struct ContentView: View {
 
     @StateObject private var appState: AppState = AppState()
 
-    private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar)
-
-    @State private var navigationStyle: SnapNavigation.Style = .adaptable
+    private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar, style: AppState.navigationStyleInitial)
 
 	var body: some View {
         SnapNavigationView(
-            state: state,
-            style: appState.navigationStyle
+            state: state
 		)
         .tabViewSidebarHeader {
             Text("Header")
@@ -38,6 +35,9 @@ struct ContentView: View {
         }
         .tint(.green)
         .environmentObject(appState)
+        .onChange(of: appState.navigationStyle) { oldValue, newValue in
+            state.style = newValue
+        }
 	}
 }
 

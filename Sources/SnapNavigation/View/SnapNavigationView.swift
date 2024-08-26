@@ -9,20 +9,17 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
     public typealias NavState = SnapNavigation.State<Item>
 
-    private let style: SnapNavigation.Style
+    @StateObject private var state: NavState
 
-    private let state: NavState
-
-    public init(state: NavState, style: SnapNavigation.Style) {
-        self.state = state
-        self.style = style
+    public init(state: NavState) {
+        _state = StateObject(wrappedValue: state)
     }
 
 
     // MARK: - Body
 
     public var body: some View {
-        switch style {
+        switch state.style {
         case .tab:
             SnapNavigationTabView(state: state)
                 .tabViewStyle(.tabBarOnly)

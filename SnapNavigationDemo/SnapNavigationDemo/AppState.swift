@@ -8,6 +8,8 @@ import SnapNavigation
 
 class AppState: ObservableObject {
 
-    @Published var navigationStyle: SnapNavigation.Style = .adaptable
+    static var navigationStyleInitial: SnapNavigation.Style { .adaptable }
+
+    @Published var navigationStyle: SnapNavigation.Style = AppState.navigationStyleInitial
 
 }
