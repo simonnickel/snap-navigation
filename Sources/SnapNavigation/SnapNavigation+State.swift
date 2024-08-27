@@ -12,8 +12,22 @@ public extension SnapNavigation {
     public class State<Item: SnapNavigationItem> {
 
         public typealias Path = [Item]
+        
+        public var style: Style {
+            didSet {
+                guard style.shouldMaintainPath != oldValue.shouldMaintainPath else { return }
 
-        public var style: Style
+                if style.shouldMaintainPath {
+                    if let selected {
+                        pathForItem[selected] = path
+                    }
+                } else {
+                    if let selected, let path = pathForItem[selected] {
+                        self.path = path
+                    }
+                }
+            }
+        }
 
         public var selected: Item?
 
@@ -37,6 +51,10 @@ public extension SnapNavigation {
 
         // MARK: Path
 
+        /// The path is used for navigation styles that do not maintain the path for each item (see `SnapNavigation.Style.shouldMaintainPath`).
+        public var path: Path = []
+
+        /// The Paths in pathForItem are used for navigation styles that maintain the path for each item (see `SnapNavigation.Style.shouldMaintainPath`).
         @ObservationIgnored
         private var pathForItem: [Item : Path] = [:]
 
@@ -59,8 +77,12 @@ public extension SnapNavigation {
             // Insert item if not on top level of items. The parent will be the root of the navigation stack, see tabView.
 			if let parent = parent(of: item) {
                 var path: Path = getPath(for: item)
-                path.insert(item, at: 0)
-                setPath(path, for: item)
+
+                // Do not insert if path already has content, e.g. when `.path` is copied on style change.
+                if path == [] {
+                    path.insert(item, at: 0)
+                    setPath(path, for: item)
+                }
             }
 
             let binding = Binding<Path> { [weak self] in

@@ -12,6 +12,13 @@ public extension SnapNavigation {
         public var id: Self { self }
 
         case tab, sidebar, adaptable, dynamic
+
+        var shouldMaintainPath: Bool {
+            switch self {
+            case .tab, .adaptable, .dynamic: true
+            case .sidebar: false
+            }
+        }
     }
     
 }
