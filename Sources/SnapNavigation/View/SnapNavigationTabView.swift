@@ -60,6 +60,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 
             switch newValue {
                 case .regular:
+                // Select child of the previously selected parent and copy the path.
                     let path = state.getPath(for: selected)
                     if let firstPathItem = path.first, selected.subitems.contains(firstPathItem) {
                         state.setPath(path, for: firstPathItem)
@@ -71,6 +72,7 @@ public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
                     }
 
                 case .compact:
+                // Select the parent of the previously selected subitem and copy the path.
                     if let parent = state.parent(of: selected) {
                         state.setPath(state.getPath(for: selected), for: parent)
 

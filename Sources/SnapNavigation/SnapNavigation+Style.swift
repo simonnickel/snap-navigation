@@ -13,6 +13,7 @@ public extension SnapNavigation {
 
         case tab, sidebar, adaptable, dynamic
 
+        /// True if the style is expected to maintain the path of each top level item.
         var shouldMaintainPath: Bool {
             switch self {
             case .tab, .adaptable, .dynamic: true
