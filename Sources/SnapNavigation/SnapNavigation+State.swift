@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import Observation
 
 public extension SnapNavigation {
 
