@@ -54,7 +54,6 @@ public struct SnapNavigationSplitView<Item: SnapNavigationItem>: View {
                 EmptyView() // TODO:
             }
         }
-        // TODO: Do not insert item here. Should be handled inside of state.
         .onChange(of: state.selected ?? .initial) { oldValue, newValue in
             if let parent = state.parent(of: newValue) {
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {

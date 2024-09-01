@@ -12,7 +12,21 @@ public extension SnapNavigation {
     public class State<Item: SnapNavigationItem> {
 
         public typealias Path = [Item]
+
+        public init(items: [Item], style: Style) {
+            self.items = items
+            self.style = style
+            self.selected = Item.initial
+        }
+
+
+        // MARK: Selected
+
+        public var selected: Item?
+
         
+        // MARK: Style
+
         public var style: Style {
             didSet {
                 guard style.shouldMaintainPath != oldValue.shouldMaintainPath else { return }
@@ -27,14 +41,6 @@ public extension SnapNavigation {
                     }
                 }
             }
-        }
-
-        public var selected: Item?
-
-        public init(items: [Item], style: Style) {
-            self.items = items
-            self.style = style
-            self.selected = Item.initial
         }
 
 
