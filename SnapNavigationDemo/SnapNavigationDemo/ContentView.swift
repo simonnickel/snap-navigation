@@ -8,9 +8,7 @@ import SnapNavigation
 
 struct ContentView: View {
 
-    @StateObject private var appState: AppState = AppState()
-
-    private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar, style: AppState.navigationStyleInitial)
+    private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar)
 
 	var body: some View {
         SnapNavigationView(
@@ -34,10 +32,6 @@ struct ContentView: View {
             }
         }
         .tint(.green)
-        .environmentObject(appState)
-        .onChange(of: appState.navigationStyle) { oldValue, newValue in
-            state.style = newValue
-        }
 	}
 }
 
