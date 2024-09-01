@@ -24,7 +24,6 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
 
         SnapNavigationTabView(state: state)
             .tabViewStyle(.sidebarAdaptable)
-            // TODO: Does this trigger on normal TabView (without adaptive) on size class changes too?
             .onChange(of: horizontalSize) { oldValue, newValue in
                 guard let selected = state.selected else { return }
                 
