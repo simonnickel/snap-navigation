@@ -25,7 +25,7 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
         SnapNavigationTabView(state: state)
             .tabViewStyle(.sidebarAdaptable)
             .onChange(of: horizontalSize) { oldValue, newValue in
-                guard let selected = state.selected else { return }
+                let selected = state.selected
                 
                 switch newValue {
                 case .regular:
