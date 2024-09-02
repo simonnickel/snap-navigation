@@ -22,7 +22,7 @@ public extension SnapNavigation {
 
         // MARK: Selected
 
-        public var selected: Item?
+        public var selected: Item
 
 
         // MARK: Items
