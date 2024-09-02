@@ -35,7 +35,7 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
                     if let firstPathItem = path.first {
 						// Select child of the previously selected item and copy the path.
 						
-						guard selected.subitems.contains(firstPathItem) else { return }
+						guard selected == state.parent(of: firstPathItem) else { return }
 						
                         state.setPath(path, for: firstPathItem)
                         
