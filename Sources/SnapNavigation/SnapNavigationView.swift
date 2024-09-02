@@ -23,7 +23,9 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
     public var body: some View {
 
         SnapNavigationTabView(state: state)
-            .onChange(of: horizontalSize) { oldValue, newValue in
+			.onChange(of: horizontalSize, initial: true) { oldValue, newValue in
+				state.update(with: newValue)
+				
                 let selected = state.selected
                 
                 switch newValue {

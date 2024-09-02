@@ -22,7 +22,7 @@ internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 		TabView(selection: $state.selected) {
 			ForEach(state.items) { item in
 				
-				if item.subitems.isEmpty || horizontalSize == .compact {
+				if item.subitems.isEmpty || state.shouldShowSubitems == false {
 					
 					tab(for: item, root: item)
 					
@@ -30,10 +30,12 @@ internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 					
 					TabSection(item.title) {
 						ForEach(item.subitems) { subitem in
-							
-							// Put the actual parent screen at root, the subitem is added to the path.
-							tab(for: subitem, root: item)
-							
+							if state.shouldAddParent {
+								// Put the actual parent screen at root, the subitem is added to the path.
+								tab(for: subitem, root: item)
+							} else {
+								tab(for: subitem, root: subitem)								
+							}
 						}
 					}
 					

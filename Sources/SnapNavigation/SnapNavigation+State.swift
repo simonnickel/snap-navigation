@@ -18,6 +18,19 @@ public extension SnapNavigation {
             self.items = items
             self.selected = Item.initial
         }
+		
+		internal var shouldAddParent: Bool = false
+		internal var shouldShowSubitems: Bool = false
+		
+		internal func update(with sizeClass: UserInterfaceSizeClass?) {
+			shouldShowSubitems = sizeClass != .compact
+			
+#if os(macOS)
+			// On macOS a SplitView is used, which does not properly work with manipulating the path.
+#else
+			shouldAddParent = sizeClass != .compact
+#endif
+		}
 
 
         // MARK: Selected
