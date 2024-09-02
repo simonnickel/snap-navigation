@@ -74,8 +74,8 @@ public extension SnapNavigation {
 			if let parent = parent(of: item) {
                 var path: Path = getPath(for: item)
 
-                // Do not insert if path already has content, e.g. when `.path` is copied on style change.
-                if path == [] {
+                // Do not insert if path already has it.
+				if path.contains(item) {
                     path.insert(item, at: 0)
                     setPath(path, for: item)
                 }
