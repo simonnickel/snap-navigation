@@ -5,19 +5,19 @@
 
 import SwiftUI
 
-public struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
+internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 
-    public typealias NavState = SnapNavigation.State<Item>
+    typealias NavState = SnapNavigation.State<Item>
 
     @Environment(\.horizontalSizeClass) private var horizontalSize
 
     @Bindable private var state: NavState
 
-    public init(state: NavState) {
+    init(state: NavState) {
         self.state = state
     }
 
-    public var body: some View {
+    var body: some View {
 
         TabView(selection: $state.selected) {
             ForEach(state.items) { item in

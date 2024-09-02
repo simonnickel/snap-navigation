@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-struct SnapNavigationDestinationScreen<Item: SnapNavigationItem>: View {
+internal struct SnapNavigationDestinationScreen<Item: SnapNavigationItem>: View {
 	
 	let item: Item
 	
