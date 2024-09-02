@@ -45,9 +45,10 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
                         }
 						
 					} else {
-						// Select first child.
+						// Select first child, reset it's path.
 						
 						if let firstChild = selected.subitems.first {
+							state.setPath([], for: firstChild)
 							state.selected = firstChild
 						}
 					}
