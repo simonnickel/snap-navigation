@@ -30,16 +30,27 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
                 
                 switch newValue {
                 case .regular:
-                    // Select child of the previously selected parent and copy the path.
                     let path = state.getPath(for: selected)
-                    if let firstPathItem = path.first, selected.subitems.contains(firstPathItem) {
+						
+                    if let firstPathItem = path.first {
+						// Select child of the previously selected item and copy the path.
+						
+						guard selected.subitems.contains(firstPathItem) else { return }
+						
                         state.setPath(path, for: firstPathItem)
                         
                         // Without AsyncAfter animations of the NavigationStack are broken afterwards.
                         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
                             state.selected = firstPathItem
                         }
-                    }
+						
+					} else {
+						// Select first child.
+						
+						if let firstChild = selected.subitems.first {
+							state.selected = firstChild
+						}
+					}
                     
                 case .compact:
                     // Select the parent of the previously selected subitem and copy the path.
