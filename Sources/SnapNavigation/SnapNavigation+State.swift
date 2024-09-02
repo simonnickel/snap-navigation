@@ -75,7 +75,7 @@ public extension SnapNavigation {
                 var path: Path = getPath(for: item)
 
                 // Do not insert if path already has it.
-				if path.contains(item) {
+				if !path.contains(item) {
                     path.insert(item, at: 0)
                     setPath(path, for: item)
                 }
