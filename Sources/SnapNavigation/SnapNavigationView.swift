@@ -23,7 +23,6 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
     public var body: some View {
 
         SnapNavigationTabView(state: state)
-            .tabViewStyle(.sidebarAdaptable)
             .onChange(of: horizontalSize) { oldValue, newValue in
                 let selected = state.selected
                 

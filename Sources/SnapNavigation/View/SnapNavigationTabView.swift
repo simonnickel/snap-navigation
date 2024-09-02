@@ -41,6 +41,7 @@ internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 				
 			}
 		}
+		.tabViewStyle(.sidebarAdaptable)
 		
 	}
 	
