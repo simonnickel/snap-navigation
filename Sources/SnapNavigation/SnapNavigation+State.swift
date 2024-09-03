@@ -60,26 +60,25 @@ public extension SnapNavigation {
 
         public func setPath(_ path: Path, for item: Item) {
             pathForItem[item] = path
+			// TODO: Select different child if path is indicating its the selected one.
+//			if let firstItem = path.first, selected != firstItem, item.subitems.contains(firstItem) {
+//				DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+//					self.selected = firstItem
+//				}
+//			}
         }
 
         @ObservationIgnored
-        private var pathBindingsForItem: [Item: Binding<Path>] = [:]
+        internal var pathBindingsForItem: [Item: Binding<Path>] = [:]
 
         public func pathBinding(for item: Item) -> Binding<Path> {
             if let binding = pathBindingsForItem[item] {
                 return binding
             }
-
-            // Insert item if not on top level of items. The parent will be the root of the navigation stack, see tabView.
+			
 			if let parent = parent(of: item) {
-                var path: Path = getPath(for: item)
-
-                // Do not insert if path already has it.
-				if !path.contains(item) {
-                    path.insert(item, at: 0)
-                    setPath(path, for: item)
-                }
-            }
+				return pathBinding(for: parent)
+			}
 
             let binding = Binding<Path> { [weak self] in
                 self?.getPath(for: item) ?? []

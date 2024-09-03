@@ -23,6 +23,16 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
     public var body: some View {
 
         SnapNavigationTabView(state: state)
+			.onChange(of: state.selected, { oldValue, newValue in
+				if let parent = state.parent(of: newValue) {
+					// TODO: if state.should
+					let pathParent = state.getPath(for: parent)
+					if pathParent.first != newValue {
+						state.setPath([newValue], for: parent)
+						state.pathBindingsForItem[parent] = nil
+					}
+				}
+			})
 			.onChange(of: horizontalSize, initial: true) { oldValue, newValue in
 				state.update(with: newValue)
 				
@@ -33,11 +43,9 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
                     let path = state.getPath(for: selected)
 						
                     if let firstPathItem = path.first {
-						// Select child of the previously selected item and copy the path.
+						// Select child of the previously selected item.
 						
 						guard selected == state.parent(of: firstPathItem) else { return }
-						
-                        state.setPath(path, for: firstPathItem)
                         
                         // Without AsyncAfter animations of the NavigationStack are broken afterwards.
                         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
@@ -45,18 +53,16 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
                         }
 						
 					} else {
-						// Select first child, reset it's path.
+						// Select first child.
 						
 						if let firstChild = selected.subitems.first {
-							state.setPath([], for: firstChild)
 							state.selected = firstChild
 						}
 					}
                     
                 case .compact:
-                    // Select the parent of the previously selected subitem and copy the path.
+                    // Select the parent of the previously selected subitem.
                     if let parent = state.parent(of: selected) {
-                        state.setPath(state.getPath(for: selected), for: parent)
                         
                         // Without AsyncAfter animations of the NavigationStack are broken afterwards.
                         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
