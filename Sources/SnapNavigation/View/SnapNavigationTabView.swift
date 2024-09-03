@@ -24,7 +24,7 @@ internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 				
 				if shouldShowSection(for: item) {
 					
-					TabSection(item.title) {
+					TabSection(item.definition.title) {
 						ForEach(item.subitems) { subitem in
 							tab(for: subitem)
 						}

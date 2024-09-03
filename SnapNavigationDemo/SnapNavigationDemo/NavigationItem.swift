@@ -32,40 +32,24 @@ enum NavigationItem: String, SnapNavigationItem {
 		}
 	}
 
-    var title: String {
+	var definition: SnapNavigation.ItemDefinition {
         switch self {
-            case .rectangle: "Rectangle"
-            case .triangle: "Triangle"
-            case .circle: "Circle"
+			case .rectangle: .init(title: "Rectangle", systemImage: "rectangle")
+            case .triangle: .init(title: "Triangle", systemImage: "triangle")
+            case .circle: .init(title: "Circle", systemImage: "circle")
 
-            case .circle1: "Circle 1"
-            case .circle2: "Circle 2"
-            case .circle3: "Circle 3"
+            case .circle1: .init(title: "Circle 1", systemImage: "1.circle")
+            case .circle2: .init(title: "Circle 2", systemImage: "2.circle")
+            case .circle3: .init(title: "Circle 3", systemImage: "3.circle")
 
-            case .infinity: "Infinity"
+            case .infinity: .init(title: "Infinity", systemImage: "infinity")
         }
     }
 
-    var systemImage: String {
-        switch self {
-            case .rectangle: "rectangle"
-            case .circle: "circle"
-            case .triangle: "triangle"
-
-            case .circle1: "1.circle"
-            case .circle2: "2.circle"
-            case .circle3: "3.circle"
-            
-            case .infinity: "infinity"
-        }
-    }
-
-	@MainActor
 	var label: any View {
-		Label(title, systemImage: systemImage)
+		definition.label
 	}
 
-    @MainActor
 	var destination: any View {
 		switch self {
             case .triangle: ItemScreen(item: self)
