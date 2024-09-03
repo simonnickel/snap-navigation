@@ -18,19 +18,6 @@ public extension SnapNavigation {
             self.items = items
             self.selected = Item.initial
         }
-		
-		internal var shouldAddParent: Bool = false
-		internal var shouldShowSubitems: Bool = false
-		
-		internal func update(with sizeClass: UserInterfaceSizeClass?) {
-			shouldShowSubitems = sizeClass != .compact
-			
-#if os(macOS)
-			// On macOS a SplitView is used, which does not properly work with manipulating the path.
-#else
-			shouldAddParent = sizeClass != .compact
-#endif
-		}
 
 
         // MARK: Selected
@@ -60,12 +47,6 @@ public extension SnapNavigation {
 
         public func setPath(_ path: Path, for item: Item) {
             pathForItem[item] = path
-			// TODO: Select different child if path is indicating its the selected one.
-//			if let firstItem = path.first, selected != firstItem, item.subitems.contains(firstItem) {
-//				DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-//					self.selected = firstItem
-//				}
-//			}
         }
 
         @ObservationIgnored
@@ -75,10 +56,6 @@ public extension SnapNavigation {
             if let binding = pathBindingsForItem[item] {
                 return binding
             }
-			
-			if let parent = parent(of: item) {
-				return pathBinding(for: parent)
-			}
 
             let binding = Binding<Path> { [weak self] in
                 self?.getPath(for: item) ?? []

@@ -22,22 +22,17 @@ internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 		TabView(selection: $state.selected) {
 			ForEach(state.items) { item in
 				
-				if item.subitems.isEmpty || state.shouldShowSubitems == false {
-					
-					tab(for: item, root: item)
-					
-				} else {
+				if shouldShowSection(for: item) {
 					
 					TabSection(item.title) {
 						ForEach(item.subitems) { subitem in
-							if state.shouldAddParent {
-								// Put the actual parent screen at root, the subitem is added to the path.
-								tab(for: subitem, root: item)
-							} else {
-								tab(for: subitem, root: subitem)								
-							}
+							tab(for: subitem)
 						}
 					}
+					
+				} else {
+					
+					tab(for: item)
 					
 				}
 				
@@ -47,15 +42,24 @@ internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 		
 	}
 	
+	private func shouldShowSection(for item: Item) -> Bool {
+#if os(macOS)
+		// TODO FB: Adding items to a path does not work on macOS currently.
+		false
+#else
+		item.subitems.isEmpty == false && horizontalSize != .compact
+#endif
+	}
+	
 	
 	// MARK: Tab View
 	
 	@TabContentBuilder<Item>
-	private func tab(for item: Item, root: Item) -> some TabContent<Item> {
+	private func tab(for item: Item) -> some TabContent<Item> {
 		Tab(value: item, role: nil) {
 			SnapNavigationStack(
 				path: state.pathBinding(for: item),
-				root: root
+				root: item
 			)
 		} label: {
 			AnyView(item.label)

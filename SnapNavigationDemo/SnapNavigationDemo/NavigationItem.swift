@@ -18,10 +18,19 @@ enum NavigationItem: String, SnapNavigationItem {
 
     var subitems: [Self] {
         switch self {
-            case .circle: [.circle1, .circle2, .circle3]
+			case .circle: [.circle, .circle1, .circle2, .circle3]
             default: []
         }
     }
+	
+	var path: SnapNavigation.State<Self>.Path {
+		switch self {
+			case .circle1: [.triangle]
+			case .circle2: [.triangle, .circle1]
+			case .circle3: [.triangle, .circle1, .circle2]
+			default: []
+		}
+	}
 
     var title: String {
         switch self {
@@ -51,8 +60,9 @@ enum NavigationItem: String, SnapNavigationItem {
         }
     }
 
+	@MainActor
 	var label: any View {
-        Label(title, systemImage: systemImage)
+		Label(title, systemImage: systemImage)
 	}
 
     @MainActor
