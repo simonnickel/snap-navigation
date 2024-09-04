@@ -13,7 +13,7 @@ struct ItemScreen: View {
         NavigationLink(value: NavigationItem.infinity) {
             AnyView(NavigationItem.infinity.label)
 		}
-		.navigationTitle(item.rawValue)
+		.navigationTitle(item.definition.title)
 	}
 	
 }
