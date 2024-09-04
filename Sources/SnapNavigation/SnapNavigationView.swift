@@ -25,14 +25,9 @@ public struct SnapNavigationView<ItemProvider: SnapNavigationItemProvider>: View
         SnapNavigationTabView(state: state)
 			.environment(state)
 			.onChange(of: state.selected, { oldValue, newValue in
-				var path = state.path(for: newValue)
-				if let first = path.first {
-					path.remove(at: 0)
-					path.append(newValue)
+				if state.items.contains(newValue) == false {
 					DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
-						state.setPath(path, for: first)
-						state.pathBindingsForItem[first] = nil
-						state.selected = first
+						state.navigate(to: newValue)
 					}
 				}
 			})

@@ -24,6 +24,22 @@ public extension SnapNavigation {
         // MARK: Selected
 
         public var selected: Item
+		
+		
+		// MARK: Navigate
+		
+		public func navigate(to item: Item) {
+			guard let itemLocation = location(of: item) else {
+				return
+			}
+			var path = itemLocation
+			if let first = path.first {
+				path.removeFirst()
+				setPath(path, for: first)
+				pathBindingsForItem[first] = nil
+				selected = first
+			}
+		}
 
 
         // MARK: Items
@@ -34,8 +50,8 @@ public extension SnapNavigation {
 			itemProvider.items
 		}
 		
-		public func path(for item: Item) -> Path {
-			itemProvider.path(for: item)
+		public func location(of item: Item) -> Path? {
+			itemProvider.location(of: item)
 		}
 		
 		public func subitems(for item: Item) -> [Item] {

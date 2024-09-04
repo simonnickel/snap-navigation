@@ -6,11 +6,12 @@
 import SwiftUI
 import SnapNavigation
 
-enum NavigationItem: String, SnapNavigationItem {
-	var id: String { self.rawValue }
+enum NavigationItem: SnapNavigationItem {
+	
+	var id: Int { self.hashValue }
 		
 	case triangle, rectangle, circle
-    case circle1, circle2, circle3
+	case circleItem(level: Int)
     case infinity
 
 	var definition: SnapNavigation.ItemDefinition {
@@ -19,10 +20,8 @@ enum NavigationItem: String, SnapNavigationItem {
             case .triangle: .init(title: "Triangle", systemImage: "triangle")
             case .circle: .init(title: "Circle", systemImage: "circle")
 
-            case .circle1: .init(title: "Circle 1", systemImage: "1.circle")
-            case .circle2: .init(title: "Circle 2", systemImage: "2.circle")
-            case .circle3: .init(title: "Circle 3", systemImage: "3.circle")
-
+			case .circleItem(level: let level): .init(title: "Circle \(level)", systemImage: "\(level).circle")
+            
             case .infinity: .init(title: "Infinity", systemImage: "infinity")
         }
     }

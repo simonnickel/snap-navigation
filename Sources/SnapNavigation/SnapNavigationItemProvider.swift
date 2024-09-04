@@ -11,7 +11,7 @@ public protocol SnapNavigationItemProvider {
 	
 	var items: [Item] { get }
 	
-	func path(for item: Item) -> [Item]
+	func location(of item: Item) -> [Item]?
 	
 	func subitems(for item: Item) -> [Item]
 	

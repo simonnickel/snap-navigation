@@ -15,17 +15,20 @@ struct NavigationItemProvider: SnapNavigationItemProvider {
 	
 	func subitems(for item: NavigationItem) -> [NavigationItem] {
 		switch item {
-			case .circle: [.circle, .circle1, .circle2, .circle3]
+			case .circle: [.circle, .circleItem(level: 1), .circleItem(level: 2), .circleItem(level: 3)]
 			default: []
 		}
 	}
 	
-	func path(for item: Item) -> SnapNavigation.State<Self>.Path {
-		switch item {
-			case .circle1: [.triangle]
-			case .circle2: [.triangle, .circle1]
-			case .circle3: [.triangle, .circle1, .circle2]
-			default: []
+	func location(of item: Item) -> SnapNavigation.State<Self>.Path? {
+		// Top Level items an be accessed directly
+		if items.contains(item) {
+			return [item]
+		}
+		
+		return switch item {
+			case .circleItem(level: let level): [.triangle] + (1...level).map { .circleItem(level: $0) }
+			default: nil
 		}
 	}
 	
