@@ -10,29 +10,42 @@ public extension SnapNavigation {
 
     @MainActor
     @Observable
-    public class State<Item: SnapNavigationItem> {
+    public class State<ItemProvider: SnapNavigationItemProvider> {
 
+		public typealias Item = ItemProvider.Item
         public typealias Path = [Item]
 
-        public init(items: [Item]) {
-            self.items = items
-            self.selected = Item.initial
+		public init(itemProvider: ItemProvider) {
+            self.selected = ItemProvider.initial
+			self.itemProvider = itemProvider
         }
 
-
+		
         // MARK: Selected
 
         public var selected: Item
 
 
         // MARK: Items
-
-        internal let items: [Item]
-
+		
+		private let itemProvider: ItemProvider
+		
+		public var items: [Item] {
+			itemProvider.items
+		}
+		
+		public func path(for item: Item) -> Path {
+			itemProvider.path(for: item)
+		}
+		
+		public func subitems(for item: Item) -> [Item] {
+			itemProvider.subitems(for: item)
+		}
+		
         public func parent(of item: Item) -> Item? {
-            guard !items.contains(item) else { return nil }
+			guard !itemProvider.items.contains(item) else { return nil }
 
-            return items.first { $0.subitems.contains(item) }
+			return itemProvider.items.first { subitems(for: $0).contains(item) }
         }
 
 

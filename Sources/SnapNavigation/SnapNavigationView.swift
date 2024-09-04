@@ -5,11 +5,11 @@
 
 import SwiftUI
 
-public struct SnapNavigationView<Item: SnapNavigationItem>: View {
+public struct SnapNavigationView<ItemProvider: SnapNavigationItemProvider>: View {
 
     @Environment(\.horizontalSizeClass) private var horizontalSize
 
-    public typealias NavState = SnapNavigation.State<Item>
+    public typealias NavState = SnapNavigation.State<ItemProvider>
 
     private let state: NavState
 
@@ -23,8 +23,9 @@ public struct SnapNavigationView<Item: SnapNavigationItem>: View {
     public var body: some View {
 
         SnapNavigationTabView(state: state)
+			.environment(state)
 			.onChange(of: state.selected, { oldValue, newValue in
-				var path = newValue.path
+				var path = state.path(for: newValue)
 				if let first = path.first {
 					path.remove(at: 0)
 					path.append(newValue)

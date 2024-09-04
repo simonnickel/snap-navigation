@@ -4,13 +4,16 @@
 //
 
 import SwiftUI
+import SnapNavigation
 
 struct ItemList: View {
+	
+	@Environment(SnapNavigation.State<NavigationItemProvider>.self) private var navigationState
 
     let item: NavigationItem
 
     var body: some View {
-        List(item.subitems) { subitem in
+        List(navigationState.subitems(for: item)) { subitem in
             NavigationLink(value: subitem) {
                 AnyView(subitem.label)
             }

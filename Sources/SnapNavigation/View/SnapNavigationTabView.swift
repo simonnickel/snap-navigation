@@ -5,9 +5,9 @@
 
 import SwiftUI
 
-internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
+internal struct SnapNavigationTabView<ItemProvider: SnapNavigationItemProvider>: View {
 
-    typealias NavState = SnapNavigation.State<Item>
+	typealias NavState = SnapNavigation.State<ItemProvider>
 
     @Environment(\.horizontalSizeClass) private var horizontalSize
 
@@ -25,7 +25,7 @@ internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 				if shouldShowSection(for: item) {
 					
 					TabSection(item.definition.title) {
-						ForEach(item.subitems) { subitem in
+						ForEach(state.subitems(for: item)) { subitem in
 							tab(for: subitem)
 						}
 					}
@@ -42,20 +42,20 @@ internal struct SnapNavigationTabView<Item: SnapNavigationItem>: View {
 		
 	}
 	
-	private func shouldShowSection(for item: Item) -> Bool {
+	private func shouldShowSection(for item: ItemProvider.Item) -> Bool {
 #if os(macOS)
 		// TODO FB: Adding items to a path does not work on macOS currently.
 		false
 #else
-		item.subitems.isEmpty == false && horizontalSize != .compact
+		state.subitems(for: item).isEmpty == false && horizontalSize != .compact
 #endif
 	}
 	
 	
 	// MARK: Tab View
 	
-	@TabContentBuilder<Item>
-	private func tab(for item: Item) -> some TabContent<Item> {
+	@TabContentBuilder<ItemProvider.Item>
+	private func tab(for item: ItemProvider.Item) -> some TabContent<ItemProvider.Item> {
 		Tab(value: item, role: nil) {
 			SnapNavigationStack(
 				path: state.pathBinding(for: item),

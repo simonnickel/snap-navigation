@@ -7,12 +7,6 @@ import SwiftUI
 
 public protocol SnapNavigationItem: Identifiable, Hashable, Equatable {
 	
-    static var initial: Self { get }
-
-    var subitems: [Self] { get }
-	
-	var path: SnapNavigation.State<Self>.Path { get }
-	
 	var definition: SnapNavigation.ItemDefinition { get }
 	
     var label: any View { get }

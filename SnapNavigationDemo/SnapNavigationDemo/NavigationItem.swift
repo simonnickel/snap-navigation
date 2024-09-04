@@ -13,25 +13,6 @@ enum NavigationItem: String, SnapNavigationItem {
     case circle1, circle2, circle3
     case infinity
 
-    static var itemsForTabBar: [Self] { [.triangle, .rectangle, .circle] }
-    static var initial: NavigationItem { .rectangle }
-
-    var subitems: [Self] {
-        switch self {
-			case .circle: [.circle, .circle1, .circle2, .circle3]
-            default: []
-        }
-    }
-	
-	var path: SnapNavigation.State<Self>.Path {
-		switch self {
-			case .circle1: [.triangle]
-			case .circle2: [.triangle, .circle1]
-			case .circle3: [.triangle, .circle1, .circle2]
-			default: []
-		}
-	}
-
 	var definition: SnapNavigation.ItemDefinition {
         switch self {
 			case .rectangle: .init(title: "Rectangle", systemImage: "rectangle")

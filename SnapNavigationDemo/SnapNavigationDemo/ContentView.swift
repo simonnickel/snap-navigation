@@ -8,7 +8,7 @@ import SnapNavigation
 
 struct ContentView: View {
 
-    private var state = SnapNavigation.State(items: NavigationItem.itemsForTabBar)
+	private var state = SnapNavigation.State(itemProvider: NavigationItemProvider())
 
 	var body: some View {
         SnapNavigationView(
