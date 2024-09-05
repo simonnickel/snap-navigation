@@ -38,6 +38,14 @@ public extension SnapNavigation {
 				setPath(path, for: first)
 				pathBindingsForItem[first] = nil
 				selected = first
+#if os(macOS)
+				// TODO FB: macOS does not show the correct path on first try.
+				Task {
+					self.setPath(path, for: first)
+					self.pathBindingsForItem[first] = nil
+					self.selected = first
+				}
+#endif
 			}
 		}
 

@@ -43,12 +43,7 @@ internal struct SnapNavigationTabView<ItemProvider: SnapNavigationItemProvider>:
 	}
 	
 	private func shouldShowSection(for item: ItemProvider.Item) -> Bool {
-#if os(macOS)
-		// TODO FB: Adding items to a path does not work on macOS currently.
-		false
-#else
 		state.subitems(for: item).isEmpty == false && horizontalSize != .compact
-#endif
 	}
 	
 	
