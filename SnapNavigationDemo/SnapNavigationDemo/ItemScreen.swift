@@ -14,23 +14,10 @@ struct ItemScreen: View {
 	
 	var body: some View {
 		VStack {
-			Text(item.definition.title)
 			
-			Button {
-				navigationState.navigate(to: .circleItem(level: 4))
-			} label: {
-				Text("Button Deeplink: Circle 4")
-			}
-			.padding()
-			
-			Button {
-				navigationState.navigate(to: .rectangle)
-			} label: {
-				Text("Button Deeplink: Rectangle")
-			}
-			.padding()
+			DeeplinkButton(title: "Deeplink: Circle 4", item: .circleItem(level: 4))
+			DeeplinkButton(title: "Deeplink: Rectangle", item: .rectangle)
 
-			
 			NavigationLink(value: NavigationItem.infinity) {
 				HStack {
 					Text("NavigationLink:")
