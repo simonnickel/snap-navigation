@@ -25,10 +25,8 @@ public struct SnapNavigationView<ItemProvider: SnapNavigationItemProvider>: View
         SnapNavigationTabView(state: state)
 			.environment(state)
 			.onChange(of: state.selected, { oldValue, newValue in
-				if state.items.contains(newValue) == false {
-					DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
-						state.navigate(to: newValue)
-					}
+				if !state.items.contains(newValue) {
+					state.navigate(to: newValue)
 				}
 			})
         
