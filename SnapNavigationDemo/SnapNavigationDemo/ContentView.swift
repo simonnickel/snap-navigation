@@ -25,10 +25,9 @@ struct ContentView: View {
         }
         .tabViewSidebarBottomBar {
             Button {
-                state.setPath([.rectangle, .circle], for: .triangle)
-                state.selected = .circle
+				state.navigate(to: .circleItem(level: 10))
             } label: {
-                Text("Tri > Rect > Circ")
+                Text("Deeplink: Circle 10")
             }
         }
         .tint(.green)
