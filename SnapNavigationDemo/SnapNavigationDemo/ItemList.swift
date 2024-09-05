@@ -18,7 +18,6 @@ struct ItemList: View {
                 AnyView(subitem.label)
             }
         }
-		.navigationTitle(item.definition.title)
     }
 
 }

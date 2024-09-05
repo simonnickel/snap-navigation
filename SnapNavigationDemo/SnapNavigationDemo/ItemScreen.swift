@@ -14,6 +14,7 @@ struct ItemScreen: View {
 	
 	var body: some View {
 		VStack {
+			Text(item.definition.title)
 			
 			Button {
 				navigationState.navigate(to: .circleItem(level: 4))
@@ -39,7 +40,6 @@ struct ItemScreen: View {
 			.padding()
 			
 		}
-		.navigationTitle(item.definition.title)
 	}
 	
 }

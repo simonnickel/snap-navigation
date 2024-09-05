@@ -11,6 +11,7 @@ internal struct SnapNavigationDestinationScreen<Item: SnapNavigationItem>: View 
 	
 	var body: some View {
 		AnyView(item.destination)
+			.navigationTitle(item.definition.title)
 	}
 	
 }
