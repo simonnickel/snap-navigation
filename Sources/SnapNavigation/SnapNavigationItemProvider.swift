@@ -7,7 +7,7 @@ public protocol SnapNavigationItemProvider {
 	
 	associatedtype Item: SnapNavigationItem
 	
-	static var initial: Item { get }
+	var initial: Item { get }
 	
 	var items: [Item] { get }
 	

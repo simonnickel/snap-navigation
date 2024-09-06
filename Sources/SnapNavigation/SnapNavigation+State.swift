@@ -14,10 +14,12 @@ public extension SnapNavigation {
 
 		public typealias Item = ItemProvider.Item
         public typealias Path = [Item]
-
+		
+		private let itemProvider: ItemProvider
+		
 		public init(itemProvider: ItemProvider) {
-            self.selected = ItemProvider.initial
 			self.itemProvider = itemProvider
+            self.selected = itemProvider.initial
         }
 
 		
@@ -50,8 +52,6 @@ public extension SnapNavigation {
 
 
         // MARK: Items
-		
-		private let itemProvider: ItemProvider
 		
 		public var items: [Item] {
 			itemProvider.items
