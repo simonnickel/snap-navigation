@@ -26,7 +26,10 @@ public struct SnapNavigationView<ItemProvider: SnapNavigationItemProvider>: View
 			.environment(state)
 			.onChange(of: state.selected, { oldValue, newValue in
 				if state.route(to: newValue)?.first != newValue {
-					state.navigate(to: newValue)
+					// Without wrapping the call in Task, sometimes the stack animations will break.
+					Task {
+						state.navigate(to: newValue)
+					}
 				}
 			})
         
