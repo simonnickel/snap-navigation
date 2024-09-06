@@ -25,6 +25,7 @@ public struct SnapNavigationView<ItemProvider: SnapNavigationItemProvider>: View
         SnapNavigationTabView(state: state)
 			.environment(state)
 			.onChange(of: state.selected, { oldValue, newValue in
+				// Navigate to the item if the selected item is not the first item on it's route.
 				if state.route(to: newValue)?.first != newValue {
 					// Without wrapping the call in Task, sometimes the stack animations will break.
 					Task {
