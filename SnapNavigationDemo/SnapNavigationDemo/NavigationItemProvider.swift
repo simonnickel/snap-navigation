@@ -21,7 +21,7 @@ struct NavigationItemProvider: SnapNavigationItemProvider {
 	}
 	
 	func location(of item: Item) -> SnapNavigation.State<Self>.Path? {
-		// Top Level items an be accessed directly
+		// Top Level items can be accessed directly
 		if items.contains(item) {
 			return [item]
 		}
