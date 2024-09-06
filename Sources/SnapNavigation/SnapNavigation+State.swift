@@ -34,21 +34,16 @@ public extension SnapNavigation {
 			}
 			var path = itemLocation
 			if let first = path.first {
-#if os(macOS)
-				// macOS uses SplitView with sidebar, where a selection clears the path.
-				// Therefor it has to select first and then change the path.
+				path.removeFirst()
 				selected = first
+#if os(macOS)
+				// macOS uses SplitView, where a selection in the sidebar clears the path.
+				// Wrapping this in Task applies the new path after the purge.
 				Task {
-					self.setPath(path, for: first)
-					self.pathBindingsForItem[first] = nil
-					// Selection has to be applied again to update the view.
-					self.selected = first
+					self.pathForItem[first] = path
 				}
 #else
-				path.removeFirst()
-				setPath(path, for: first)
-				pathBindingsForItem[first] = nil
-				selected = first
+				pathForItem[first] = path
 #endif
 			}
 		}
@@ -79,7 +74,6 @@ public extension SnapNavigation {
 
         // MARK: Path
 
-        @ObservationIgnored
         private var pathForItem: [Item : Path] = [:]
 
         public func getPath(for item: Item) -> Path {
