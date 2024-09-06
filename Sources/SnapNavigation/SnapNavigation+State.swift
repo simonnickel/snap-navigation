@@ -29,7 +29,7 @@ public extension SnapNavigation {
 		// MARK: Navigate
 		
 		public func navigate(to item: Item) {
-			guard let itemLocation = location(of: item) else {
+			guard let itemLocation = route(to: item) else {
 				return
 			}
 			var path = itemLocation
@@ -62,8 +62,8 @@ public extension SnapNavigation {
 			itemProvider.items
 		}
 		
-		public func location(of item: Item) -> Path? {
-			itemProvider.location(of: item)
+		public func route(to item: Item) -> Path? {
+			itemProvider.route(to: item)
 		}
 		
 		public func subitems(for item: Item) -> [Item] {
