@@ -42,10 +42,10 @@ public extension SnapNavigation {
 				// macOS uses SplitView, where a selection in the sidebar clears the path.
 				// Wrapping this in Task applies the new path after the purge.
 				Task {
-					self.pathForItem[first] = path
+					self.setPath(path, for: first)
 				}
 #else
-				pathForItem[first] = path
+				setPath(path, for: first)
 #endif
 			}
 		}
