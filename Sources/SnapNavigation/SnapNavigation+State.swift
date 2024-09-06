@@ -31,21 +31,20 @@ public extension SnapNavigation {
 		// MARK: Navigate
 		
 		public func navigate(to item: Item) {
-			guard let itemLocation = route(to: item) else {
+			guard var route = route(to: item) else {
 				return
 			}
-			var path = itemLocation
-			if let first = path.first {
-				path.removeFirst()
+			if let first = route.first {
+				route.removeFirst()
 				selected = first
 #if os(macOS)
 				// macOS uses SplitView, where a selection in the sidebar clears the path.
 				// Wrapping this in Task applies the new path after the purge.
 				Task {
-					self.setPath(path, for: first)
+					self.setPath(route, for: first)
 				}
 #else
-				setPath(path, for: first)
+				setPath(route, for: first)
 #endif
 			}
 		}
