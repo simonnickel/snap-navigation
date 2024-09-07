@@ -7,8 +7,6 @@ import SwiftUI
 import SnapNavigation
 
 enum NavigationItem: SnapNavigationItem {
-	
-	var id: Int { self.hashValue }
 		
 	case triangle
 	case rectangle, rectangleItem(level: Int)

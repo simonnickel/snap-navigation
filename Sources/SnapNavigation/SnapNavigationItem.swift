@@ -15,6 +15,10 @@ public protocol SnapNavigationItem: Identifiable, Hashable, Equatable {
 
 }
 
+public extension SnapNavigationItem {
+	var id: Int { self.hashValue }
+}
+
 extension SnapNavigation {
 	
 	public struct ItemDefinition<Item: SnapNavigationItem> {

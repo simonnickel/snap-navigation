@@ -9,7 +9,7 @@ struct NavigationItemProvider: SnapNavigationItemProvider {
 	
 	public typealias Path = [Item]
 	
-	var initial: NavigationItem { .rectangle }
+	var initial: NavigationItem { .triangle }
 	
 	var items: [Item] { [.triangle, .rectangle, .circle, .circleSection] }
 	
