@@ -11,11 +11,11 @@ struct NavigationItemProvider: SnapNavigationItemProvider {
 	
 	var initial: NavigationItem { .rectangle }
 	
-	var items: [Item] { [.triangle, .rectangle, .circle] }
+	var items: [Item] { [.triangle, .rectangle, .circle, .circleSection] }
 	
 	func subitems(for item: NavigationItem) -> [NavigationItem] {
 		switch item {
-			case .circle: [.circle, .circleItem(level: 1), .circleItem(level: 2), .circleItem(level: 3)]
+			case .circleSection: [.circleSection, .circleItem(level: 1), .circleItem(level: 2), .circleItem(level: 3)]
 			default: []
 		}
 	}
@@ -27,7 +27,10 @@ struct NavigationItemProvider: SnapNavigationItemProvider {
 		}
 		
 		return switch item {
-			case .circleItem(level: let level): [.triangle] + (1...level).map { .circleItem(level: $0) }
+			case .circleItem(level: let level): [.circle] + (1...level).map { .circleItem(level: $0) }
+				
+			case .rectangleItem(level: let level): [.rectangle] + (1...level).map { .rectangleItem(level: $0) }
+				
 			default: nil
 		}
 	}
