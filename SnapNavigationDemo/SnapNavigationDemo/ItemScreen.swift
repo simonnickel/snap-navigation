@@ -15,8 +15,11 @@ struct ItemScreen: View {
 	var body: some View {
 		VStack {
 			
-			DeeplinkButton(title: "Deeplink: Circle 4", item: .circleItem(level: 4))
 			DeeplinkButton(title: "Deeplink: Rectangle", item: .rectangle)
+			DeeplinkButton(title: "Deeplink: Rectangle 3", item: .rectangleItem(level: 3))
+
+			DeeplinkButton(title: "Deeplink: Circle", item: .circle)
+			DeeplinkButton(title: "Deeplink: Circle 3", item: .circleItem(level: 3))
 
 			NavigationLink(value: NavigationItem.infinity) {
 				HStack {
