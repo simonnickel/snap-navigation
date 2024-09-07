@@ -8,7 +8,7 @@ import SnapNavigation
 
 struct ContentView: View {
 
-	private var state = SnapNavigation.State(itemProvider: NavigationItemProvider())
+	private var state = SnapNavigation.State(provider: NavigationProvider())
 
 	var body: some View {
         SnapNavigationView(
@@ -22,12 +22,12 @@ struct ContentView: View {
         .tabViewSidebarFooter {
 			VStack {
 				Text("Footer")
-				DeeplinkButton(title: "Deeplink: Rectangle", item: .rectangle)
+				DeeplinkButton(title: "Deeplink: Rectangle", screen: .rectangle)
 			}
 			.font(.footnote)
         }
         .tabViewSidebarBottomBar {
-			DeeplinkButton(title: "Deeplink: Circle 10", item: .circleItem(level: 10))
+			DeeplinkButton(title: "Deeplink: Circle 10", screen: .circleItem(level: 10))
         }
         .tint(.green)
 	}

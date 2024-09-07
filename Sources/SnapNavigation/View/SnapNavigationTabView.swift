@@ -5,9 +5,9 @@
 
 import SwiftUI
 
-internal struct SnapNavigationTabView<ItemProvider: SnapNavigationItemProvider>: View {
+internal struct SnapNavigationTabView<NavigationProvider: SnapNavigationProvider>: View {
 
-	typealias NavState = SnapNavigation.State<ItemProvider>
+	typealias NavState = SnapNavigation.State<NavigationProvider>
 
     @Environment(\.horizontalSizeClass) private var horizontalSize
 
@@ -20,19 +20,19 @@ internal struct SnapNavigationTabView<ItemProvider: SnapNavigationItemProvider>:
 	var body: some View {
 		
 		TabView(selection: $state.selected) {
-			ForEach(state.items) { item in
+			ForEach(state.screens) { screen in
 				
-				if shouldShowSection(for: item) {
+				if shouldShowSection(for: screen) {
 					
-					TabSection(item.definition.title) {
-						ForEach(state.subitems(for: item)) { subitem in
-							tab(for: subitem)
+					TabSection(screen.definition.title) {
+						ForEach(state.subscreens(for: screen)) { subscreen in
+							tab(for: subscreen)
 						}
 					}
 					
 				} else {
 					
-					tab(for: item)
+					tab(for: screen)
 					
 				}
 				
@@ -42,22 +42,22 @@ internal struct SnapNavigationTabView<ItemProvider: SnapNavigationItemProvider>:
 		
 	}
 	
-	private func shouldShowSection(for item: ItemProvider.Item) -> Bool {
-		state.subitems(for: item).isEmpty == false && horizontalSize != .compact
+	private func shouldShowSection(for screen: NavigationProvider.Screen) -> Bool {
+		state.subscreens(for: screen).isEmpty == false && horizontalSize != .compact
 	}
 	
 	
 	// MARK: Tab View
 	
-	@TabContentBuilder<ItemProvider.Item>
-	private func tab(for item: ItemProvider.Item) -> some TabContent<ItemProvider.Item> {
-		Tab(value: item, role: nil) {
+	@TabContentBuilder<NavigationProvider.Screen>
+	private func tab(for screen: NavigationProvider.Screen) -> some TabContent<NavigationProvider.Screen> {
+		Tab(value: screen, role: nil) {
 			SnapNavigationStack(
-				path: state.pathBinding(for: item),
-				root: item
+				path: state.pathBinding(for: screen),
+				root: screen
 			)
 		} label: {
-			AnyView(item.label)
+			AnyView(screen.label)
 		}
 	}
 	

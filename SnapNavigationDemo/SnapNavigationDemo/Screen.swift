@@ -6,14 +6,14 @@
 import SwiftUI
 import SnapNavigation
 
-enum NavigationItem: SnapNavigationItem {
+enum Screen: SnapNavigationScreen {
 		
 	case triangle
 	case rectangle, rectangleItem(level: Int)
 	case circle, circleSection, circleItem(level: Int)
     case infinity
 
-	var definition: SnapNavigation.ItemDefinition<Self> {
+	var definition: SnapNavigation.ScreenDefinition<Self> {
         switch self {
 				
 			case .triangle: .init(title: "Triangle", systemImage: "triangle")
@@ -24,8 +24,8 @@ enum NavigationItem: SnapNavigationItem {
 				
             case .circle: .init(title: "Circle", systemImage: "circle")
 				
-			case .circleSection: .init(title: "Circles", systemImage: "circle") { item in
-				ItemList(item: item)
+			case .circleSection: .init(title: "Circles", systemImage: "circle") { screen in
+				ScreenListScreen(screen: screen)
 			}
 				
 			case .circleItem(level: let level): .init(title: "Circle \(level)", systemImage: "\(level).circle")
@@ -40,7 +40,7 @@ enum NavigationItem: SnapNavigationItem {
 	}
 	
 	var destination: any View {
-		definition.destination?(self) ?? ItemScreen(item: self)
+		definition.destination?(self) ?? DeeplinkScreen(screen: self)
 	}
 	
 }

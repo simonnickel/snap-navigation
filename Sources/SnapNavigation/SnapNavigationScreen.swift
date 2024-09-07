@@ -5,9 +5,9 @@
 
 import SwiftUI
 
-public protocol SnapNavigationItem: Identifiable, Hashable, Equatable {
+public protocol SnapNavigationScreen: Identifiable, Hashable, Equatable {
 	
-	var definition: SnapNavigation.ItemDefinition<Self> { get }
+	var definition: SnapNavigation.ScreenDefinition<Self> { get }
 	
     var label: any View { get }
 
@@ -15,18 +15,18 @@ public protocol SnapNavigationItem: Identifiable, Hashable, Equatable {
 
 }
 
-public extension SnapNavigationItem {
+public extension SnapNavigationScreen {
 	var id: Int { self.hashValue }
 }
 
 extension SnapNavigation {
 	
-	public struct ItemDefinition<Item: SnapNavigationItem> {
+	public struct ScreenDefinition<Screen: SnapNavigationScreen> {
 		
 		public var title: String
 		public var systemImage: String?
 		
-		public typealias DestinationFactory = (Item) -> (any View)
+		public typealias DestinationFactory = (Screen) -> (any View)
 		public var destination: DestinationFactory?
 
 		public init(title: String, systemImage: String? = nil, destination: DestinationFactory? = nil) {

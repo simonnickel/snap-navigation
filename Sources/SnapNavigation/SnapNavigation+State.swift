@@ -10,28 +10,28 @@ public extension SnapNavigation {
 
     @MainActor
     @Observable
-    public class State<ItemProvider: SnapNavigationItemProvider> {
+    public class State<NavigationProvider: SnapNavigationProvider> {
 
-		public typealias Item = ItemProvider.Item
-        public typealias Path = [Item]
+		public typealias Screen = NavigationProvider.Screen
+        public typealias Path = [Screen]
 		
-		private let itemProvider: ItemProvider
+		private let navigationProvider: NavigationProvider
 		
-		public init(itemProvider: ItemProvider) {
-			self.itemProvider = itemProvider
-            self.selected = itemProvider.initial
+		public init(provider: NavigationProvider) {
+			self.navigationProvider = provider
+            self.selected = provider.initial
         }
 
 		
         // MARK: Selected
 
-        public var selected: Item
+        public var selected: Screen
 		
 		
 		// MARK: Navigate
 		
-		public func navigate(to item: Item) {
-			guard var route = route(to: item) else {
+		public func navigate(to screen: Screen) {
+			guard var route = route(to: screen) else {
 				return
 			}
 			if let first = route.first {
@@ -50,54 +50,54 @@ public extension SnapNavigation {
 		}
 
 
-        // MARK: Items
+        // MARK: Screens
 		
-		public var items: [Item] {
-			itemProvider.items
+		public var screens: [Screen] {
+			navigationProvider.screens
 		}
 		
-		public func route(to item: Item) -> Path? {
-			itemProvider.route(to: item)
+		public func route(to screen: Screen) -> Path? {
+			navigationProvider.route(to: screen)
 		}
 		
-		public func subitems(for item: Item) -> [Item] {
-			itemProvider.subitems(for: item)
+		public func subscreens(for screen: Screen) -> [Screen] {
+			navigationProvider.subscreens(for: screen)
 		}
 		
-        public func parent(of item: Item) -> Item? {
-			guard !itemProvider.items.contains(item) else { return nil }
+        public func parent(of screen: Screen) -> Screen? {
+			guard !navigationProvider.screens.contains(screen) else { return nil }
 
-			return itemProvider.items.first { subitems(for: $0).contains(item) }
+			return navigationProvider.screens.first { subscreens(for: $0).contains(screen) }
         }
 
 
         // MARK: Path
 
-        private var pathForItem: [Item : Path] = [:]
+		private var pathForScreen: [Screen : Path] = [:]
 
-        public func getPath(for item: Item) -> Path {
-            pathForItem[item] ?? []
+        public func getPath(for screen: Screen) -> Path {
+			pathForScreen[screen] ?? []
         }
 
-        public func setPath(_ path: Path, for item: Item) {
-            pathForItem[item] = path
+        public func setPath(_ path: Path, for screen: Screen) {
+			pathForScreen[screen] = path
         }
 
         @ObservationIgnored
-        internal var pathBindingsForItem: [Item: Binding<Path>] = [:]
+        internal var pathBindingsForScreen: [Screen: Binding<Path>] = [:]
 
-        public func pathBinding(for item: Item) -> Binding<Path> {
-            if let binding = pathBindingsForItem[item] {
+        public func pathBinding(for screen: Screen) -> Binding<Path> {
+            if let binding = pathBindingsForScreen[screen] {
                 return binding
             }
 
             let binding = Binding<Path> { [weak self] in
-                self?.getPath(for: item) ?? []
+                self?.getPath(for: screen) ?? []
             } set: { [weak self] path in
-                self?.setPath(path, for: item)
+                self?.setPath(path, for: screen)
             }
 
-            pathBindingsForItem[item] = binding
+			pathBindingsForScreen[screen] = binding
             return binding
         }
 

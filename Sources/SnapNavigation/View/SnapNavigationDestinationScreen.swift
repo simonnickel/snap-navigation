@@ -5,13 +5,13 @@
 
 import SwiftUI
 
-internal struct SnapNavigationDestinationScreen<Item: SnapNavigationItem>: View {
+internal struct SnapNavigationDestinationScreen<Screen: SnapNavigationScreen>: View {
 	
-	let item: Item
+	let screen: Screen
 	
 	var body: some View {
-		AnyView(item.destination)
-			.navigationTitle(item.definition.title)
+		AnyView(screen.destination)
+			.navigationTitle(screen.definition.title)
 	}
 	
 }

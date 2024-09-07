@@ -5,15 +5,15 @@
 
 import SwiftUI
 
-public struct SnapNavigationView<ItemProvider: SnapNavigationItemProvider>: View {
+public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: View {
 
     @Environment(\.horizontalSizeClass) private var horizontalSize
 
-    public typealias NavState = SnapNavigation.State<ItemProvider>
+    public typealias NavigationState = SnapNavigation.State<NavigationProvider>
 
-    private let state: NavState
+    private let state: NavigationState
 
-    public init(state: NavState) {
+    public init(state: NavigationState) {
         self.state = state
     }
 
@@ -25,7 +25,7 @@ public struct SnapNavigationView<ItemProvider: SnapNavigationItemProvider>: View
         SnapNavigationTabView(state: state)
 			.environment(state)
 			.onChange(of: state.selected, { oldValue, newValue in
-				// Navigate to the item if the selected item is not the first item on it's route.
+				// Navigate to the screen if the selected screen is not the first on it's route.
 				if state.route(to: newValue)?.first != newValue {
 					// Without wrapping the call in Task, sometimes the stack animations will break.
 					Task {
