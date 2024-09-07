@@ -19,6 +19,10 @@ public extension SnapNavigationScreen {
 	var id: Int { self.hashValue }
 }
 
+extension Array: Hashable, Identifiable where Element: SnapNavigationScreen {
+	public var id: Int { hashValue }
+}
+
 extension SnapNavigation {
 	
 	public struct ScreenDefinition<Screen: SnapNavigationScreen> {

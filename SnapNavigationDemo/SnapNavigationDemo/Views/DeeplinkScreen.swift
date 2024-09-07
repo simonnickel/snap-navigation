@@ -15,6 +15,7 @@ struct DeeplinkScreen: View {
 	var body: some View {
 		VStack {
 			
+			PresentButton(title: "Present: Rectangle", screen: .rectangle)
 			DeeplinkButton(title: "Deeplink: Rectangle", screen: .rectangle)
 			DeeplinkButton(title: "Deeplink: Rectangle 3", screen: .rectangleItem(level: 3))
 

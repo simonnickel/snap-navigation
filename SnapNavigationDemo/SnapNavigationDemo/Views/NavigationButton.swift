@@ -14,8 +14,34 @@ struct DeeplinkButton: View {
 	let screen: Screen
 
 	var body: some View {
-		Button {
+		NavigationButton(title: title) {
 			navigationState.navigate(to: screen)
+		}
+	}
+}
+
+struct PresentButton: View {
+	
+	@Environment(NavigationState.self) private var navigationState
+
+	let title: String
+	let screen: Screen
+
+	var body: some View {
+		NavigationButton(title: title) {
+			navigationState.present(screen: screen)
+		}
+	}
+}
+
+struct NavigationButton: View {
+
+	let title: String
+	let action: () -> Void
+
+	var body: some View {
+		Button {
+			action()
 		} label: {
 			Text(title)
 				.font(.system(.caption))

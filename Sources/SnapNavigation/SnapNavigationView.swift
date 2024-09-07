@@ -11,7 +11,7 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 
     public typealias NavigationState = SnapNavigation.State<NavigationProvider>
 
-    private let state: NavigationState
+	private let state: NavigationState
 
     public init(state: NavigationState) {
         self.state = state
@@ -23,7 +23,6 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
     public var body: some View {
 
         SnapNavigationTabView(state: state)
-			.environment(state)
 			.onChange(of: state.selected, { oldValue, newValue in
 				// Navigate to the screen if the selected screen is not the first on it's route.
 				if state.route(to: newValue)?.first != newValue {
@@ -33,6 +32,8 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 					}
 				}
 			})
+			.modifier(SnapPresentationModifier<NavigationProvider>(entries: state.presentations))
+			.environment(state)
         
     }
     
