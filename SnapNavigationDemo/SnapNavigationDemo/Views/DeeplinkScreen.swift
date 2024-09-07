@@ -8,7 +8,7 @@ import SnapNavigation
 
 struct DeeplinkScreen: View {
 	
-	@Environment(SnapNavigation.State<NavigationProvider>.self) private var navigationState
+	@Environment(NavigationState.self) private var navigationState
 
 	let screen: Screen
 	

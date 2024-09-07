@@ -5,6 +5,8 @@
 
 import SnapNavigation
 
+typealias NavigationState = SnapNavigation.State<NavigationProvider>
+
 struct NavigationProvider: SnapNavigationProvider {
 	
 	public typealias Path = [Screen]
