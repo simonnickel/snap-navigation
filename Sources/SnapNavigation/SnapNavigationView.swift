@@ -25,14 +25,14 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
         SnapNavigationTabView(state: state)
 			.onChange(of: state.selected, { oldValue, newValue in
 				// Navigate to the screen if the selected screen is not the first on it's route.
-				if state.route(to: newValue)?.first != newValue {
+				if state.route(to: newValue).first != newValue {
 					// Without wrapping the call in Task, sometimes the stack animations will break.
 					Task {
 						state.navigate(to: newValue)
 					}
 				}
 			})
-			.modifier(SnapPresentationModifier<NavigationProvider>(entries: state.presentations))
+			.modifier(SnapPresentationModifier<NavigationProvider>(entries: state.sheets))
 			.environment(state)
         
     }

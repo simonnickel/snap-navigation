@@ -34,6 +34,20 @@ struct PresentButton: View {
 	}
 }
 
+struct PushButton: View {
+	
+	@Environment(NavigationState.self) private var navigationState
+
+	let title: String
+	let screen: Screen
+
+	var body: some View {
+		NavigationButton(title: title) {
+			navigationState.push(screen: screen)
+		}
+	}
+}
+
 struct NavigationButton: View {
 
 	let title: String
@@ -43,13 +57,15 @@ struct NavigationButton: View {
 		Button {
 			action()
 		} label: {
-			Text(title)
-				.font(.system(.caption))
-				.bold()
-				.foregroundStyle(.white)
+			VStack {
+				Text(title)
+			}
+			.bold()
+			.font(.system(.caption))
+			.foregroundStyle(.white)
 		}
 		.padding(.horizontal, 10)
 		.padding(.vertical, 5)
-		.background(.green, in: .capsule)
+		.background(.green, in: .rect(cornerRadius: 5))
 	}
 }

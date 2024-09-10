@@ -25,7 +25,7 @@ struct SnapPresentationModifier<NavigationProvider: SnapNavigationProvider>: Vie
 	
 	func body(content: Content) -> some View {
 		content
-			.sheet(item: navigationState.presentationBinding(for: entry?.id)) { presentation in
+			.sheet(item: navigationState.sheetBinding(for: entry?.id)) { presentation in
 				AnyView(presentation.screen.destination)
 					.modifier(SnapPresentationModifier(entries: entries))
 					.environment(navigationState)

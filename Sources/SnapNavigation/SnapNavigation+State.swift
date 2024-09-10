@@ -25,55 +25,38 @@ public extension SnapNavigation {
 		
 		// MARK: Navigation
 		
-		public var selected: Screen
-		
-		public func navigate(to screen: Screen) {
-			guard var route = route(to: screen) else {
-				return
-			}
-			if let first = route.first {
-				route.removeFirst()
-				selected = first
-#if os(macOS)
-				// macOS uses SplitView, where a selection in the sidebar clears the path.
-				// Wrapping this in Task applies the new path after the purge.
-				Task {
-					self.setPath(route, for: first)
-				}
-#else
-				setPath(route, for: first)
-#endif
-			}
-		}
-		
-		
-		// MARK: Presentation
-		
 		struct PresentationEntry: Equatable, Identifiable {
 			let id: UUID
 			let screen: NavigationProvider.Screen
 		}
 		
-		var presentations: [PresentationEntry] = []
-		
-		public func present(screen: Screen) {
-			presentations.append(PresentationEntry(id: UUID(), screen: screen))
+		public func navigate(to screen: Screen) {
+			var route = route(to: screen)
+			
+			if let first = route.first {
+				route.removeFirst()
+				selected = first
+				setPath(path, for: selected)
+			}
 		}
 		
-		func presentationBinding(for presentationId: PresentationEntry.ID?) -> Binding<PresentationEntry?> {
-			Binding(get: {
-				self.presentations.first(where: { $0.id == presentationId })
-			}, set: { screen in
-				if let screen {
-					if let index = self.presentations.lastIndex(of: screen) {
-						self.presentations.remove(at: index)
-					}
-				} else {
-					if let index = self.presentations.firstIndex(where: { $0.id == presentationId }) {
-						self.presentations.remove(at: index)
-					}
-				}
-			})
+		public func present(screen: Screen) {
+			sheets.append(PresentationEntry(id: UUID(), screen: screen))
+		}
+		
+		public func push(screen: Screen) {
+			var path = getCurrentPath()
+			path.append(screen)
+			setCurrent(path: path)
+		}
+		
+		internal func route(to screen: Screen) -> Path {
+			guard let parent = navigationProvider.parent(of: screen) else {
+				return [screen]
+			}
+			var pathToParent = route(to: parent) ?? []
+			pathToParent.append(screen)
+			return pathToParent
 		}
 		
 		
@@ -83,37 +66,69 @@ public extension SnapNavigation {
 			navigationProvider.screens
 		}
 		
-		public func route(to screen: Screen) -> Path? {
-			navigationProvider.route(to: screen)
-		}
-		
 		public func subscreens(for screen: Screen) -> [Screen] {
 			navigationProvider.subscreens(for: screen)
 		}
 		
-		public func parent(of screen: Screen) -> Screen? {
-			guard !navigationProvider.screens.contains(screen) else { return nil }
-			
-			return navigationProvider.screens.first { subscreens(for: $0).contains(screen) }
+		
+		// MARK: Selection
+		
+		public var selected: Screen
+		
+		
+		// MARK: Sheets
+		
+		internal var sheets: [PresentationEntry] = []
+		
+		internal func sheetBinding(for presentationId: PresentationEntry.ID?) -> Binding<PresentationEntry?> {
+			Binding(get: {
+				self.sheets.first(where: { $0.id == presentationId })
+			}, set: { screen in
+				if let screen {
+					if let index = self.sheets.lastIndex(of: screen) {
+						self.sheets.remove(at: index)
+					}
+				} else {
+					if let index = self.sheets.firstIndex(where: { $0.id == presentationId }) {
+						self.sheets.remove(at: index)
+					}
+				}
+			})
 		}
 		
 		
-		// MARK: Path
+		// MARK: Paths
 		
 		private var pathForScreen: [Screen : Path] = [:]
 		
-		public func getPath(for screen: Screen) -> Path {
+		private func getPath(for screen: Screen) -> Path {
 			pathForScreen[screen] ?? []
 		}
 		
-		public func setPath(_ path: Path, for screen: Screen) {
+		private func setPath(_ path: Path, for screen: Screen) {
+#if os(macOS)
+			// macOS uses SplitView, where a selection in the sidebar clears the path.
+			// Wrapping this in Task applies the new path after the purge.
+			Task {
+				pathForScreen[screen] = path
+			}
+#else
 			pathForScreen[screen] = path
+#endif
+		}
+		
+		private func getCurrentPath() -> Path {
+			getPath(for: selected)
+		}
+		
+		private func setCurrent(path: Path) {
+			setPath(path, for: selected)
 		}
 		
 		@ObservationIgnored
 		internal var pathBindingsForScreen: [Screen: Binding<Path>] = [:]
 		
-		public func pathBinding(for screen: Screen) -> Binding<Path> {
+		internal func pathBinding(for screen: Screen) -> Binding<Path> {
 			if let binding = pathBindingsForScreen[screen] {
 				return binding
 			}
