@@ -8,12 +8,19 @@ import Observation
 
 public extension SnapNavigation {
 	
+	public enum PresentationStyle {
+		case select
+		case push
+		case sheet
+	}
+	
 	@MainActor
 	@Observable
 	public class State<NavigationProvider: SnapNavigationProvider> {
 		
 		public typealias Screen = NavigationProvider.Screen
 		public typealias Path = [Screen]
+		internal typealias Route = [RouteEntry]
 		
 		private let navigationProvider: NavigationProvider
 		
@@ -25,23 +32,54 @@ public extension SnapNavigation {
 		
 		// MARK: Navigation
 		
-		struct PresentationEntry: Equatable, Identifiable {
-			let id: UUID
-			let screen: NavigationProvider.Screen
+		internal struct RouteEntry: Equatable, Identifiable {
+			let id: UUID = UUID()
+			var screens: [Screen]
+			let style: PresentationStyle
 		}
 		
 		public func navigate(to screen: Screen) {
 			var route = route(to: screen)
 			
-			if let first = route.first {
-				route.removeFirst()
-				selected = first
-				setPath(path, for: selected)
+			// Selection
+			guard let firstEntry = route.first, firstEntry.style == .select, let firstScreen = firstEntry.screens.first else {
+				return
 			}
+
+			selected = firstScreen
+			route.removeFirst()
+			
+			// Pushes
+			if let entry = route.first, entry.style == .push {
+				let path: Path = entry.screens
+				setPath(path, for: selected)
+			} else {
+				setPath([], for: selected)
+			}
+			
+			// Sheets
+			for entry in route.filter({ $0.style == .sheet }) {
+				if let first = entry.screens.first {
+					var path = entry.screens
+					path.removeFirst()
+					setPath(path, for: first)
+					present(screen: first, style: entry.style)
+				}
+			}
+
 		}
 		
-		public func present(screen: Screen) {
-			sheets.append(PresentationEntry(id: UUID(), screen: screen))
+		public func present(screen: Screen, style: PresentationStyle) {
+			switch style {
+				case .select:
+					// TODO: Not tested or used yet
+					setPath([], for: screen)
+					selected = screen
+				case .push:
+					push(screen: screen)
+				case .sheet:
+					sheets.append(RouteEntry(screens: [screen], style: .sheet))
+			}
 		}
 		
 		public func push(screen: Screen) {
@@ -50,13 +88,40 @@ public extension SnapNavigation {
 			setCurrent(path: path)
 		}
 		
-		internal func route(to screen: Screen) -> Path {
+		internal func route(to screen: Screen) -> Route {
+			let route = routeEntries(to: screen)
+			
+			return condense(route: route)
+		}
+		
+		private func routeEntries(to screen: Screen) -> Route {
 			guard let parent = navigationProvider.parent(of: screen) else {
-				return [screen]
+				return [RouteEntry(screens: [screen], style: .select)]
 			}
-			var pathToParent = route(to: parent) ?? []
-			pathToParent.append(screen)
+			var pathToParent = routeEntries(to: parent) ?? []
+			pathToParent.append(RouteEntry(screens: [screen], style: screen.definition.presentationStyle))
 			return pathToParent
+		}
+		
+		// TODO: Unit Tests
+		private func condense(route: Route) -> Route {
+			var result: Route = []
+			var currentEntry: RouteEntry = RouteEntry(screens: [], style: .select)
+			for entry in route {
+				if entry.style == .push && currentEntry.style != .select {
+					currentEntry.screens = currentEntry.screens + entry.screens
+				} else {
+					if currentEntry.screens.count > 0 {
+						result.append(currentEntry)
+					}
+					currentEntry = entry
+				}
+			}
+			if currentEntry.screens.count > 0 {
+				result.append(currentEntry)
+			}
+			
+			return result
 		}
 		
 		
@@ -64,6 +129,10 @@ public extension SnapNavigation {
 		
 		public var screens: [Screen] {
 			navigationProvider.screens
+		}
+		
+		public func parent(for screen: Screen) -> Screen? {
+			navigationProvider.parent(of: screen)
 		}
 		
 		public func subscreens(for screen: Screen) -> [Screen] {
@@ -78,9 +147,9 @@ public extension SnapNavigation {
 		
 		// MARK: Sheets
 		
-		internal var sheets: [PresentationEntry] = []
+		internal var sheets: [RouteEntry] = []
 		
-		internal func sheetBinding(for presentationId: PresentationEntry.ID?) -> Binding<PresentationEntry?> {
+		internal func sheetBinding(for presentationId: RouteEntry.ID?) -> Binding<RouteEntry?> {
 			Binding(get: {
 				self.sheets.first(where: { $0.id == presentationId })
 			}, set: { screen in
@@ -117,12 +186,20 @@ public extension SnapNavigation {
 #endif
 		}
 		
+		private var currentRoot: Screen {
+			if let latestSheet = sheets.last, let firstScreen = latestSheet.screens.first {
+				return firstScreen
+			} else {
+				return selected
+			}
+		}
+		
 		private func getCurrentPath() -> Path {
-			getPath(for: selected)
+			getPath(for: currentRoot)
 		}
 		
 		private func setCurrent(path: Path) {
-			setPath(path, for: selected)
+			setPath(path, for: currentRoot)
 		}
 		
 		@ObservationIgnored

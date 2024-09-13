@@ -29,13 +29,15 @@ extension SnapNavigation {
 		
 		public var title: String
 		public var systemImage: String?
+		public var presentationStyle: PresentationStyle
 		
 		public typealias DestinationFactory = (Screen) -> (any View)
 		public var destination: DestinationFactory?
 
-		public init(title: String, systemImage: String? = nil, destination: DestinationFactory? = nil) {
+		public init(title: String, systemImage: String? = nil, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
 			self.title = title
 			self.systemImage = systemImage
+			self.presentationStyle = style
 			self.destination = destination
 		}
 		

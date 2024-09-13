@@ -29,7 +29,7 @@ struct PresentButton: View {
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigationState.present(screen: screen)
+			navigationState.present(screen: screen, style: .sheet)
 		}
 	}
 }
