@@ -29,7 +29,7 @@ struct SnapPresentationModifier<NavigationProvider: SnapNavigationProvider>: Vie
 				Group {
 					if let root = routeEntry.screens.first {
 						// TODO: SnapNavigationStack schould just get a RouteEntry
-						SnapNavigationStack(path: navigationState.pathBinding(for: root), root: root)
+						SnapNavigationStack<NavigationProvider>(root: root)
 					} else {
 						EmptyView()
 					}

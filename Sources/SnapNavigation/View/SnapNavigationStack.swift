@@ -5,13 +5,17 @@
 
 import SwiftUI
 
-internal struct SnapNavigationStack<Screen: SnapNavigationScreen>: View {
+internal struct SnapNavigationStack<NavigationProvider: SnapNavigationProvider>: View {
 
-    let path: Binding<[Screen]>
+	typealias Screen = NavigationProvider.Screen
+	
+	typealias NavigationState = SnapNavigation.State<NavigationProvider>
+	@Environment(NavigationState.self) private var navigationState
+	
     let root: Screen
 
     var body: some View {
-        NavigationStack(path: path) {
+		NavigationStack(path: navigationState.pathBinding(for: root)) {
             SnapNavigationDestinationScreen(screen: root)
                 .navigationDestination(for: Screen.self) { screen in
                     SnapNavigationDestinationScreen(screen: screen)

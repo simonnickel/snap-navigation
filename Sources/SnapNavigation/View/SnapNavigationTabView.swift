@@ -52,10 +52,7 @@ internal struct SnapNavigationTabView<NavigationProvider: SnapNavigationProvider
 	@TabContentBuilder<NavigationProvider.Screen>
 	private func tab(for screen: NavigationProvider.Screen) -> some TabContent<NavigationProvider.Screen> {
 		Tab(value: screen, role: nil) {
-			SnapNavigationStack(
-				path: state.pathBinding(for: screen),
-				root: screen
-			)
+			SnapNavigationStack<NavigationProvider>(root: screen)
 		} label: {
 			AnyView(screen.label)
 		}
