@@ -36,7 +36,7 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 					}
 				}
 			})
-			.modifier(SnapPresentationModifier<NavigationProvider>(level: state.sheets.count - 1))
+			.modifier(SnapPresentationModifier<NavigationProvider>(level: state.sheetLevelCurrent))
 			.environment(state)
         
     }

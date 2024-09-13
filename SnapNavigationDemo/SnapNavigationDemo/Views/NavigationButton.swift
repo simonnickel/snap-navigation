@@ -43,7 +43,7 @@ struct PushButton: View {
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigationState.push(screen: screen)
+			navigationState.present(screen: screen, style: .push)
 		}
 	}
 }

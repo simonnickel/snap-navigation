@@ -8,6 +8,12 @@ import Observation
 
 public extension SnapNavigation {
 	
+	internal typealias SheetLevel = Int
+	
+	internal enum Constants {
+		static let sheetLevelMin: SheetLevel = 0
+	}
+	
 	public enum PresentationStyle {
 		case select
 		case push
@@ -50,7 +56,7 @@ public extension SnapNavigation {
 			
 			// Push
 			if let entry = route.first, entry.style == .push {
-				setPath(entry.path, for: .selection(screen: selected))
+				setPath([entry.root] + entry.path, for: .selection(screen: selected))
 			} else {
 				setPath([], for: .selection(screen: selected))
 			}
@@ -69,10 +75,12 @@ public extension SnapNavigation {
 					sheets = []
 					setPath([], for: .selection(screen: screen))
 					selected = screen
+					
 				case .push:
-					var path = getCurrentPath()
+					var path = getPath(for: pathContextCurrent)
 					path.append(screen)
-					setCurrent(path: path)
+					setPath(path, for: pathContextCurrent)
+					
 				case .sheet:
 					sheets.append(RouteEntry(root: screen, path: [], style: .sheet))
 			}
@@ -91,7 +99,7 @@ public extension SnapNavigation {
 		}
 		
 		public func popCurrentToRoot() {
-			setCurrent(path: [])
+			setPath([], for: pathContextCurrent)
 		}
 		
 		
@@ -154,19 +162,29 @@ public extension SnapNavigation {
 		
 		public var selected: Screen
 		
+		private var pathContextCurrent: PathContext {
+			if sheetLevelCurrent >= 0 {
+				return .sheet(level: sheetLevelCurrent)
+			} else {
+				return .selection(screen: selected)
+			}
+		}
+		
 		
 		// MARK: Sheets
 		
-		internal var sheets: [RouteEntry] = []
+		private var sheets: [RouteEntry] = []
 		
-		internal func sheetLevelInverted(_ level: Int) -> Int {
+		internal var sheetLevelCurrent: SheetLevel { sheets.count - 1 }
+		
+		internal func sheetLevelInverted(_ level: SheetLevel) -> SheetLevel {
 			return sheets.count - 1 - level
 		}
 		
 		@ObservationIgnored
-		private var sheetBindingsForLevel: [Int: Binding<Bool>] = [:]
+		private var sheetBindingsForLevel: [SheetLevel: Binding<Bool>] = [:]
 		
-		internal func sheetBinding(for level: Int) -> Binding<Bool> {
+		internal func sheetBinding(for level: SheetLevel) -> Binding<Bool> {
 			if let binding = sheetBindingsForLevel[level] {
 				return binding
 			}
@@ -186,9 +204,11 @@ public extension SnapNavigation {
 		
 		// MARK: Paths
 		
-		internal enum PathContext {
+		private var pathForScreen: [Screen : Path] = [:]
+		
+		internal enum PathContext: Hashable {
 			case selection(screen: Screen)
-			case sheet(level: Int)
+			case sheet(level: SheetLevel)
 		}
 		
 		internal func rootScreen(for context: PathContext) -> Screen? {
@@ -204,38 +224,32 @@ public extension SnapNavigation {
 			}
 		}
 		
-		internal func pathBinding(for context: PathContext) -> Binding<Path> {
-			switch context {
-				case .selection(let screen): pathBinding(for: screen)
-				case .sheet(let level): pathBinding(for: level)
-			}
-		}
-		
 		@ObservationIgnored
-		private var pathBindingsForLevel: [Int: Binding<Path>] = [:]
-
-		internal func pathBinding(for level: Int) -> Binding<Path> {
-			if let binding = pathBindingsForLevel[level] {
+		private var pathBindingsForContext: [PathContext: Binding<Path>] = [:]
+		
+		internal func pathBinding(for context: PathContext) -> Binding<Path> {
+			if let binding = pathBindingsForContext[context] {
 				return binding
 			}
-			let binding = Binding<Path> { [weak self] in
-				self?.getPath(for: .sheet(level: level)) ?? []
-			} set: { [weak self] path in
-				self?.setPath(path, for: .sheet(level: level))
+			let binding: Binding<Path>
+			switch context {
+				case .selection(let screen):
+					binding = Binding<Path> { [weak self] in
+						self?.getPath(for: .selection(screen: screen)) ?? []
+					} set: { [weak self] path in
+						self?.setPath(path, for: .selection(screen: screen))
+					}
+					
+				case .sheet(let level):
+					binding = Binding<Path> { [weak self] in
+						self?.getPath(for: .sheet(level: level)) ?? []
+					} set: { [weak self] path in
+						self?.setPath(path, for: .sheet(level: level))
+					}
 			}
 			
-			pathBindingsForLevel[level] = binding
+			pathBindingsForContext[context] = binding
 			return binding
-		}
-		
-		private var pathForScreen: [Screen : Path] = [:]
-		
-		private var currentPathContext: PathContext {
-			if sheets.count > 0 {
-				return .sheet(level: sheets.count - 1)
-			} else {
-				return .selection(screen: selected)
-			}
 		}
 		
 		private func getPath(for context: PathContext) -> Path {
@@ -269,32 +283,6 @@ public extension SnapNavigation {
 						sheets[level] = entry
 					}
 			}
-		}
-		private func getCurrentPath() -> Path {
-			
-			getPath(for: currentPathContext)
-		}
-		
-		private func setCurrent(path: Path) {
-			setPath(path, for: currentPathContext)
-		}
-		
-		@ObservationIgnored
-		private var pathBindingsForScreen: [Screen: Binding<Path>] = [:]
-		
-		private func pathBinding(for screen: Screen) -> Binding<Path> {
-			if let binding = pathBindingsForScreen[screen] {
-				return binding
-			}
-			
-			let binding = Binding<Path> { [weak self] in
-				self?.getPath(for: .selection(screen: screen)) ?? []
-			} set: { [weak self] path in
-				self?.setPath(path, for: .selection(screen: screen))
-			}
-			
-			pathBindingsForScreen[screen] = binding
-			return binding
 		}
 		
 	}
