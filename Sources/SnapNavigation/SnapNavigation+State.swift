@@ -22,7 +22,11 @@ public extension SnapNavigation {
 		public typealias Path = [Screen]
 		internal typealias Route = [RouteEntry]
 		
-		private let navigationProvider: NavigationProvider
+		internal struct RouteEntry: Equatable, Identifiable {
+			let id: UUID = UUID()
+			var screens: [Screen]
+			let style: PresentationStyle
+		}
 		
 		public init(provider: NavigationProvider) {
 			self.navigationProvider = provider
@@ -30,13 +34,7 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: Navigation
-		
-		internal struct RouteEntry: Equatable, Identifiable {
-			let id: UUID = UUID()
-			var screens: [Screen]
-			let style: PresentationStyle
-		}
+		// MARK: - Navigation
 		
 		public func navigate(to screen: Screen) {
 			var route = route(to: screen)
@@ -72,7 +70,7 @@ public extension SnapNavigation {
 		public func present(screen: Screen, style: PresentationStyle) {
 			switch style {
 				case .select:
-					// TODO: Not tested or used yet
+					sheets = []
 					setPath([], for: screen)
 					selected = screen
 				case .push:
@@ -87,6 +85,24 @@ public extension SnapNavigation {
 			path.append(screen)
 			setCurrent(path: path)
 		}
+
+		
+		// MARK: Dismiss
+		
+		public func dismissCurrentSheet() {
+			sheets.dropLast()
+		}
+		
+		public func dismissSheets() {
+			sheets = []
+		}
+		
+		public func popCurrentToRoot() {
+			setCurrent(path: [])
+		}
+		
+		
+		// MARK: Route
 		
 		internal func route(to screen: Screen) -> Route {
 			let route = routeEntries(to: screen)
@@ -125,7 +141,9 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: Screens
+		// MARK: - NavigationProvider
+		
+		private let navigationProvider: NavigationProvider
 		
 		public var screens: [Screen] {
 			navigationProvider.screens
@@ -140,7 +158,7 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: Selection
+		// MARK: - State
 		
 		public var selected: Screen
 		

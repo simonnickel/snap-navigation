@@ -44,6 +44,23 @@ struct DeeplinkScreen: View {
 					}
 				}
 				
+				VStack(alignment: .leading, spacing: 4) {
+					Text("Dismiss").font(.headline)
+					NavigationButton(title: "Pop to Root") {
+						navigationState.popCurrentToRoot()
+					}
+					NavigationButton(title: "Dismiss Current Sheet") {
+						navigationState.dismissCurrentSheet()
+					}
+					NavigationButton(title: "Dismiss Sheets") {
+						navigationState.dismissSheets()
+					}
+					
+					NavigationLink(value: Screen.infinity) {
+						Text("NavigationLink: Infinity")
+					}
+				}
+				
 			}
 			.frame(maxWidth: .infinity, alignment: .leading)
 			.scenePadding()
