@@ -24,19 +24,23 @@ struct SnapPresentationModifier<NavigationProvider: SnapNavigationProvider>: Vie
 	}
 	
 	func body(content: Content) -> some View {
-		content
-			.sheet(item: navigationState.sheetBinding(for: entry?.id)) { routeEntry in
-				Group {
-					if let root = routeEntry.screens.first {
-						// TODO: SnapNavigationStack schould just get a RouteEntry
-						SnapNavigationStack<NavigationProvider>(root: root)
-					} else {
-						EmptyView()
+		if let entry {
+			content
+				.sheet(item: navigationState.sheetBinding(for: entry)) { routeEntry in
+					Group {
+						if let root = routeEntry.screens.first {
+							// TODO: SnapNavigationStack schould just get a RouteEntry
+							SnapNavigationStack<NavigationProvider>(root: root)
+						} else {
+							EmptyView()
+						}
 					}
+					.modifier(SnapPresentationModifier(entries: entries))
+					.environment(navigationState)
 				}
-				.modifier(SnapPresentationModifier(entries: entries))
-				.environment(navigationState)
-			}
+		} else {
+			content
+		}
 	}
 	
 }

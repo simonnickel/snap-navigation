@@ -56,7 +56,7 @@ public extension SnapNavigation {
 			}
 			
 			// Sheets
-			sheets = []
+			dismissSheets()
 			for entry in route.filter({ $0.style == .sheet }) {
 				if let first = entry.screens.first {
 					var path = entry.screens
@@ -94,6 +94,7 @@ public extension SnapNavigation {
 			sheets.dropLast()
 		}
 		
+		// TODO: Reset sheets should also reset all path bindings?
 		public func dismissSheets() {
 			sheets = []
 		}
@@ -168,16 +169,16 @@ public extension SnapNavigation {
 		
 		internal var sheets: [RouteEntry] = []
 		
-		internal func sheetBinding(for presentationId: RouteEntry.ID?) -> Binding<RouteEntry?> {
+		internal func sheetBinding(for entry: RouteEntry) -> Binding<RouteEntry?> {
 			Binding(get: {
-				self.sheets.first(where: { $0.id == presentationId })
+				self.sheets.first(where: { $0.id == entry.id })
 			}, set: { screen in
 				if let screen {
 					if let index = self.sheets.lastIndex(of: screen) {
 						self.sheets.remove(at: index)
 					}
 				} else {
-					if let index = self.sheets.firstIndex(where: { $0.id == presentationId }) {
+					if let index = self.sheets.firstIndex(where: { $0.id == entry.id }) {
 						self.sheets.remove(at: index)
 					}
 				}
