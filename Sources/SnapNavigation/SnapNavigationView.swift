@@ -29,14 +29,14 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 					return
 				}
 				// Navigate to the screen if the selected screen is not the first on it's route.
-				if let firstRouteEntry = state.route(to: newValue).first, firstRouteEntry.style == .select, firstRouteEntry.screens.first != newValue {
+				if let firstRouteEntry = state.route(to: newValue).first, firstRouteEntry.style == .select, firstRouteEntry.root != newValue {
 					// Without wrapping the call in Task, sometimes the stack animations will break.
 					Task {
 						state.navigate(to: newValue)
 					}
 				}
 			})
-			.modifier(SnapPresentationModifier<NavigationProvider>(entries: state.sheets))
+			.modifier(SnapPresentationModifier<NavigationProvider>(level: state.sheets.count - 1))
 			.environment(state)
         
     }

@@ -11,32 +11,20 @@ struct SnapPresentationModifier<NavigationProvider: SnapNavigationProvider>: Vie
 	typealias NavigationState = SnapNavigation.State<NavigationProvider>
 	@Environment(NavigationState.self) private var navigationState
 	
-	/// The `PresentationEntry` to present.
-	private let entry: NavigationState.RouteEntry?
+	private let level: Int
 	
-	/// The additional `PresentationEntires` to stack on top.
-	private let entries: [NavigationState.RouteEntry]
-	
-	init(entries: [NavigationState.RouteEntry]) {
-		let first = entries.first
-		self.entry = first
-		self.entries = Array(entries.dropFirst())
+	init(level: Int) {
+		self.level = level
 	}
 	
 	func body(content: Content) -> some View {
-		if let entry {
+		let level = navigationState.sheetLevelInverted(self.level)
+		if level >= 0 {
 			content
-				.sheet(item: navigationState.sheetBinding(for: entry)) { routeEntry in
-					Group {
-						if let root = routeEntry.screens.first {
-							// TODO: SnapNavigationStack schould just get a RouteEntry
-							SnapNavigationStack<NavigationProvider>(root: root)
-						} else {
-							EmptyView()
-						}
-					}
-					.modifier(SnapPresentationModifier(entries: entries))
-					.environment(navigationState)
+				.sheet(isPresented: navigationState.sheetBinding(for: level)) {
+					SnapNavigationStack<NavigationProvider>(context: .sheet(level: level))
+						.modifier(SnapPresentationModifier(level: self.level - 1))
+						.environment(navigationState)
 				}
 		} else {
 			content

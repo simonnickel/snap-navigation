@@ -24,7 +24,8 @@ public extension SnapNavigation {
 		
 		internal struct RouteEntry: Equatable, Identifiable, Hashable {
 			var id: Int { hashValue }
-			var screens: [Screen]
+			var root: Screen
+			var path: Path
 			let style: PresentationStyle
 		}
 		
@@ -39,31 +40,25 @@ public extension SnapNavigation {
 		public func navigate(to screen: Screen) {
 			var route = route(to: screen)
 			
-			// Selection
-			guard let firstEntry = route.first, firstEntry.style == .select, let firstScreen = firstEntry.screens.first else {
+			// Select
+			guard let firstEntry = route.first, firstEntry.style == .select else {
 				return
 			}
 
-			selected = firstScreen
+			selected = firstEntry.root
 			route.removeFirst()
 			
-			// Pushes
+			// Push
 			if let entry = route.first, entry.style == .push {
-				let path: Path = entry.screens
-				setPath(path, for: selected)
+				setPath(entry.path, for: .selection(screen: selected))
 			} else {
-				setPath([], for: selected)
+				setPath([], for: .selection(screen: selected))
 			}
 			
 			// Sheets
 			dismissSheets()
 			for entry in route.filter({ $0.style == .sheet }) {
-				if let first = entry.screens.first {
-					var path = entry.screens
-					path.removeFirst()
-					setPath(path, for: first)
-					present(screen: first, style: entry.style)
-				}
+				sheets.append(entry)
 			}
 
 		}
@@ -72,26 +67,22 @@ public extension SnapNavigation {
 			switch style {
 				case .select:
 					sheets = []
-					setPath([], for: screen)
+					setPath([], for: .selection(screen: screen))
 					selected = screen
 				case .push:
-					push(screen: screen)
+					var path = getCurrentPath()
+					path.append(screen)
+					setCurrent(path: path)
 				case .sheet:
-					sheets.append(RouteEntry(screens: [screen], style: .sheet))
+					sheets.append(RouteEntry(root: screen, path: [], style: .sheet))
 			}
-		}
-		
-		public func push(screen: Screen) {
-			var path = getCurrentPath()
-			path.append(screen)
-			setCurrent(path: path)
 		}
 
 		
 		// MARK: Dismiss
 		
 		public func dismissCurrentSheet() {
-			sheets.dropLast()
+			sheets.removeLast()
 		}
 		
 		// TODO: Reset sheets should also reset all path bindings?
@@ -108,36 +99,35 @@ public extension SnapNavigation {
 		
 		internal func route(to screen: Screen) -> Route {
 			let route = routeEntries(to: screen)
-			
 			return condense(route: route)
 		}
 		
 		private func routeEntries(to screen: Screen) -> Route {
 			guard let parent = navigationProvider.parent(of: screen) else {
-				return [RouteEntry(screens: [screen], style: .select)]
+				return [RouteEntry(root: screen, path: [], style: .select)]
 			}
 			var routeToParent = routeEntries(to: parent) ?? []
-			routeToParent.append(RouteEntry(screens: [screen], style: screen.definition.presentationStyle))
+			routeToParent.append(RouteEntry(root: screen, path: [], style: screen.definition.presentationStyle))
 			return routeToParent
 		}
 		
-		// TODO: Unit Tests
 		private func condense(route: Route) -> Route {
+			var route = route
 			var result: Route = []
-			var currentEntry: RouteEntry = RouteEntry(screens: [], style: .select)
+			guard let first = route.first else { return result }
+			
+			var currentEntry: RouteEntry = first
+			route.removeFirst()
+			
 			for entry in route {
 				if entry.style == .push && currentEntry.style != .select {
-					currentEntry.screens = currentEntry.screens + entry.screens
+					currentEntry.path = currentEntry.path + [entry.root] + entry.path
 				} else {
-					if currentEntry.screens.count > 0 {
-						result.append(currentEntry)
-					}
+					result.append(currentEntry)
 					currentEntry = entry
 				}
 			}
-			if currentEntry.screens.count > 0 {
-				result.append(currentEntry)
-			}
+			result.append(currentEntry)
 			
 			return result
 		}
@@ -169,71 +159,138 @@ public extension SnapNavigation {
 		
 		internal var sheets: [RouteEntry] = []
 		
-		internal func sheetBinding(for entry: RouteEntry) -> Binding<RouteEntry?> {
-			Binding(get: {
-				self.sheets.first(where: { $0.id == entry.id })
-			}, set: { screen in
-				if let screen {
-					if let index = self.sheets.lastIndex(of: screen) {
-						self.sheets.remove(at: index)
-					}
-				} else {
-					if let index = self.sheets.firstIndex(where: { $0.id == entry.id }) {
-						self.sheets.remove(at: index)
-					}
+		internal func sheetLevelInverted(_ level: Int) -> Int {
+			return sheets.count - 1 - level
+		}
+		
+		@ObservationIgnored
+		private var sheetBindingsForLevel: [Int: Binding<Bool>] = [:]
+		
+		internal func sheetBinding(for level: Int) -> Binding<Bool> {
+			if let binding = sheetBindingsForLevel[level] {
+				return binding
+			}
+			
+			let binding = Binding(get: { [weak self] in
+				self?.sheets.count ?? 0 > level
+			}, set: { [weak self] isPresented in
+				if !isPresented && self?.sheets.count ?? 0 > level {
+					self?.sheets.remove(at: level)
 				}
 			})
+			
+			sheetBindingsForLevel[level] = binding
+			return binding
 		}
 		
 		
 		// MARK: Paths
 		
-		private var pathForScreen: [Screen : Path] = [:]
-		
-		private func getPath(for screen: Screen) -> Path {
-			pathForScreen[screen] ?? []
+		internal enum PathContext {
+			case selection(screen: Screen)
+			case sheet(level: Int)
 		}
 		
-		private func setPath(_ path: Path, for screen: Screen) {
-#if os(macOS)
-			// macOS uses SplitView, where a selection in the sidebar clears the path.
-			// Wrapping this in Task applies the new path after the purge.
-			Task {
-				pathForScreen[screen] = path
-			}
-#else
-			pathForScreen[screen] = path
-#endif
-		}
-		
-		private var currentRoot: Screen {
-			if let latestSheet = sheets.last, let firstScreen = latestSheet.screens.first {
-				return firstScreen
-			} else {
-				return selected
+		internal func rootScreen(for context: PathContext) -> Screen? {
+			switch context {
+				case .selection(let screen):
+					return screen
+					
+				case .sheet(let level):
+					guard sheets.count > level else { return nil }
+					
+					let entry = sheets[level]
+					return entry.root
 			}
 		}
 		
-		private func getCurrentPath() -> Path {
-			getPath(for: currentRoot)
-		}
-		
-		private func setCurrent(path: Path) {
-			setPath(path, for: currentRoot)
+		internal func pathBinding(for context: PathContext) -> Binding<Path> {
+			switch context {
+				case .selection(let screen): pathBinding(for: screen)
+				case .sheet(let level): pathBinding(for: level)
+			}
 		}
 		
 		@ObservationIgnored
-		internal var pathBindingsForScreen: [Screen: Binding<Path>] = [:]
+		private var pathBindingsForLevel: [Int: Binding<Path>] = [:]
+
+		internal func pathBinding(for level: Int) -> Binding<Path> {
+			if let binding = pathBindingsForLevel[level] {
+				return binding
+			}
+			let binding = Binding<Path> { [weak self] in
+				self?.getPath(for: .sheet(level: level)) ?? []
+			} set: { [weak self] path in
+				self?.setPath(path, for: .sheet(level: level))
+			}
+			
+			pathBindingsForLevel[level] = binding
+			return binding
+		}
 		
-		internal func pathBinding(for screen: Screen) -> Binding<Path> {
+		private var pathForScreen: [Screen : Path] = [:]
+		
+		private var currentPathContext: PathContext {
+			if sheets.count > 0 {
+				return .sheet(level: sheets.count - 1)
+			} else {
+				return .selection(screen: selected)
+			}
+		}
+		
+		private func getPath(for context: PathContext) -> Path {
+			switch context {
+				case .selection(let screen):
+					return pathForScreen[screen] ?? []
+					
+				case .sheet(let level):
+					guard sheets.count > level else { return [] }
+					return sheets[level].path
+			}
+		}
+		
+		private func setPath(_ path: Path, for context: PathContext) {
+			switch context {
+				case .selection(let screen):
+#if os(macOS)
+					// macOS uses SplitView, where a selection in the sidebar clears the path.
+					// Wrapping this in Task applies the new path after the purge.
+					Task {
+						pathForScreen[screen] = path
+					}
+#else
+					pathForScreen[screen] = path
+#endif
+					
+				case .sheet(let level):
+					if sheets.count > level {
+						var entry = sheets[level]
+						entry.path = path
+						sheets[level] = entry
+					}
+			}
+		}
+		private func getCurrentPath() -> Path {
+			
+			getPath(for: currentPathContext)
+		}
+		
+		private func setCurrent(path: Path) {
+			setPath(path, for: currentPathContext)
+		}
+		
+		@ObservationIgnored
+		private var pathBindingsForScreen: [Screen: Binding<Path>] = [:]
+		
+		private func pathBinding(for screen: Screen) -> Binding<Path> {
 			if let binding = pathBindingsForScreen[screen] {
 				return binding
 			}
 			
 			let binding = Binding<Path> { [weak self] in
-				self?.getPath(for: screen) ?? []
+				self?.getPath(for: .selection(screen: screen)) ?? []
 			} set: { [weak self] path in
-				self?.setPath(path, for: screen)
+				self?.setPath(path, for: .selection(screen: screen))
 			}
 			
 			pathBindingsForScreen[screen] = binding
