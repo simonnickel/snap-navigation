@@ -115,9 +115,9 @@ public extension SnapNavigation {
 			guard let parent = navigationProvider.parent(of: screen) else {
 				return [RouteEntry(screens: [screen], style: .select)]
 			}
-			var pathToParent = routeEntries(to: parent) ?? []
-			pathToParent.append(RouteEntry(screens: [screen], style: screen.definition.presentationStyle))
-			return pathToParent
+			var routeToParent = routeEntries(to: parent) ?? []
+			routeToParent.append(RouteEntry(screens: [screen], style: screen.definition.presentationStyle))
+			return routeToParent
 		}
 		
 		// TODO: Unit Tests
