@@ -22,8 +22,8 @@ public extension SnapNavigation {
 		public typealias Path = [Screen]
 		internal typealias Route = [RouteEntry]
 		
-		internal struct RouteEntry: Equatable, Identifiable {
-			let id: UUID = UUID()
+		internal struct RouteEntry: Equatable, Identifiable, Hashable {
+			var id: Int { hashValue }
 			var screens: [Screen]
 			let style: PresentationStyle
 		}
@@ -56,6 +56,7 @@ public extension SnapNavigation {
 			}
 			
 			// Sheets
+			sheets = []
 			for entry in route.filter({ $0.style == .sheet }) {
 				if let first = entry.screens.first {
 					var path = entry.screens

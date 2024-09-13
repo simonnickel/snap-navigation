@@ -20,7 +20,9 @@ struct DeeplinkScreen: View {
 					HStack {
 						DeeplinkButton(title: "Rectangle", screen: .rectangle)
 						DeeplinkButton(title: "Rectangle 2", screen: .rectangleItem(level: 2))
+						DeeplinkButton(title: "Rectangle 3", screen: .rectangleItem(level: 3))
 						DeeplinkButton(title: "Rectangle 7", screen: .rectangleItem(level: 7))
+						DeeplinkButton(title: "Rectangle 8", screen: .rectangleItem(level: 8))
 					}
 					
 					HStack {
