@@ -171,6 +171,14 @@ public extension SnapNavigation {
 			}
 		}
 		
+		internal var currentScreen: Screen? {
+			currentScreen(for: pathContextCurrent)
+		}
+		
+		internal func currentScreen(for context: PathContext) -> Screen? {
+			getPath(for: context).last
+		}
+		
 		
 		// MARK: Sheets
 		

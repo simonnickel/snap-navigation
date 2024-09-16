@@ -24,17 +24,19 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 
         SnapNavigationTabView(state: state)
 			.onChange(of: state.selected, { oldValue, newValue in
-				// Trigger navigation when subscreen got selected.
+				// Only trigger navigation when subscreen got selected.
 				if state.screens.contains(newValue) {
 					return
 				}
-				// Navigate to the screen if the selected screen is not the first on it's route.
-				if let firstRouteEntry = state.route(to: newValue).first, firstRouteEntry.style == .select, firstRouteEntry.root != newValue {
-					// Without wrapping the call in Task, sometimes the stack animations will break.
-					Task {
-						state.navigate(to: newValue)
-					}
+
+				#if os(iOS)
+				// Without wrapping the call in Task, sometimes the stack animations will break on iPad.
+				Task {
+					state.navigate(to: newValue)
 				}
+				#else
+				state.navigate(to: newValue)
+				#endif
 			})
 			.modifier(SnapPresentationModifier<NavigationProvider>(level: state.sheetLevelCurrent))
 			.environment(state)
