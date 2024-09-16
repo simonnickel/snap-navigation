@@ -20,6 +20,9 @@ public extension SnapNavigation {
 		case sheet
 	}
 	
+	
+	// MARK: - SnapNavigation.State
+	
 	@MainActor
 	@Observable
 	public class State<NavigationProvider: SnapNavigationProvider> {
@@ -34,6 +37,10 @@ public extension SnapNavigation {
 			var path: Path
 			let style: PresentationStyle
 		}
+		
+		private let navigationProvider: NavigationProvider
+		
+		public var selected: Screen
 		
 		public init(provider: NavigationProvider) {
 			self.navigationProvider = provider
@@ -66,7 +73,6 @@ public extension SnapNavigation {
 			for entry in route.filter({ $0.style == .sheet }) {
 				sheets.append(entry)
 			}
-
 		}
 		
 		public func present(screen: Screen, style: PresentationStyle) {
@@ -104,7 +110,7 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: Route
+		// MARK: - Route
 		
 		internal func route(to screen: Screen) -> Route {
 			let route = routeEntries(to: screen)
@@ -142,45 +148,7 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: - NavigationProvider
-		
-		private let navigationProvider: NavigationProvider
-		
-		public var screens: [Screen] {
-			navigationProvider.screens
-		}
-		
-		public func parent(for screen: Screen) -> Screen? {
-			navigationProvider.parent(of: screen)
-		}
-		
-		public func subscreens(for screen: Screen) -> [Screen] {
-			navigationProvider.subscreens(for: screen)
-		}
-		
-		
-		// MARK: - State
-		
-		public var selected: Screen
-		
-		private var pathContextCurrent: PathContext {
-			if sheetLevelCurrent >= 0 {
-				return .sheet(level: sheetLevelCurrent)
-			} else {
-				return .selection(screen: selected)
-			}
-		}
-		
-		internal var currentScreen: Screen? {
-			currentScreen(for: pathContextCurrent)
-		}
-		
-		internal func currentScreen(for context: PathContext) -> Screen? {
-			getPath(for: context).last
-		}
-		
-		
-		// MARK: Sheets
+		// MARK: - Sheets
 		
 		private var sheets: [RouteEntry] = []
 		
@@ -211,26 +179,13 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: Paths
+		// MARK: - Paths
 		
 		private var pathForScreen: [Screen : Path] = [:]
 		
 		internal enum PathContext: Hashable {
 			case selection(screen: Screen)
 			case sheet(level: SheetLevel)
-		}
-		
-		internal func rootScreen(for context: PathContext) -> Screen? {
-			switch context {
-				case .selection(let screen):
-					return screen
-					
-				case .sheet(let level):
-					guard sheets.count > level else { return nil }
-					
-					let entry = sheets[level]
-					return entry.root
-			}
 		}
 		
 		@ObservationIgnored
@@ -294,6 +249,60 @@ public extension SnapNavigation {
 			}
 		}
 		
+	}
+	
+}
+
+
+// MARK: - Convenience
+
+extension SnapNavigation.State {
+	
+	
+	// MARK: State
+	
+	private var pathContextCurrent: PathContext {
+		if sheetLevelCurrent >= 0 {
+			return .sheet(level: sheetLevelCurrent)
+		} else {
+			return .selection(screen: selected)
+		}
+	}
+	
+	private var currentScreen: Screen? {
+		currentScreen(for: pathContextCurrent)
+	}
+	
+	private func currentScreen(for context: PathContext) -> Screen? {
+		getPath(for: context).last
+	}
+	
+	internal func rootScreen(for context: PathContext) -> Screen? {
+		switch context {
+			case .selection(let screen):
+				return screen
+				
+			case .sheet(let level):
+				guard sheets.count > level else { return nil }
+				
+				let entry = sheets[level]
+				return entry.root
+		}
+	}
+	
+	
+	// MARK: NavigationProvider
+	
+	public var screens: [Screen] {
+		navigationProvider.screens
+	}
+	
+	public func parent(for screen: Screen) -> Screen? {
+		navigationProvider.parent(of: screen)
+	}
+	
+	public func subscreens(for screen: Screen) -> [Screen] {
+		navigationProvider.subscreens(for: screen)
 	}
 	
 }
