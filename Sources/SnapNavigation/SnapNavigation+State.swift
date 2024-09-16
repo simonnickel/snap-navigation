@@ -90,10 +90,11 @@ public extension SnapNavigation {
 		// MARK: Dismiss
 		
 		public func dismissCurrentSheet() {
-			sheets.removeLast()
+			if sheets.count > 0 {
+				sheets.removeLast()
+			}
 		}
 		
-		// TODO: Reset sheets should also reset all path bindings?
 		public func dismissSheets() {
 			sheets = []
 		}
