@@ -51,11 +51,11 @@ struct DeeplinkScreen: View {
 					NavigationButton(title: "Pop to Root") {
 						navigationState.popCurrentToRoot()
 					}
-					NavigationButton(title: "Dismiss Current Sheet") {
-						navigationState.dismissCurrentSheet()
+					NavigationButton(title: "Dismiss Current Modal") {
+						navigationState.dismissCurrentModal()
 					}
-					NavigationButton(title: "Dismiss Sheets") {
-						navigationState.dismissSheets()
+					NavigationButton(title: "Dismiss Modals") {
+						navigationState.dismissModals()
 					}
 					
 					NavigationLink(value: Screen.infinity) {

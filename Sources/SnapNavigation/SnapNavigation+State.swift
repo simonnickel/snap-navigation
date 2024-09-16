@@ -8,16 +8,16 @@ import Observation
 
 public extension SnapNavigation {
 	
-	internal typealias SheetLevel = Int
+	internal typealias ModalLevel = Int
 	
 	internal enum Constants {
-		static let sheetLevelMin: SheetLevel = 0
+		static let modalLevelMin: ModalLevel = 0
 	}
 	
 	public enum PresentationStyle {
 		case select
 		case push
-		case sheet
+		case modal
 	}
 	
 	
@@ -68,17 +68,17 @@ public extension SnapNavigation {
 				setPath([], for: .selection(screen: selected))
 			}
 			
-			// Sheets
-			dismissSheets()
-			for entry in route.filter({ $0.style == .sheet }) {
-				sheets.append(entry)
+			// Modals
+			dismissModals()
+			for entry in route.filter({ $0.style == .modal }) {
+				modals.append(entry)
 			}
 		}
 		
 		public func present(screen: Screen, style: PresentationStyle) {
 			switch style {
 				case .select:
-					sheets = []
+					modals = []
 					setPath([], for: .selection(screen: screen))
 					selected = screen
 					
@@ -87,22 +87,22 @@ public extension SnapNavigation {
 					path.append(screen)
 					setPath(path, for: pathContextCurrent)
 					
-				case .sheet:
-					sheets.append(RouteEntry(root: screen, path: [], style: .sheet))
+				case .modal:
+					modals.append(RouteEntry(root: screen, path: [], style: .modal))
 			}
 		}
 
 		
 		// MARK: Dismiss
 		
-		public func dismissCurrentSheet() {
-			if sheets.count > 0 {
-				sheets.removeLast()
+		public func dismissCurrentModal() {
+			if modals.count > 0 {
+				modals.removeLast()
 			}
 		}
 		
-		public func dismissSheets() {
-			sheets = []
+		public func dismissModals() {
+			modals = []
 		}
 		
 		public func popCurrentToRoot() {
@@ -148,33 +148,33 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: - Sheets
+		// MARK: - Modals
 		
-		private var sheets: [RouteEntry] = []
+		private var modals: [RouteEntry] = []
 		
-		internal var sheetLevelCurrent: SheetLevel { sheets.count - 1 }
+		internal var currentModalLevel: ModalLevel { modals.count - 1 }
 		
-		internal func sheetLevelInverted(_ level: SheetLevel) -> SheetLevel {
-			return sheets.count - 1 - level
+		internal func modalLevelInverted(_ level: ModalLevel) -> ModalLevel {
+			return modals.count - 1 - level
 		}
 		
 		@ObservationIgnored
-		private var sheetBindingsForLevel: [SheetLevel: Binding<Bool>] = [:]
+		private var modalBindingsForLevel: [ModalLevel: Binding<Bool>] = [:]
 		
-		internal func sheetBinding(for level: SheetLevel) -> Binding<Bool> {
-			if let binding = sheetBindingsForLevel[level] {
+		internal func modalBinding(for level: ModalLevel) -> Binding<Bool> {
+			if let binding = modalBindingsForLevel[level] {
 				return binding
 			}
 			
 			let binding = Binding(get: { [weak self] in
-				self?.sheets.count ?? 0 > level
+				self?.modals.count ?? 0 > level
 			}, set: { [weak self] isPresented in
-				if !isPresented && self?.sheets.count ?? 0 > level {
-					self?.sheets.remove(at: level)
+				if !isPresented && self?.modals.count ?? 0 > level {
+					self?.modals.remove(at: level)
 				}
 			})
 			
-			sheetBindingsForLevel[level] = binding
+			modalBindingsForLevel[level] = binding
 			return binding
 		}
 		
@@ -185,7 +185,7 @@ public extension SnapNavigation {
 		
 		internal enum PathContext: Hashable {
 			case selection(screen: Screen)
-			case sheet(level: SheetLevel)
+			case modal(level: ModalLevel)
 		}
 		
 		@ObservationIgnored
@@ -204,11 +204,11 @@ public extension SnapNavigation {
 						self?.setPath(path, for: .selection(screen: screen))
 					}
 					
-				case .sheet(let level):
+				case .modal(let level):
 					binding = Binding<Path> { [weak self] in
-						self?.getPath(for: .sheet(level: level)) ?? []
+						self?.getPath(for: .modal(level: level)) ?? []
 					} set: { [weak self] path in
-						self?.setPath(path, for: .sheet(level: level))
+						self?.setPath(path, for: .modal(level: level))
 					}
 			}
 			
@@ -221,9 +221,9 @@ public extension SnapNavigation {
 				case .selection(let screen):
 					return pathForScreen[screen] ?? []
 					
-				case .sheet(let level):
-					guard sheets.count > level else { return [] }
-					return sheets[level].path
+				case .modal(let level):
+					guard modals.count > level else { return [] }
+					return modals[level].path
 			}
 		}
 		
@@ -240,11 +240,11 @@ public extension SnapNavigation {
 					pathForScreen[screen] = path
 #endif
 					
-				case .sheet(let level):
-					if sheets.count > level {
-						var entry = sheets[level]
+				case .modal(let level):
+					if modals.count > level {
+						var entry = modals[level]
 						entry.path = path
-						sheets[level] = entry
+						modals[level] = entry
 					}
 			}
 		}
@@ -262,8 +262,8 @@ extension SnapNavigation.State {
 	// MARK: State
 	
 	private var pathContextCurrent: PathContext {
-		if sheetLevelCurrent >= 0 {
-			return .sheet(level: sheetLevelCurrent)
+		if currentModalLevel >= 0 {
+			return .modal(level: currentModalLevel)
 		} else {
 			return .selection(screen: selected)
 		}
@@ -282,10 +282,10 @@ extension SnapNavigation.State {
 			case .selection(let screen):
 				return screen
 				
-			case .sheet(let level):
-				guard sheets.count > level else { return nil }
+			case .modal(let level):
+				guard modals.count > level else { return nil }
 				
-				let entry = sheets[level]
+				let entry = modals[level]
 				return entry.root
 		}
 	}

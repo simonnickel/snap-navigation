@@ -38,7 +38,7 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 				state.navigate(to: newValue)
 				#endif
 			})
-			.modifier(SnapPresentationModifier<NavigationProvider>(level: state.sheetLevelCurrent))
+			.modifier(SnapPresentationModifier<NavigationProvider>(level: state.currentModalLevel))
 			.environment(state)
         
     }

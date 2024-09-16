@@ -23,7 +23,7 @@ enum Screen: SnapNavigationScreen {
 			case .rectangleItem(level: let level): .init(
 				title: "Rectangle \(level)",
 				systemImage: "\(level).rectangle",
-				style: level % 3 == 0 ? .sheet : .push
+				style: level % 3 == 0 ? .modal : .push
 			)
 				
             case .circle: .init(title: "Circle", systemImage: "circle")

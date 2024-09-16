@@ -18,14 +18,14 @@ struct SnapPresentationModifier<NavigationProvider: SnapNavigationProvider>: Vie
 	}
 	
 	func body(content: Content) -> some View {
-		// SnapPresentationModifier has to start with highest visible level to recursively present sheets.
+		// SnapPresentationModifier has to start with highest visible level to recursively present modals.
 		// Therefore it has to invert the level to get the correct bindings.
-		let level = navigationState.sheetLevelInverted(levelIteration)
+		let level = navigationState.modalLevelInverted(levelIteration)
 		
-		if level >= SnapNavigation.Constants.sheetLevelMin {
+		if level >= SnapNavigation.Constants.modalLevelMin {
 			content
-				.sheet(isPresented: navigationState.sheetBinding(for: level)) {
-					SnapNavigationStack<NavigationProvider>(context: .sheet(level: level))
+				.sheet(isPresented: navigationState.modalBinding(for: level)) {
+					SnapNavigationStack<NavigationProvider>(context: .modal(level: level))
 						.modifier(SnapPresentationModifier(level: levelIteration - 1))
 						.environment(navigationState)
 				}
