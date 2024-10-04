@@ -16,25 +16,25 @@ enum Screen: SnapNavigationScreen {
 	var definition: SnapNavigation.ScreenDefinition<Self> {
         switch self {
 				
-			case .triangle: .init(title: "Triangle", systemImage: "triangle")
+			case .triangle: .init(title: "Triangle", systemIcon: "triangle")
 				
-			case .rectangle: .init(title: "Rectangle", systemImage: "rectangle")
+			case .rectangle: .init(title: "Rectangle", systemIcon: "rectangle")
 				
 			case .rectangleItem(level: let level): .init(
 				title: "Rectangle \(level)",
-				systemImage: "\(level).rectangle",
+				systemIcon: "\(level).rectangle",
 				style: level % 3 == 0 ? .modal : .push
 			)
 				
-            case .circle: .init(title: "Circle", systemImage: "circle")
+            case .circle: .init(title: "Circle", systemIcon: "circle")
 				
-			case .circleSection: .init(title: "Circles", systemImage: "circle") { screen in
+			case .circleSection: .init(title: "Circles", systemIcon: "circle") { screen in
 				ScreenListScreen(screen: screen)
 			}
 				
-			case .circleItem(level: let level): .init(title: "Circle \(level)", systemImage: "\(level).circle")
+			case .circleItem(level: let level): .init(title: "Circle \(level)", systemIcon: "\(level).circle")
             
-            case .infinity: .init(title: "Infinity", systemImage: "infinity")
+            case .infinity: .init(title: "Infinity", systemIcon: "infinity")
 				
         }
     }
