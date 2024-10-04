@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-/// A recursive modifier that modally presents a stack of `PresentationEntries`.
+/// A modifier to present multiple modals by recursively applying itself for each level of presentation visible.
 struct SnapNavigationModalModifier<NavigationProvider: SnapNavigationProvider>: ViewModifier {
 	
 	typealias NavigationState = SnapNavigation.State<NavigationProvider>
