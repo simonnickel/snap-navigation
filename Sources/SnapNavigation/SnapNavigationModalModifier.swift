@@ -6,7 +6,7 @@
 import SwiftUI
 
 /// A recursive modifier that modally presents a stack of `PresentationEntries`.
-struct SnapPresentationModifier<NavigationProvider: SnapNavigationProvider>: ViewModifier {
+struct SnapNavigationModalModifier<NavigationProvider: SnapNavigationProvider>: ViewModifier {
 	
 	typealias NavigationState = SnapNavigation.State<NavigationProvider>
 	@Environment(NavigationState.self) private var navigationState
@@ -18,7 +18,7 @@ struct SnapPresentationModifier<NavigationProvider: SnapNavigationProvider>: Vie
 	}
 	
 	func body(content: Content) -> some View {
-		// SnapPresentationModifier has to start with highest visible level to recursively present modals.
+		// SnapNavigationModalModifier has to start with highest visible level to recursively present modals.
 		// Therefore it has to invert the level to get the correct bindings.
 		let level = navigationState.modalLevelInverted(levelIteration)
 		
@@ -26,7 +26,7 @@ struct SnapPresentationModifier<NavigationProvider: SnapNavigationProvider>: Vie
 			content
 				.sheet(isPresented: navigationState.modalBinding(for: level)) {
 					SnapNavigationStack<NavigationProvider>(context: .modal(level: level))
-						.modifier(SnapPresentationModifier(level: levelIteration - 1))
+						.modifier(SnapNavigationModalModifier(level: levelIteration - 1))
 						.environment(navigationState)
 				}
 		} else {
