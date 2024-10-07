@@ -36,3 +36,18 @@ The [demo project](/PackageDemo) shows ...
 ## How to use
 
 Details about package content ...
+
+
+## Considerations
+
+### TabSection
+iOS 18 supports to group multiple Tabs into a TabSection: While the sidebar is visible, the Tabs are visible below the section header. While the TabBar is visible, only the section header is visible as a tab.
+
+This causes ambiguous state when switching size classes or hiding the sidebar. I tried a few things, like manually adding the Section on the NavigationStack. But was not really happy with any of them.
+
+Decision: Not supporting TabSection for now.
+
+### .fullScreenCover()
+Supporting a mix of .sheet() and .fullScreenCover() causes some animation issues in deeplink handling.
+
+Decision: Not supporting .fullScreenCover() for now. Modal presentation uses .sheet().

@@ -13,6 +13,4 @@ public protocol SnapNavigationProvider {
 	
 	func parent(of screen: Screen) -> Screen?
 	
-	func subscreens(for screen: Screen) -> [Screen]
-	
 }

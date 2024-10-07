@@ -251,8 +251,4 @@ extension SnapNavigation.State {
 		navigationProvider.parent(of: screen)
 	}
 	
-	public func subscreens(for screen: Screen) -> [Screen] {
-		navigationProvider.subscreens(for: screen)
-	}
-	
 }

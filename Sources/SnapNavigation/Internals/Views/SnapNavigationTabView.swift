@@ -22,28 +22,12 @@ internal struct SnapNavigationTabView<NavigationProvider: SnapNavigationProvider
 		TabView(selection: $state.selected) {
 			ForEach(state.screens) { screen in
 				
-				if shouldShowSection(for: screen) {
-					
-					TabSection(screen.definition.title) {
-						ForEach(state.subscreens(for: screen)) { subscreen in
-							tab(for: subscreen)
-						}
-					}
-					
-				} else {
-					
-					tab(for: screen)
-					
-				}
+				tab(for: screen)
 				
 			}
 		}
 		.tabViewStyle(.sidebarAdaptable)
 		
-	}
-	
-	private func shouldShowSection(for screen: NavigationProvider.Screen) -> Bool {
-		state.subscreens(for: screen).isEmpty == false && horizontalSize != .compact
 	}
 	
 	

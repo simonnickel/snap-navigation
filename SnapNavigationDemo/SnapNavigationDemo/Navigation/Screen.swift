@@ -10,7 +10,7 @@ enum Screen: SnapNavigationScreen {
 		
 	case triangle
 	case rectangle, rectangleItem(level: Int)
-	case circle, circleSection, circleItem(level: Int)
+	case circle, circleItem(level: Int)
     case infinity
 
 	var definition: SnapNavigation.ScreenDefinition<Self> {
@@ -27,10 +27,6 @@ enum Screen: SnapNavigationScreen {
 			)
 				
             case .circle: .init(title: "Circle", systemIcon: "circle")
-				
-			case .circleSection: .init(title: "Circles", systemIcon: "circle") { screen in
-				ScreenListScreen(screen: screen)
-			}
 				
 			case .circleItem(level: let level): .init(title: "Circle \(level)", systemIcon: "\(level).circle")
             
