@@ -15,6 +15,9 @@ public protocol SnapNavigationScreen: Identifiable, Hashable, Equatable {
 
 }
 
+
+// MARK: - Extensions
+
 public extension SnapNavigationScreen {
 	var id: Int { self.hashValue }
 }
@@ -22,6 +25,9 @@ public extension SnapNavigationScreen {
 extension Array: Hashable, Identifiable where Element: SnapNavigationScreen {
 	public var id: Int { hashValue }
 }
+
+
+// MARK: - Screen Definition
 
 extension SnapNavigation {
 	

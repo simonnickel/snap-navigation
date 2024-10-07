@@ -13,8 +13,8 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 
 	private let state: NavigationState
 
-    public init(state: NavigationState) {
-        self.state = state
+    public init(provider: NavigationProvider) {
+        self.state = SnapNavigation.State(provider: provider)
     }
 
 
@@ -38,7 +38,7 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 				state.navigate(to: newValue)
 				#endif
 			})
-			.modifier(SnapNavigationModalModifier<NavigationProvider>(level: state.currentModalLevel))
+			.modifier(SnapNavigation.ModalPresentationModifier<NavigationProvider>(level: state.modalLevelCurrent))
 			.environment(state)
         
     }

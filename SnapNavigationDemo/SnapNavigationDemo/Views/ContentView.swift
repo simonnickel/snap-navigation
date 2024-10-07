@@ -8,11 +8,9 @@ import SnapNavigation
 
 struct ContentView: View {
 
-	private var state = SnapNavigation.State(provider: NavigationProvider())
-
 	var body: some View {
         SnapNavigationView(
-            state: state
+			provider: NavigationProvider()
 		)
         .tabViewSidebarHeader {
             Text("Header")

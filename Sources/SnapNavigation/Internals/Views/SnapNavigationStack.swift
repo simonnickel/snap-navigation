@@ -15,14 +15,20 @@ internal struct SnapNavigationStack<NavigationProvider: SnapNavigationProvider>:
 	let context: NavigationState.PathContext
 
     var body: some View {
+		
 		NavigationStack(path: navigationState.pathBinding(for: context)) {
-			if let root = navigationState.rootScreen(for: context) {
+			
+			if let root = navigationState.root(for: context) {
+				
 				SnapNavigationDestinationScreen(screen: root)
 					.navigationDestination(for: Screen.self) { screen in
 						SnapNavigationDestinationScreen(screen: screen)
 					}
+				
 			}
+			
         }
+		
     }
     
 }

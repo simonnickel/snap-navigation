@@ -8,35 +8,13 @@ import Observation
 
 public extension SnapNavigation {
 	
-	internal typealias ModalLevel = Int
-	
-	internal enum Constants {
-		static let modalLevelMin: ModalLevel = 0
-	}
-	
-	public enum PresentationStyle {
-		case select
-		case push
-		case modal
-	}
-	
-	
-	// MARK: - SnapNavigation.State
-	
 	@MainActor
 	@Observable
 	public class State<NavigationProvider: SnapNavigationProvider> {
 		
 		public typealias Screen = NavigationProvider.Screen
 		public typealias Path = [Screen]
-		internal typealias Route = [RouteEntry]
-		
-		internal struct RouteEntry: Equatable, Identifiable, Hashable {
-			var id: Int { hashValue }
-			var root: Screen
-			var path: Path
-			let style: PresentationStyle
-		}
+		internal typealias Route = [RouteEntry<Screen>]
 		
 		private let navigationProvider: NavigationProvider
 		
@@ -112,11 +90,12 @@ public extension SnapNavigation {
 		
 		// MARK: - Route
 		
-		internal func route(to screen: Screen) -> Route {
+		private func route(to screen: Screen) -> Route {
 			let route = routeEntries(to: screen)
-			return condense(route: route)
+			return route.condense()
 		}
 		
+		/// Get all entries of the route to a screen by traversing parents up to the root.
 		private func routeEntries(to screen: Screen) -> Route {
 			guard let parent = navigationProvider.parent(of: screen) else {
 				return [RouteEntry(root: screen, path: [], style: .select)]
@@ -126,33 +105,12 @@ public extension SnapNavigation {
 			return routeToParent
 		}
 		
-		private func condense(route: Route) -> Route {
-			var route = route
-			var result: Route = []
-			guard let first = route.first else { return result }
-			
-			var currentEntry: RouteEntry = first
-			route.removeFirst()
-			
-			for entry in route {
-				if entry.style == .push && currentEntry.style != .select {
-					currentEntry.path = currentEntry.path + [entry.root] + entry.path
-				} else {
-					result.append(currentEntry)
-					currentEntry = entry
-				}
-			}
-			result.append(currentEntry)
-			
-			return result
-		}
-		
 		
 		// MARK: - Modals
 		
-		private var modals: [RouteEntry] = []
+		private var modals: [RouteEntry<Screen>] = []
 		
-		internal var currentModalLevel: ModalLevel { modals.count - 1 }
+		internal var modalLevelCurrent: ModalLevel { modals.count - 1 }
 		
 		internal func modalLevelInverted(_ level: ModalLevel) -> ModalLevel {
 			return modals.count - 1 - level
@@ -262,22 +220,14 @@ extension SnapNavigation.State {
 	// MARK: State
 	
 	private var pathContextCurrent: PathContext {
-		if currentModalLevel >= 0 {
-			return .modal(level: currentModalLevel)
+		if modalLevelCurrent >= 0 {
+			return .modal(level: modalLevelCurrent)
 		} else {
 			return .selection(screen: selected)
 		}
 	}
 	
-	private var currentScreen: Screen? {
-		currentScreen(for: pathContextCurrent)
-	}
-	
-	private func currentScreen(for context: PathContext) -> Screen? {
-		getPath(for: context).last
-	}
-	
-	internal func rootScreen(for context: PathContext) -> Screen? {
+	internal func root(for context: PathContext) -> Screen? {
 		switch context {
 			case .selection(let screen):
 				return screen
