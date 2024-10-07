@@ -11,7 +11,7 @@ public protocol SnapNavigationProvider {
 	
 	var screens: [Screen] { get }
 	
-	func route(to screen: Screen) -> [Screen]?
+	func parent(of screen: Screen) -> Screen?
 	
 	func subscreens(for screen: Screen) -> [Screen]
 	

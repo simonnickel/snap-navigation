@@ -10,8 +10,10 @@ internal struct SnapNavigationDestinationScreen<Screen: SnapNavigationScreen>: V
 	let screen: Screen
 	
 	var body: some View {
+		
 		AnyView(screen.destination)
 			.navigationTitle(screen.definition.title)
+		
 	}
 	
 }

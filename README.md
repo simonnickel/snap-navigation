@@ -7,7 +7,7 @@
 
 # SnapNavigation
 
-Decouple your SwiftUI app navigation structure from it's presentation.
+Define the navigation structure of your SwiftUI app decoupled from it's presentation.
 
 The package provides `SnapNavigationScreen` to define the structure of an app and `SnapNavigationView` presents it in different navigation approaches. 
 

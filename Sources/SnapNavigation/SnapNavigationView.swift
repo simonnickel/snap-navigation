@@ -11,10 +11,10 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 
     public typealias NavigationState = SnapNavigation.State<NavigationProvider>
 
-    private let state: NavigationState
+	private let state: NavigationState
 
-    public init(state: NavigationState) {
-        self.state = state
+    public init(provider: NavigationProvider) {
+        self.state = SnapNavigation.State(provider: provider)
     }
 
 
@@ -23,16 +23,23 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
     public var body: some View {
 
         SnapNavigationTabView(state: state)
-			.environment(state)
 			.onChange(of: state.selected, { oldValue, newValue in
-				// Navigate to the screen if the selected screen is not the first on it's route.
-				if state.route(to: newValue)?.first != newValue {
-					// Without wrapping the call in Task, sometimes the stack animations will break.
-					Task {
-						state.navigate(to: newValue)
-					}
+				// Only trigger navigation when subscreen got selected.
+				if state.screens.contains(newValue) {
+					return
 				}
+
+				#if os(iOS)
+				// Without wrapping the call in Task, sometimes the stack animations will break on iPad.
+				Task {
+					state.navigate(to: newValue)
+				}
+				#else
+				state.navigate(to: newValue)
+				#endif
 			})
+			.modifier(SnapNavigation.ModalPresentationModifier<NavigationProvider>(level: state.modalLevelCurrent))
+			.environment(state)
         
     }
     

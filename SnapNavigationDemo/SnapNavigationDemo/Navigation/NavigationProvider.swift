@@ -15,25 +15,20 @@ struct NavigationProvider: SnapNavigationProvider {
 	
 	var screens: [Screen] { [.triangle, .rectangle, .circle, .circleSection] }
 	
+	func parent(of screen: Screen) -> Screen? {
+		switch screen {
+			case .triangle, .rectangle, .circle, .circleSection, .infinity: nil
+			case .rectangleItem(let level):
+				level > 1 ? .rectangleItem(level: level - 1) : .rectangle
+			case .circleItem(let level):
+				level > 1 ? .circleItem(level: level - 1) : .circle
+		}
+	}
+		
 	func subscreens(for screen: Screen) -> [Screen] {
 		switch screen {
 			case .circleSection: [.circleSection, .circleItem(level: 1), .circleItem(level: 2), .circleItem(level: 3)]
 			default: []
-		}
-	}
-	
-	func route(to screen: Screen) -> SnapNavigation.State<Self>.Path? {
-		// Top Level screens can be accessed directly
-		if screens.contains(screen) {
-			return [screen]
-		}
-		
-		return switch screen {
-			case .circleItem(level: let level): [.circle] + (1...level).map { .circleItem(level: $0) }
-				
-			case .rectangleItem(level: let level): [.rectangle] + (1...level).map { .rectangleItem(level: $0) }
-				
-			default: nil
 		}
 	}
 	

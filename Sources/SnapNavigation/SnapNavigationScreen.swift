@@ -15,31 +15,53 @@ public protocol SnapNavigationScreen: Identifiable, Hashable, Equatable {
 
 }
 
+
+// MARK: - Extensions
+
 public extension SnapNavigationScreen {
 	var id: Int { self.hashValue }
 }
+
+extension Array: Hashable, Identifiable where Element: SnapNavigationScreen {
+	public var id: Int { hashValue }
+}
+
+
+// MARK: - Screen Definition
 
 extension SnapNavigation {
 	
 	public struct ScreenDefinition<Screen: SnapNavigationScreen> {
 		
 		public var title: String
-		public var systemImage: String?
+		
+		public typealias IconFactory = () -> Image?
+		public var icon: IconFactory?
+		
+		public var presentationStyle: PresentationStyle
 		
 		public typealias DestinationFactory = (Screen) -> (any View)
 		public var destination: DestinationFactory?
 
-		public init(title: String, systemImage: String? = nil, destination: DestinationFactory? = nil) {
+		public init(title: String, systemIcon: String, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
 			self.title = title
-			self.systemImage = systemImage
+			self.icon = { Image(systemName: systemIcon) }
+			self.presentationStyle = style
+			self.destination = destination
+		}
+		
+		public init(title: String, icon: IconFactory?, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
+			self.title = title
+			self.icon = icon
+			self.presentationStyle = style
 			self.destination = destination
 		}
 		
 		public var label: any View {
-			if let systemImage = systemImage {
-				return Label(title, systemImage: systemImage)
-			} else {
-				return Text(title)
+			Label {
+				Text(title)
+			} icon: {
+				icon?()
 			}
 		}
 		

@@ -13,23 +13,63 @@ struct DeeplinkScreen: View {
 	let screen: Screen
 	
 	var body: some View {
-		VStack {
-			
-			DeeplinkButton(title: "Deeplink: Rectangle", screen: .rectangle)
-			DeeplinkButton(title: "Deeplink: Rectangle 3", screen: .rectangleItem(level: 3))
-
-			DeeplinkButton(title: "Deeplink: Circle", screen: .circle)
-			DeeplinkButton(title: "Deeplink: Circle 3", screen: .circleItem(level: 3))
-
-			NavigationLink(value: Screen.infinity) {
-				HStack {
-					Text("NavigationLink:")
-					AnyView(Screen.infinity.label)
+		ScrollView {
+			VStack(alignment: .leading, spacing: 32) {
+				VStack(alignment: .leading, spacing: 4) {
+					Text("Deeplink").font(.headline)
+					HStack {
+						DeeplinkButton(title: "Rectangle", screen: .rectangle)
+						DeeplinkButton(title: "Rectangle 2", screen: .rectangleItem(level: 2))
+						DeeplinkButton(title: "Rectangle 3", screen: .rectangleItem(level: 3))
+						DeeplinkButton(title: "Rectangle 7", screen: .rectangleItem(level: 7))
+						DeeplinkButton(title: "Rectangle 8", screen: .rectangleItem(level: 8))
+					}
+					
+					HStack {
+						DeeplinkButton(title: "Circle", screen: .circle)
+						DeeplinkButton(title: "Circle 3", screen: .circleItem(level: 3))
+					}
 				}
+				
+				VStack(alignment: .leading, spacing: 4) {
+					Text("Present").font(.headline)
+					PresentButton(title: "Rectangle", screen: .rectangle)
+					PresentButton(title: "Circle", screen: .circle)
+				}
+				
+				VStack(alignment: .leading, spacing: 4) {
+					Text("Push").font(.headline)
+					PushButton(title: "Infinity", screen: .infinity)
+					
+					NavigationLink(value: Screen.infinity) {
+						Text("NavigationLink: Infinity")
+					}
+				}
+				
+				VStack(alignment: .leading, spacing: 4) {
+					Text("Dismiss").font(.headline)
+					NavigationButton(title: "Pop to Root") {
+						navigationState.popCurrentToRoot()
+					}
+					NavigationButton(title: "Dismiss Current Modal") {
+						navigationState.dismissCurrentModal()
+					}
+					NavigationButton(title: "Dismiss Modals") {
+						navigationState.dismissModals()
+					}
+					
+					NavigationLink(value: Screen.infinity) {
+						Text("NavigationLink: Infinity")
+					}
+				}
+				
 			}
-			.padding()
-			
+			.frame(maxWidth: .infinity, alignment: .leading)
+			.scenePadding()
 		}
+		// TODO FB15147353: TabView content behind toolbar. Adding `.offset(1)` or `.padding(1)` fixes it.
+		.offset(y: 1)
+		
 	}
 	
 }
