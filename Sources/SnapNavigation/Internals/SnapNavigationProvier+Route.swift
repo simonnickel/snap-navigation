@@ -20,8 +20,10 @@ extension SnapNavigationProvider {
 		guard let parent = parent(of: screen) else {
 			return [RouteEntry(root: screen, path: [], style: .select)]
 		}
+		
 		var routeToParent = routeEntries(to: parent) ?? []
 		routeToParent.append(RouteEntry(root: screen, path: [], style: screen.definition.presentationStyle))
+		
 		return routeToParent
 	}
 	

@@ -62,6 +62,9 @@ public extension SnapNavigation {
 			}
 		}
 		
+		
+		// MARK: Present
+		
 		public func present(screen: Screen, style styleOverride: PresentationStyle? = nil) {
 			let style = styleOverride ?? screen.definition.presentationStyle
 			switch style {
@@ -98,62 +101,11 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: - Modals
-		
-		@ObservationIgnored
-		private var modalBindingsForLevel: [ModalLevel: Binding<Bool>] = [:]
-		
-		internal func modalBinding(for level: ModalLevel) -> Binding<Bool> {
-			if let binding = modalBindingsForLevel[level] {
-				return binding
-			}
-			
-			let binding = Binding(get: { [weak self] in
-				self?.state.modals.count ?? 0 > level
-			}, set: { [weak self] isPresented in
-				if !isPresented && self?.state.modals.count ?? 0 > level {
-					self?.state.modals.remove(at: level)
-				}
-			})
-			
-			modalBindingsForLevel[level] = binding
-			return binding
-		}
-		
-		
 		// MARK: - Paths
 		
 		internal enum PathContext: Hashable {
 			case selection(screen: Screen)
 			case modal(level: ModalLevel)
-		}
-		
-		@ObservationIgnored
-		private var pathBindingsForContext: [PathContext: Binding<Path>] = [:]
-		
-		internal func pathBinding(for context: PathContext) -> Binding<Path> {
-			if let binding = pathBindingsForContext[context] {
-				return binding
-			}
-			let binding: Binding<Path>
-			switch context {
-				case .selection(let screen):
-					binding = Binding<Path> { [weak self] in
-						self?.getPath(for: .selection(screen: screen)) ?? []
-					} set: { [weak self] path in
-						self?.setPath(path, for: .selection(screen: screen))
-					}
-					
-				case .modal(let level):
-					binding = Binding<Path> { [weak self] in
-						self?.getPath(for: .modal(level: level)) ?? []
-					} set: { [weak self] path in
-						self?.setPath(path, for: .modal(level: level))
-					}
-			}
-			
-			pathBindingsForContext[context] = binding
-			return binding
 		}
 		
 		private func getPath(for context: PathContext) -> Path {
@@ -189,6 +141,58 @@ public extension SnapNavigation {
 			}
 		}
 		
+		// MARK: - Path Bindings
+		
+		@ObservationIgnored
+		private var pathBindingsForContext: [PathContext: Binding<Path>] = [:]
+		
+		internal func pathBinding(for context: PathContext) -> Binding<Path> {
+			if let binding = pathBindingsForContext[context] {
+				return binding
+			}
+			let binding: Binding<Path>
+			switch context {
+				case .selection(let screen):
+					binding = Binding<Path> { [weak self] in
+						self?.getPath(for: .selection(screen: screen)) ?? []
+					} set: { [weak self] path in
+						self?.setPath(path, for: .selection(screen: screen))
+					}
+					
+				case .modal(let level):
+					binding = Binding<Path> { [weak self] in
+						self?.getPath(for: .modal(level: level)) ?? []
+					} set: { [weak self] path in
+						self?.setPath(path, for: .modal(level: level))
+					}
+			}
+			
+			pathBindingsForContext[context] = binding
+			return binding
+		}
+		
+		
+		// MARK: - Modal Bindings
+		
+		@ObservationIgnored
+		private var modalBindingsForLevel: [ModalLevel: Binding<Bool>] = [:]
+		
+		internal func modalBinding(for level: ModalLevel) -> Binding<Bool> {
+			if let binding = modalBindingsForLevel[level] {
+				return binding
+			}
+			
+			let binding = Binding(get: { [weak self] in
+				self?.state.modals.count ?? 0 > level
+			}, set: { [weak self] isPresented in
+				if !isPresented && self?.state.modals.count ?? 0 > level {
+					self?.state.modals.remove(at: level)
+				}
+			})
+			
+			modalBindingsForLevel[level] = binding
+			return binding
+		}
 	}
 	
 }
