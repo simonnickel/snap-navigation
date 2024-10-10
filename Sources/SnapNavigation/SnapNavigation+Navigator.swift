@@ -17,9 +17,21 @@ public extension SnapNavigation {
 		
 		private let navigationProvider: NavigationProvider
 
+		private var state: State
+
 		public init(provider: NavigationProvider) {
 			self.navigationProvider = provider
-			self.selected = provider.initialSelection
+			self.state = State(selected: provider.initialSelection)
+		}
+		
+		
+		// MARK: - State
+		
+		private struct State {
+			internal var selected: Screen
+			internal var pathForSelection: [Screen : Path] = [:]
+			
+			internal var modals: [RouteEntry<Screen>] = []
 		}
 		
 		
@@ -33,20 +45,20 @@ public extension SnapNavigation {
 				return
 			}
 
-			selected = firstEntry.root
+			self.state.selected = firstEntry.root
 			route.removeFirst()
 			
 			// Push
 			if let entry = route.first, entry.style == .push {
-				setPath([entry.root] + entry.path, for: .selection(screen: selected))
+				setPath([entry.root] + entry.path, for: .selection(screen: state.selected))
 			} else {
-				setPath([], for: .selection(screen: selected))
+				setPath([], for: .selection(screen: state.selected))
 			}
 			
 			// Modals
 			dismissModals()
 			for entry in route.filter({ $0.style == .modal }) {
-				modals.append(entry)
+				state.modals.append(entry)
 			}
 		}
 		
@@ -54,9 +66,9 @@ public extension SnapNavigation {
 			let style = styleOverride ?? screen.definition.presentationStyle
 			switch style {
 				case .select:
-					modals = []
+					state.modals = []
 					setPath([], for: .selection(screen: screen))
-					selected = screen
+					state.selected = screen
 					
 				case .push:
 					var path = getPath(for: pathContextCurrent)
@@ -64,7 +76,7 @@ public extension SnapNavigation {
 					setPath(path, for: pathContextCurrent)
 					
 				case .modal:
-					modals.append(RouteEntry(root: screen, path: [], style: .modal))
+					state.modals.append(RouteEntry(root: screen, path: [], style: .modal))
 			}
 		}
 
@@ -72,13 +84,13 @@ public extension SnapNavigation {
 		// MARK: Dismiss
 		
 		public func dismissCurrentModal() {
-			if modals.count > 0 {
-				modals.removeLast()
+			if state.modals.count > 0 {
+				state.modals.removeLast()
 			}
 		}
 		
 		public func dismissModals() {
-			modals = []
+			state.modals = []
 		}
 		
 		public func popCurrentToRoot() {
@@ -86,22 +98,7 @@ public extension SnapNavigation {
 		}
 		
 		
-		// MARK: - Selection
-		
-		public var selected: Screen
-		
-		private var pathForSelection: [Screen : Path] = [:]
-		
-		
 		// MARK: - Modals
-		
-		private var modals: [RouteEntry<Screen>] = []
-		
-		internal var modalLevelCurrent: ModalLevel { modals.count - 1 }
-		
-		internal func modalLevelInverted(_ level: ModalLevel) -> ModalLevel {
-			return modals.count - 1 - level
-		}
 		
 		@ObservationIgnored
 		private var modalBindingsForLevel: [ModalLevel: Binding<Bool>] = [:]
@@ -112,10 +109,10 @@ public extension SnapNavigation {
 			}
 			
 			let binding = Binding(get: { [weak self] in
-				self?.modals.count ?? 0 > level
+				self?.state.modals.count ?? 0 > level
 			}, set: { [weak self] isPresented in
-				if !isPresented && self?.modals.count ?? 0 > level {
-					self?.modals.remove(at: level)
+				if !isPresented && self?.state.modals.count ?? 0 > level {
+					self?.state.modals.remove(at: level)
 				}
 			})
 			
@@ -162,11 +159,11 @@ public extension SnapNavigation {
 		private func getPath(for context: PathContext) -> Path {
 			switch context {
 				case .selection(let screen):
-					return pathForSelection[screen] ?? []
+					return state.pathForSelection[screen] ?? []
 					
 				case .modal(let level):
-					guard modals.count > level else { return [] }
-					return modals[level].path
+					guard state.modals.count > level else { return [] }
+					return state.modals[level].path
 			}
 		}
 		
@@ -177,17 +174,17 @@ public extension SnapNavigation {
 					// macOS uses SplitView, where a selection in the sidebar clears the path.
 					// Wrapping this in Task applies the new path after the purge.
 					Task {
-						pathForSelection[screen] = path
+						state.pathForSelection[screen] = path
 					}
 #else
-					pathForSelection[screen] = path
+					state.pathForSelection[screen] = path
 #endif
 					
 				case .modal(let level):
-					if modals.count > level {
-						var entry = modals[level]
+					if state.modals.count > level {
+						var entry = state.modals[level]
 						entry.path = path
-						modals[level] = entry
+						state.modals[level] = entry
 					}
 			}
 		}
@@ -202,13 +199,30 @@ public extension SnapNavigation {
 extension SnapNavigation.Navigator {
 	
 	
+	// MARK: State
+	
+	internal var selected: Screen {
+		get { state.selected }
+		set { state.selected = newValue }
+	}
+	
+	
+	// MARK: Modals
+	
+	internal var modalLevelCurrent: SnapNavigation.ModalLevel { state.modals.count - 1 }
+	
+	internal func modalLevelInverted(_ level: SnapNavigation.ModalLevel) -> SnapNavigation.ModalLevel {
+		return state.modals.count - 1 - level
+	}
+	
+	
 	// MARK: Navigator
 	
 	private var pathContextCurrent: PathContext {
 		if modalLevelCurrent >= 0 {
 			return .modal(level: modalLevelCurrent)
 		} else {
-			return .selection(screen: selected)
+			return .selection(screen: state.selected)
 		}
 	}
 	
@@ -218,9 +232,9 @@ extension SnapNavigation.Navigator {
 				return screen
 				
 			case .modal(let level):
-				guard modals.count > level else { return nil }
+				guard state.modals.count > level else { return nil }
 				
-				let entry = modals[level]
+				let entry = state.modals[level]
 				return entry.root
 		}
 	}
