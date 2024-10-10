@@ -140,7 +140,7 @@ public extension SnapNavigation {
 		
 		// MARK: - Paths
 		
-		private var pathForScreen: [Screen : Path] = [:]
+		private var pathForSelection: [Screen : Path] = [:]
 		
 		internal enum PathContext: Hashable {
 			case selection(screen: Screen)
@@ -178,7 +178,7 @@ public extension SnapNavigation {
 		private func getPath(for context: PathContext) -> Path {
 			switch context {
 				case .selection(let screen):
-					return pathForScreen[screen] ?? []
+					return pathForSelection[screen] ?? []
 					
 				case .modal(let level):
 					guard modals.count > level else { return [] }
@@ -193,10 +193,10 @@ public extension SnapNavigation {
 					// macOS uses SplitView, where a selection in the sidebar clears the path.
 					// Wrapping this in Task applies the new path after the purge.
 					Task {
-						pathForScreen[screen] = path
+						pathForSelection[screen] = path
 					}
 #else
-					pathForScreen[screen] = path
+					pathForSelection[screen] = path
 #endif
 					
 				case .modal(let level):
