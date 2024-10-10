@@ -8,42 +8,42 @@ import SnapNavigation
 
 struct DeeplinkButton: View {
 	
-	@Environment(NavigationState.self) private var navigationState
+	@Environment(Navigator.self) private var navigator
 
 	let title: String
 	let screen: Screen
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigationState.navigate(to: screen)
+			navigator.navigate(to: screen)
 		}
 	}
 }
 
 struct PresentButton: View {
 	
-	@Environment(NavigationState.self) private var navigationState
+	@Environment(Navigator.self) private var navigator
 
 	let title: String
 	let screen: Screen
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigationState.present(screen: screen, style: .modal)
+			navigator.present(screen: screen, style: .modal)
 		}
 	}
 }
 
 struct PushButton: View {
 	
-	@Environment(NavigationState.self) private var navigationState
+	@Environment(Navigator.self) private var navigator
 
 	let title: String
 	let screen: Screen
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigationState.present(screen: screen, style: .push)
+			navigator.present(screen: screen, style: .push)
 		}
 	}
 }

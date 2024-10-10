@@ -9,16 +9,16 @@ internal struct SnapNavigationStack<NavigationProvider: SnapNavigationProvider>:
 
 	typealias Screen = NavigationProvider.Screen
 	
-	typealias NavigationState = SnapNavigation.State<NavigationProvider>
-	@Environment(NavigationState.self) private var navigationState
+	typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
+	@Environment(Navigator.self) private var navigator
 	
-	let context: NavigationState.PathContext
+	let context: Navigator.PathContext
 
     var body: some View {
 		
-		NavigationStack(path: navigationState.pathBinding(for: context)) {
+		NavigationStack(path: navigator.pathBinding(for: context)) {
 			
-			if let root = navigationState.root(for: context) {
+			if let root = navigator.root(for: context) {
 				
 				SnapNavigationDestinationScreen(screen: root)
 					.navigationDestination(for: Screen.self) { screen in

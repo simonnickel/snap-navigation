@@ -9,7 +9,7 @@
 
 Define the navigation structure of your SwiftUI app decoupled from it's presentation.
 
-The package provides `SnapNavigationScreen` to define Screens and `SnapNavigationProvider` to build a structure of Screens to navigate between. `SnapNavigationView` presents it and manages the `NavigationState`, which can be used to deeplink to each Screen.
+The package provides `SnapNavigationScreen` to define Screens and `SnapNavigationProvider` to build a structure of Screens to navigate between. `SnapNavigationView` presents it and manages the `Navigator`, which can be used to deeplink to each Screen.
 
 [![Documentation][documentation badge]][documentation] 
 

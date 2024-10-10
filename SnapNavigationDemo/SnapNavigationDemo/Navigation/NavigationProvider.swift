@@ -5,7 +5,7 @@
 
 import SnapNavigation
 
-typealias NavigationState = SnapNavigation.State<NavigationProvider>
+typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
 
 struct NavigationProvider: SnapNavigationProvider {
 	

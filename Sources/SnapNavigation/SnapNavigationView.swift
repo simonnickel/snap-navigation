@@ -7,12 +7,12 @@ import SwiftUI
 
 public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: View {
 
-    public typealias NavigationState = SnapNavigation.State<NavigationProvider>
+    public typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
 
-	private let state: NavigationState
+	private let navigator: Navigator
 
     public init(provider: NavigationProvider) {
-        self.state = SnapNavigation.State(provider: provider)
+        self.navigator = SnapNavigation.Navigator(provider: provider)
     }
 
 
@@ -20,9 +20,9 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 
     public var body: some View {
 
-        SnapNavigationTabView(state: state)
-			.modifier(SnapNavigation.ModalPresentationModifier<NavigationProvider>(level: state.modalLevelCurrent))
-			.environment(state)
+        SnapNavigationTabView(navigator: navigator)
+			.modifier(SnapNavigation.ModalPresentationModifier<NavigationProvider>(level: navigator.modalLevelCurrent))
+			.environment(navigator)
         
     }
     

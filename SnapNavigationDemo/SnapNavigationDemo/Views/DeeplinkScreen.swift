@@ -8,7 +8,7 @@ import SnapNavigation
 
 struct DeeplinkScreen: View {
 	
-	@Environment(NavigationState.self) private var navigationState
+	@Environment(Navigator.self) private var navigator
 
 	let screen: Screen
 	
@@ -49,13 +49,13 @@ struct DeeplinkScreen: View {
 				VStack(alignment: .leading, spacing: 4) {
 					Text("Dismiss").font(.headline)
 					NavigationButton(title: "Pop to Root") {
-						navigationState.popCurrentToRoot()
+						navigator.popCurrentToRoot()
 					}
 					NavigationButton(title: "Dismiss Current Modal") {
-						navigationState.dismissCurrentModal()
+						navigator.dismissCurrentModal()
 					}
 					NavigationButton(title: "Dismiss Modals") {
-						navigationState.dismissModals()
+						navigator.dismissModals()
 					}
 					
 					NavigationLink(value: Screen.infinity) {

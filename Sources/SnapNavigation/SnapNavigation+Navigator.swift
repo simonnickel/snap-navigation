@@ -10,7 +10,7 @@ public extension SnapNavigation {
 	
 	@MainActor
 	@Observable
-	public class State<NavigationProvider: SnapNavigationProvider> {
+	public class Navigator<NavigationProvider: SnapNavigationProvider> {
 		
 		public typealias Screen = NavigationProvider.Screen
 		public typealias Path = [Screen]
@@ -217,10 +217,10 @@ public extension SnapNavigation {
 
 // MARK: - Convenience
 
-extension SnapNavigation.State {
+extension SnapNavigation.Navigator {
 	
 	
-	// MARK: State
+	// MARK: Navigator
 	
 	private var pathContextCurrent: PathContext {
 		if modalLevelCurrent >= 0 {
