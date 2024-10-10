@@ -27,7 +27,7 @@ public extension SnapNavigationScreen {
 	var id: Int { self.hashValue }
 }
 
-extension Array: Hashable, Identifiable where Element: SnapNavigationScreen {
+extension Array: Identifiable, Hashable where Element: SnapNavigationScreen {
 	public var id: Int { hashValue }
 }
 
@@ -40,14 +40,14 @@ extension SnapNavigation {
 		
 		public var title: String
 		
-		public var icon: String?
+		public var icon: (any Hashable)?
 		
 		public var presentationStyle: PresentationStyle
 		
 		public typealias DestinationFactory = @MainActor (Screen) -> (any View)
 		public var destination: DestinationFactory?
 
-		public init(title: String, icon: String?, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
+		public init(title: String, icon: (any Hashable)?, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
 			self.title = title
 			self.icon = icon
 			self.presentationStyle = style
@@ -59,7 +59,7 @@ extension SnapNavigation {
 			Label {
 				Text(title)
 			} icon: {
-				if let icon {
+				if let icon = icon as? String {
 					Image(systemName: icon)
 				}
 			}
