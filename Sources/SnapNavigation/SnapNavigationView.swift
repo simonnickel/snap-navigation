@@ -7,8 +7,6 @@ import SwiftUI
 
 public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: View {
 
-    @Environment(\.horizontalSizeClass) private var horizontalSize
-
     public typealias NavigationState = SnapNavigation.State<NavigationProvider>
 
 	private let state: NavigationState
@@ -23,21 +21,6 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
     public var body: some View {
 
         SnapNavigationTabView(state: state)
-			.onChange(of: state.selected, { oldValue, newValue in
-				// Only trigger navigation when subscreen got selected.
-				if state.screens.contains(newValue) {
-					return
-				}
-
-				#if os(iOS)
-				// Without wrapping the call in Task, sometimes the stack animations will break on iPad.
-				Task {
-					state.navigate(to: newValue)
-				}
-				#else
-				state.navigate(to: newValue)
-				#endif
-			})
 			.modifier(SnapNavigation.ModalPresentationModifier<NavigationProvider>(level: state.modalLevelCurrent))
 			.environment(state)
         

@@ -9,6 +9,9 @@ public protocol SnapNavigationScreen: Identifiable, Hashable, Equatable {
 	
 	var definition: SnapNavigation.ScreenDefinition<Self> { get }
 	
+	
+	// MARK: Definition Overrides
+	
     var label: any View { get }
 
     var destination: any View { get }
