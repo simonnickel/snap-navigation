@@ -14,7 +14,6 @@ public extension SnapNavigation {
 		
 		public typealias Screen = NavigationProvider.Screen
 		public typealias Path = [Screen]
-		internal typealias Route = [RouteEntry<Screen>]
 		
 		private let navigationProvider: NavigationProvider
 
@@ -27,7 +26,7 @@ public extension SnapNavigation {
 		// MARK: - Navigation
 		
 		public func navigate(to screen: Screen) {
-			var route = route(to: screen)
+			var route = navigationProvider.route(to: screen)
 			
 			// Select
 			guard let firstEntry = route.first, firstEntry.style == .select else {
@@ -86,23 +85,6 @@ public extension SnapNavigation {
 			setPath([], for: pathContextCurrent)
 		}
 		
-		
-		// MARK: - Route
-		
-		private func route(to screen: Screen) -> Route {
-			let route = routeEntries(to: screen)
-			return route.condense()
-		}
-		
-		/// Get all entries of the route to a screen by traversing parents up to the root.
-		private func routeEntries(to screen: Screen) -> Route {
-			guard let parent = navigationProvider.parent(of: screen) else {
-				return [RouteEntry(root: screen, path: [], style: .select)]
-			}
-			var routeToParent = routeEntries(to: parent) ?? []
-			routeToParent.append(RouteEntry(root: screen, path: [], style: screen.definition.presentationStyle))
-			return routeToParent
-		}
 		
 		// MARK: - Selection
 		
