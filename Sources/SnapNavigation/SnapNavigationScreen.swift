@@ -12,8 +12,10 @@ public protocol SnapNavigationScreen: Identifiable, Hashable, Equatable {
 	
 	// MARK: Definition Overrides
 	
+	@MainActor
     var label: any View { get }
 
+	@MainActor
     var destination: any View { get }
 
 }

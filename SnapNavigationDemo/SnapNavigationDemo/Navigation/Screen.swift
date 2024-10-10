@@ -38,10 +38,12 @@ enum Screen: SnapNavigationScreen {
 	
 	// MARK: Definition Overrides
 
+	@MainActor
 	var label: any View {
 		definition.label
 	}
 	
+	@MainActor
 	var destination: any View {
 		definition.destination?(self) ?? DeeplinkScreen(screen: self)
 	}
