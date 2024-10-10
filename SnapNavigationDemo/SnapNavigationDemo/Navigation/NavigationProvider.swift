@@ -9,7 +9,6 @@ typealias NavigationState = SnapNavigation.State<NavigationProvider>
 
 struct NavigationProvider: SnapNavigationProvider {
 	
-	public typealias Path = [Screen]
 	var initialSelection: Screen { .triangle }
 	
 	var selectableScreens: [Screen] { [.triangle, .rectangle, .circle] }
