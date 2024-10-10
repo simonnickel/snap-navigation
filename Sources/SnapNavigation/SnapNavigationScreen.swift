@@ -55,6 +55,7 @@ extension SnapNavigation {
 			self.destination = destination
 		}
 		
+		@MainActor
 		public init(title: String, icon: IconFactory?, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
 			self.title = title
 			self.icon = icon
@@ -62,6 +63,7 @@ extension SnapNavigation {
 			self.destination = destination
 		}
 		
+		@MainActor
 		public var label: any View {
 			Label {
 				Text(title)
