@@ -9,29 +9,24 @@
 
 Define the navigation structure of your SwiftUI app decoupled from it's presentation.
 
-The package provides `SnapNavigationScreen` to define Screens and `SnapNavigationProvider` to build a structure of Screens to navigate between. `SnapNavigationView` presents it and manages the `Navigator`, which can be used to deeplink to each Screen.
-
 [![Documentation][documentation badge]][documentation] 
 
 [documentation]: https://swiftpackageindex.com/simonnickel/snap-navigation/main/documentation/snapnavigation
 [documentation badge]: https://img.shields.io/badge/Documentation-DocC-blue
 
-SnapNavigation allows you to define the navigation hierarchy of your app in a generic way. Screens can be displayed by selection, pushes (on selected or current modal stack) or modal presentation. It also allows to deeplink to a specific Screen with the whole hierarchy being created. 
+SnapNavigation allows you to define the navigation hierarchy of your app in a generic way. Screens can be displayed by selection, pushes (on selected or current modal stack) or modal presentation. It also allows to deeplink to a specific Screen with the whole hierarchy being setup. 
 
-The presentation of that definition is independent and could easily be replaced by a different style. The `SnapNavigationView` shows the Screens in a SwiftUI TabView with sidebar when suitable.
+The package provides `SnapNavigationScreen` to setup Screens and `SnapNavigationProvider` to define how to navigate between them.
+
+The presentation is independent and could easily be replaced by a different style. The `SnapNavigationView` shows the Screens in a SwiftUI TabView with sidebar when suitable. It manages the `Navigator`, which can be used to trigger navigation actions.
 
 Supports:
  - iOS, iPadOS, macOS
  - iPadOS SplitView, resizing without loosing state
  - DynamicType
  
- // TODO: Keyboard Navigation, better accessibility feature support, Multi window, Sidebar reordering
+ // TODO: keyboard navigation, better accessibility support, multi window, sidebar reordering
 
-## Setup
-
-Steps to setup the package ...
-
-Setup GitHub page: Add Description and Topics, uncheck Packages and Deployments
 Add to Swift Package Index
 Update Badge and Documentation urls in README.md
 
@@ -103,3 +98,5 @@ Decision: Not supporting TabSection for now.
 Supporting a mix of .sheet() and .fullScreenCover() causes some animation issues in deeplink handling.
 
 Decision: Not supporting .fullScreenCover() for now. Modal presentation uses .sheet().
+
+// TODO: Define FullScreenCover as additional PresentationStyle, which can only be present once as last item with a path to show, no modals. (Or even with its own complete SnapNavigationView and State).
