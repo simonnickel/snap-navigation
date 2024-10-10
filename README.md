@@ -16,6 +16,16 @@ The package provides `SnapNavigationScreen` to define Screens and `SnapNavigatio
 [documentation]: https://swiftpackageindex.com/simonnickel/snap-navigation/main/documentation/snapnavigation
 [documentation badge]: https://img.shields.io/badge/Documentation-DocC-blue
 
+SnapNavigation allows you to define the navigation hierarchy of your app in a generic way. Screens can be displayed by selection, pushes (on selected or current modal stack) or modal presentation. It also allows to deeplink to a specific Screen with the whole hierarchy being created. 
+
+The presentation of that definition is independent and could easily be replaced by a different style. The `SnapNavigationView` shows the Screens in a SwiftUI TabView with sidebar when suitable.
+
+Supports:
+ - iOS, iPadOS, macOS
+ - iPadOS SplitView, resizing without loosing state
+ - DynamicType
+ 
+ // TODO: Keyboard Navigation, better accessibility feature support, Multi window, Sidebar reordering
 
 ## Setup
 
