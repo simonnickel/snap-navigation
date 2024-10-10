@@ -27,9 +27,6 @@ Supports:
  
  // TODO: keyboard navigation, better accessibility support, multi window, sidebar reordering
 
-Add to Swift Package Index
-Update Badge and Documentation urls in README.md
-
 
 ## Demo project
 
