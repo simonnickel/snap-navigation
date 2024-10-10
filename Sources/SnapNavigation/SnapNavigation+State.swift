@@ -53,7 +53,8 @@ public extension SnapNavigation {
 			}
 		}
 		
-		public func present(screen: Screen, style: PresentationStyle) {
+		public func present(screen: Screen, style styleOverride: PresentationStyle? = nil) {
+			let style = styleOverride ?? screen.definition.presentationStyle
 			switch style {
 				case .select:
 					modals = []
