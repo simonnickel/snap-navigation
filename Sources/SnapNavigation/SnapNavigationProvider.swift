@@ -7,9 +7,9 @@ public protocol SnapNavigationProvider {
 	
 	associatedtype Screen: SnapNavigationScreen
 	
-	var initial: Screen { get }
+	var initialSelection: Screen { get }
 	
-	var screens: [Screen] { get }
+	var selectableScreens: [Screen] { get }
 	
 	func parent(of screen: Screen) -> Screen?
 	

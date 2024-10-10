@@ -22,7 +22,7 @@ public extension SnapNavigation {
 		
 		public init(provider: NavigationProvider) {
 			self.navigationProvider = provider
-			self.selected = provider.initial
+			self.selected = provider.initialSelection
 		}
 		
 		
@@ -244,7 +244,7 @@ extension SnapNavigation.State {
 	// MARK: NavigationProvider
 	
 	public var screens: [Screen] {
-		navigationProvider.screens
+		navigationProvider.selectableScreens
 	}
 	
 	public func parent(for screen: Screen) -> Screen? {

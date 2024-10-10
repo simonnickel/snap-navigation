@@ -10,10 +10,9 @@ typealias NavigationState = SnapNavigation.State<NavigationProvider>
 struct NavigationProvider: SnapNavigationProvider {
 	
 	public typealias Path = [Screen]
+	var initialSelection: Screen { .triangle }
 	
-	var initial: Screen { .triangle }
-	
-	var screens: [Screen] { [.triangle, .rectangle, .circle] }
+	var selectableScreens: [Screen] { [.triangle, .rectangle, .circle] }
 	
 	func parent(of screen: Screen) -> Screen? {
 		switch screen {
