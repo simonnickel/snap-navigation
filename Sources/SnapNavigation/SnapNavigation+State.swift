@@ -17,9 +17,7 @@ public extension SnapNavigation {
 		internal typealias Route = [RouteEntry<Screen>]
 		
 		private let navigationProvider: NavigationProvider
-		
-		public var selected: Screen
-		
+
 		public init(provider: NavigationProvider) {
 			self.navigationProvider = provider
 			self.selected = provider.initialSelection
@@ -106,6 +104,12 @@ public extension SnapNavigation {
 			return routeToParent
 		}
 		
+		// MARK: - Selection
+		
+		public var selected: Screen
+		
+		private var pathForSelection: [Screen : Path] = [:]
+		
 		
 		// MARK: - Modals
 		
@@ -139,8 +143,6 @@ public extension SnapNavigation {
 		
 		
 		// MARK: - Paths
-		
-		private var pathForSelection: [Screen : Path] = [:]
 		
 		internal enum PathContext: Hashable {
 			case selection(screen: Screen)
