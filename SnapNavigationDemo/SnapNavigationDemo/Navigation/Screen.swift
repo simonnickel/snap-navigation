@@ -16,21 +16,21 @@ enum Screen: SnapNavigationScreen {
 	var definition: SnapNavigation.ScreenDefinition<Self> {
         switch self {
 				
-			case .triangle: .init(title: "Triangle", systemIcon: "triangle")
+			case .triangle: .init(title: "Triangle", icon: "triangle")
 				
-			case .rectangle: .init(title: "Rectangle", systemIcon: "rectangle")
+			case .rectangle: .init(title: "Rectangle", icon: "rectangle")
 				
 			case .rectangleItem(level: let level): .init(
 				title: "Rectangle \(level)",
-				systemIcon: "\(level).rectangle",
+				icon: "\(level).rectangle",
 				style: level % 3 == 0 ? .modal : .push
 			)
 				
-            case .circle: .init(title: "Circle", systemIcon: "circle")
+            case .circle: .init(title: "Circle", icon: "circle")
 				
-			case .circleItem(level: let level): .init(title: "Circle \(level)", systemIcon: "\(level).circle")
+			case .circleItem(level: let level): .init(title: "Circle \(level)", icon: "\(level).circle")
             
-            case .infinity: .init(title: "Infinity", systemIcon: "infinity")
+            case .infinity: .init(title: "Infinity", icon: "infinity")
 				
         }
     }

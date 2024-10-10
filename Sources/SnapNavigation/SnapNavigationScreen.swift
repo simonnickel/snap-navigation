@@ -40,23 +40,14 @@ extension SnapNavigation {
 		
 		public var title: String
 		
-		public typealias IconFactory = () -> (any View)
-		public var icon: IconFactory?
+		public var icon: String?
 		
 		public var presentationStyle: PresentationStyle
 		
-		public typealias DestinationFactory = (Screen) -> (any View)
+		public typealias DestinationFactory = @MainActor (Screen) -> (any View)
 		public var destination: DestinationFactory?
 
-		public init(title: String, systemIcon: String, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
-			self.title = title
-			self.icon = { Image(systemName: systemIcon) }
-			self.presentationStyle = style
-			self.destination = destination
-		}
-		
-		@MainActor
-		public init(title: String, icon: IconFactory?, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
+		public init(title: String, icon: String?, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {
 			self.title = title
 			self.icon = icon
 			self.presentationStyle = style
@@ -69,7 +60,7 @@ extension SnapNavigation {
 				Text(title)
 			} icon: {
 				if let icon {
-					AnyView(icon())
+					Image(systemName: icon)
 				}
 			}
 		}
