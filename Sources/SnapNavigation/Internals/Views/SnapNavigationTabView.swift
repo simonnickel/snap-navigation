@@ -9,7 +9,6 @@ internal struct SnapNavigationTabView<NavigationProvider: SnapNavigationProvider
 
 	typealias NavState = SnapNavigation.State<NavigationProvider>
 
-    @Environment(\.horizontalSizeClass) private var horizontalSize
 
     @Bindable private var state: NavState
 
