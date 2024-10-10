@@ -40,7 +40,7 @@ extension SnapNavigation {
 		
 		public var title: String
 		
-		public typealias IconFactory = () -> Image?
+		public typealias IconFactory = () -> (any View)
 		public var icon: IconFactory?
 		
 		public var presentationStyle: PresentationStyle
@@ -66,7 +66,9 @@ extension SnapNavigation {
 			Label {
 				Text(title)
 			} icon: {
-				icon?()
+				if let icon {
+					AnyView(icon())
+				}
 			}
 		}
 		
