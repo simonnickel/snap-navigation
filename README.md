@@ -9,7 +9,7 @@
 
 Define the navigation structure of your SwiftUI app decoupled from it's presentation.
 
-The package provides `SnapNavigationScreen` to define the structure of an app and `SnapNavigationView` presents it in different navigation approaches. 
+The package provides `SnapNavigationScreen` to define Screens and `SnapNavigationProvider` to build a structure of Screens to navigate between. `SnapNavigationView` presents it and manages the `NavigationState`, which can be used to deeplink to each Screen.
 
 [![Documentation][documentation badge]][documentation] 
 
@@ -28,14 +28,56 @@ Update Badge and Documentation urls in README.md
 
 ## Demo project
 
-The [demo project](/PackageDemo) shows ...
+The [demo project](/SnapNavigationDemo) shows a navigation hierarchy with 3 top level items to select. It allows infinite items to be pushed or presented as modals and a few deeplinks to navigate to a more complex state.
 
 <img src="/screenshot.png" height="400">
 
 
 ## How to use
 
-Details about package content ...
+Define Screens the App can navigate to:
+
+```
+enum Screen: SnapNavigationScreen {		
+	case triangle, rectangle, circle
+	
+	var definition: SnapNavigation.ScreenDefinition<Self> {
+		switch self {
+			case .triangle: .init(title: "Triangle", systemIcon: "triangle")
+			...
+		}
+	}
+}
+```
+
+Implement a `SnapNavigationProvider` to define the structure of reachable screens:
+
+```
+struct NavigationProvider: SnapNavigationProvider {
+	var initialSelection: Screen { .triangle }
+	
+	var selectableScreens: [Screen] { [.triangle, .rectangle, .circle] }
+	
+	func parent(of screen: Screen) -> Screen? {
+		switch screen {
+			case .triangle, .rectangle, .circle: nil
+		}
+	}
+}
+```
+
+Use the `SnapNavigationView`:
+```
+SnapNavigationView(
+	provider: NavigationProvider()
+)
+.tabViewSidebarHeader {
+	...
+}
+.tabViewSidebarFooter {
+	...
+}
+```
 
 
 ## Considerations
