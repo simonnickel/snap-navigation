@@ -14,6 +14,10 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
     public init(provider: NavigationProvider) {
         self.navigator = SnapNavigation.Navigator(provider: provider)
     }
+	
+    public init(navigator: Navigator) {
+		self.navigator = navigator
+    }
 
 
     // MARK: - Body
