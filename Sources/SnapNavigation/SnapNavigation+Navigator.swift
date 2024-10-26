@@ -10,7 +10,7 @@ public extension SnapNavigation {
 	
 	@MainActor
 	@Observable
-	public class Navigator<NavigationProvider: SnapNavigationProvider> {
+	class Navigator<NavigationProvider: SnapNavigationProvider> {
 		
 		public typealias Screen = NavigationProvider.Screen
 		public typealias Path = [Screen]
