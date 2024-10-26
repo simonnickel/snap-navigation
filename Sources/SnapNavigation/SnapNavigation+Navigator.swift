@@ -8,9 +8,8 @@ import Observation
 
 extension SnapNavigation {
 	
-	@MainActor
 	@Observable
-	public class Navigator<NavigationProvider: SnapNavigationProvider> {
+	final public class Navigator<NavigationProvider: SnapNavigationProvider> {
 		
 		public typealias Screen = NavigationProvider.Screen
 		public typealias Path = [Screen]
@@ -37,6 +36,7 @@ extension SnapNavigation {
 		
 		// MARK: - Navigation
 		
+		@MainActor
 		public func navigate(to screen: Screen) {
 			var route = navigationProvider.route(to: screen)
 			
@@ -65,6 +65,7 @@ extension SnapNavigation {
 		
 		// MARK: Present
 		
+		@MainActor
 		public func present(screen: Screen, style styleOverride: PresentationStyle? = nil) {
 			let style = styleOverride ?? screen.definition.presentationStyle
 			switch style {
@@ -86,16 +87,19 @@ extension SnapNavigation {
 		
 		// MARK: Dismiss
 		
+		@MainActor
 		public func dismissCurrentModal() {
 			if state.modals.count > 0 {
 				state.modals.removeLast()
 			}
 		}
 		
+		@MainActor
 		public func dismissModals() {
 			state.modals = []
 		}
 		
+		@MainActor
 		public func popCurrentToRoot() {
 			setPath([], for: pathContextCurrent)
 		}
@@ -146,6 +150,7 @@ extension SnapNavigation {
 		@ObservationIgnored
 		private var pathBindingsForContext: [PathContext: Binding<Path>] = [:]
 		
+		@MainActor
 		internal func pathBinding(for context: PathContext) -> Binding<Path> {
 			if let binding = pathBindingsForContext[context] {
 				return binding
@@ -177,6 +182,7 @@ extension SnapNavigation {
 		@ObservationIgnored
 		private var modalBindingsForLevel: [ModalLevel: Binding<Bool>] = [:]
 		
+		@MainActor
 		internal func modalBinding(for level: ModalLevel) -> Binding<Bool> {
 			if let binding = modalBindingsForLevel[level] {
 				return binding
