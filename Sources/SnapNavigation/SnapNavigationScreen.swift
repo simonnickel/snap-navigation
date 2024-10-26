@@ -23,11 +23,11 @@ public protocol SnapNavigationScreen: Identifiable, Hashable, Equatable, Sendabl
 
 // MARK: - Extensions
 
-public extension SnapNavigationScreen {
-	var id: Int { self.hashValue }
+extension SnapNavigationScreen {
+	public var id: Int { self.hashValue }
 }
 
-extension Array: Identifiable, Hashable where Element: SnapNavigationScreen {
+extension Array: @retroactive Identifiable where Element: SnapNavigationScreen {
 	public var id: Int { hashValue }
 }
 

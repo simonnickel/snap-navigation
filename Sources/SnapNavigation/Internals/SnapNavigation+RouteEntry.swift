@@ -5,7 +5,7 @@
 
 internal extension SnapNavigation {
 	
-	internal struct RouteEntry<Screen: SnapNavigationScreen>: Equatable, Identifiable, Hashable {
+	struct RouteEntry<Screen: SnapNavigationScreen>: Equatable, Identifiable, Hashable, Sendable {
 		
 		internal typealias Path = [Screen]
 		
@@ -20,7 +20,7 @@ internal extension SnapNavigation {
 internal extension Array {
 	
 	/// Join an Array of `RouteEntry` based on their `PresentationStyle` into one or multiple`RouteEntry` with elements on their path.
-	internal func condense<Screen>() -> Self where Element == SnapNavigation.RouteEntry<Screen> {
+	func condense<Screen>() -> Self where Element == SnapNavigation.RouteEntry<Screen> {
 		var route = self
 		var result: Self = []
 		guard let first = route.first else { return result }

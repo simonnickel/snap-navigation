@@ -21,7 +21,7 @@ extension SnapNavigationProvider {
 			return [RouteEntry(root: screen, path: [], style: .select)]
 		}
 		
-		var routeToParent = routeEntries(to: parent) ?? []
+		var routeToParent = routeEntries(to: parent)
 		routeToParent.append(RouteEntry(root: screen, path: [], style: screen.definition.presentationStyle))
 		
 		return routeToParent

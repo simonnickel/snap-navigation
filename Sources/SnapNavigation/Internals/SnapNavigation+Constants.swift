@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal extension SnapNavigation {
+extension SnapNavigation {
 	
 	internal typealias ModalLevel = Int
 	

@@ -6,11 +6,11 @@
 import SwiftUI
 import Observation
 
-public extension SnapNavigation {
+extension SnapNavigation {
 	
 	@MainActor
 	@Observable
-	class Navigator<NavigationProvider: SnapNavigationProvider> {
+	public class Navigator<NavigationProvider: SnapNavigationProvider> {
 		
 		public typealias Screen = NavigationProvider.Screen
 		public typealias Path = [Screen]
@@ -27,7 +27,7 @@ public extension SnapNavigation {
 		
 		// MARK: - State
 		
-		private struct State {
+		private struct State: Sendable {
 			internal var selected: Screen
 			internal var pathForSelection: [Screen : Path] = [:]
 			

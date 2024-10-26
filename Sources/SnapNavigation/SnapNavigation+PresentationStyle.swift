@@ -5,9 +5,9 @@
 
 import Foundation
 
-public extension SnapNavigation {
+extension SnapNavigation {
 	
-	public enum PresentationStyle {
+	public enum PresentationStyle: Sendable {
 		case select
 		case push
 		case modal
