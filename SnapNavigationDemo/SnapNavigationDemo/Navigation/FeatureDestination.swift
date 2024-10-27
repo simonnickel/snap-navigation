@@ -14,12 +14,10 @@ enum FeatureDestination: SnapNavigationDestination {
 	var definition: SnapNavigation.ScreenDefinition {
 		switch self {
 				
-				// An example with a destination factory using the destination.
 			case .pentagon: .init(title: "Pentagon", icon: "pentagon") {
-				Text("Pentagon")
+				FeatureView(destination: self)
 			}
 			
-				// An example with a destination factory not using the destination.
 			case .hexagon: .init(title: "Hexagon", icon: "hexagon") {
 				FeatureView(destination: self)
 			}
