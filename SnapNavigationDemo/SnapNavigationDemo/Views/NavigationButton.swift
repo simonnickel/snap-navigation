@@ -34,20 +34,6 @@ struct PresentButton: View {
 	}
 }
 
-struct PushButton: View {
-	
-	@Environment(Navigator.self) private var navigator
-
-	let title: String
-	let destination: AppDestination
-
-	var body: some View {
-		NavigationButton(title: title) {
-			navigator.present(destination: destination, style: .push)
-		}
-	}
-}
-
 struct NavigationButton: View {
 
 	let title: String

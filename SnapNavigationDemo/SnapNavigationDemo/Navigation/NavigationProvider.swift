@@ -17,7 +17,7 @@ struct NavigationProvider: SnapNavigationProvider {
 	
 	func parent(of destination: Destination) -> Destination? {
 		switch destination {
-			case .triangle, .rectangle, .circle, .infinity: nil
+			case .triangle, .rectangle, .circle, .infinity, .feature(_): nil
 			case .rectangleItem(let level):
 				level > 1 ? .rectangleItem(level: level - 1) : .rectangle
 			case .circleItem(let level):
