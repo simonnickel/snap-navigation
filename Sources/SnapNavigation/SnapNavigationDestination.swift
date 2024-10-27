@@ -44,52 +44,14 @@ extension SnapNavigation {
 		
 		public var presentationStyle: PresentationStyle
 
-		/// Destination Factory has to be stored as non generic to allow ScreenDefinition to be non generic. Required to have Destination enums with a different Destination type as associated value.
 		public typealias Factory = @MainActor () -> (any View)
-		public typealias DestinationFactory = @MainActor (any SnapNavigationDestination) -> (any View)
-		public typealias DestinationFactorySpecific<Destination: SnapNavigationDestination> = @MainActor (Destination) -> (any View)
+		public var destination: Factory?
 		
-		public var destination: DestinationFactory? {
-			if let factory {
-				return { _ in
-					return factory()
-				}
-			} else if let destinationFactory {
-				return { destination in
-					return destinationFactory(destination)
-				}
-			} else {
-				return nil
-			}
-		}
-		private var factory: Factory?
-		private var destinationFactory: DestinationFactory?
-
-		public init(title: String, icon: (any Hashable)?, style: PresentationStyle = .push) {
+		public init(title: String, icon: (any Hashable)?, style: PresentationStyle = .push, destination factory: Factory? = nil) {
 			self.title = title
 			self.icon = icon
 			self.presentationStyle = style
-		}
-		
-		public init(title: String, icon: (any Hashable)?, style: PresentationStyle = .push, destination factory: @escaping Factory) {
-			self.title = title
-			self.icon = icon
-			self.presentationStyle = style
-			
-			self.factory = factory
-		}
-		
-		public init<Destination: SnapNavigationDestination>(title: String, icon: (any Hashable)?, style: PresentationStyle = .push, destination factory: @escaping DestinationFactorySpecific<Destination>) {
-			self.title = title
-			self.icon = icon
-			self.presentationStyle = style
-			
-			self.destinationFactory = { destination in
-				guard let destination = destination as? Destination else {
-					return EmptyView()
-				}
-				return factory(destination)
-			}
+			self.destination = factory
 		}
 		
 		@MainActor

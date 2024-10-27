@@ -26,8 +26,8 @@ enum AppDestination: SnapNavigationDestination {
 				title: "Rectangle \(level)",
 				icon: "\(level).rectangle",
 				style: level % 3 == 0 ? .modal : .push
-			) { destination in
-				DeeplinkScreen(destination: destination)
+			) {
+				DeeplinkScreen(destination: self)
 			}
 				
             case .circle: .init(title: "Circle", icon: "circle")
@@ -36,13 +36,7 @@ enum AppDestination: SnapNavigationDestination {
             
             case .infinity: .init(title: "Infinity", icon: "infinity")
 				
-//			case .feature(let destination): destination.definition
-			case .feature(let destination): .init(
-				title: destination.definition.title,
-				icon: destination.definition.icon,
-				style: destination.definition.presentationStyle) {
-					destination.definition.destination?(destination) ?? EmptyView()
-				}
+			case .feature(let destination): destination.definition
 				
         }
     }
@@ -57,7 +51,7 @@ enum AppDestination: SnapNavigationDestination {
 	
 	@MainActor
 	var destination: any View {
-		definition.destination?(self) ?? DeeplinkScreen(destination: self)
+		definition.destination?() ?? DeeplinkScreen(destination: self)
 	}
 	
 }

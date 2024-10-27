@@ -20,8 +20,8 @@ enum FeatureDestination: SnapNavigationDestination {
 			}
 			
 				// An example with a destination factory not using the destination.
-			case .hexagon: .init(title: "Hexagon", icon: "hexagon") { destination in
-				FeatureView(destination: destination)
+			case .hexagon: .init(title: "Hexagon", icon: "hexagon") {
+				FeatureView(destination: self)
 			}
 
 		}
@@ -37,7 +37,7 @@ enum FeatureDestination: SnapNavigationDestination {
 	
 	@MainActor
 	var destination: any View {
-		definition.destination?(self) ?? EmptyView()
+		definition.destination?() ?? EmptyView()
 	}
 	
 }
