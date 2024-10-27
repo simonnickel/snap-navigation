@@ -9,12 +9,14 @@ typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
 
 struct NavigationProvider: SnapNavigationProvider {
 	
-	var initialSelection: Screen { .triangle }
+	typealias Destination = AppDestination
 	
-	var selectableScreens: [Screen] { [.triangle, .rectangle, .circle] }
+	var initialSelection: Destination { .triangle }
 	
-	func parent(of screen: Screen) -> Screen? {
-		switch screen {
+	var selectableDestinations: [Destination] { [.triangle, .rectangle, .circle] }
+	
+	func parent(of destination: Destination) -> Destination? {
+		switch destination {
 			case .triangle, .rectangle, .circle, .infinity: nil
 			case .rectangleItem(let level):
 				level > 1 ? .rectangleItem(level: level - 1) : .rectangle

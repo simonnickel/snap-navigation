@@ -11,11 +11,11 @@ struct DeeplinkButton: View {
 	@Environment(Navigator.self) private var navigator
 
 	let title: String
-	let screen: Screen
+	let destination: AppDestination
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigator.navigate(to: screen)
+			navigator.navigate(to: destination)
 		}
 	}
 }
@@ -25,11 +25,11 @@ struct PresentButton: View {
 	@Environment(Navigator.self) private var navigator
 
 	let title: String
-	let screen: Screen
+	let destination: AppDestination
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigator.present(screen: screen, style: .modal)
+			navigator.present(destination: destination, style: .modal)
 		}
 	}
 }
@@ -39,11 +39,11 @@ struct PushButton: View {
 	@Environment(Navigator.self) private var navigator
 
 	let title: String
-	let screen: Screen
+	let destination: AppDestination
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigator.present(screen: screen, style: .push)
+			navigator.present(destination: destination, style: .push)
 		}
 	}
 }

@@ -7,7 +7,7 @@ import SwiftUI
 
 internal struct SnapNavigationStack<NavigationProvider: SnapNavigationProvider>: View {
 
-	typealias Screen = NavigationProvider.Screen
+	typealias Destination = NavigationProvider.Destination
 	
 	typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
 	@Environment(Navigator.self) private var navigator
@@ -20,9 +20,9 @@ internal struct SnapNavigationStack<NavigationProvider: SnapNavigationProvider>:
 			
 			if let root = navigator.root(for: context) {
 				
-				SnapNavigationDestinationScreen(screen: root)
-					.navigationDestination(for: Screen.self) { screen in
-						SnapNavigationDestinationScreen(screen: screen)
+				SnapNavigationDestinationScreen(destination: root)
+					.navigationDestination(for: Destination.self) { destination in
+						SnapNavigationDestinationScreen(destination: destination)
 					}
 				
 			}

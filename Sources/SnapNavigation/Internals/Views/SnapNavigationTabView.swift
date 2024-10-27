@@ -18,9 +18,9 @@ internal struct SnapNavigationTabView<NavigationProvider: SnapNavigationProvider
 	var body: some View {
 		
 		TabView(selection: $navigator.selected) {
-			ForEach(navigator.screens) { screen in
+			ForEach(navigator.destinations) { destination in
 				
-				tab(for: screen)
+				tab(for: destination)
 				
 			}
 		}
@@ -31,12 +31,12 @@ internal struct SnapNavigationTabView<NavigationProvider: SnapNavigationProvider
 	
 	// MARK: Tab View
 	
-	@TabContentBuilder<NavigationProvider.Screen>
-	private func tab(for screen: NavigationProvider.Screen) -> some TabContent<NavigationProvider.Screen> {
-		Tab(value: screen, role: nil) {
-			SnapNavigationStack<NavigationProvider>(context: .selection(screen: screen))
+	@TabContentBuilder<NavigationProvider.Destination>
+	private func tab(for destination: NavigationProvider.Destination) -> some TabContent<NavigationProvider.Destination> {
+		Tab(value: destination, role: nil) {
+			SnapNavigationStack<NavigationProvider>(context: .selection(destination: destination))
 		} label: {
-			AnyView(screen.label)
+			AnyView(destination.label)
 		}
 	}
 	

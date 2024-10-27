@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-public protocol SnapNavigationScreen: Identifiable, Hashable, Equatable, Sendable {
+public protocol SnapNavigationDestination: Identifiable, Hashable, Equatable, Sendable {
 	
 	var definition: SnapNavigation.ScreenDefinition<Self> { get }
 	
@@ -23,20 +23,20 @@ public protocol SnapNavigationScreen: Identifiable, Hashable, Equatable, Sendabl
 
 // MARK: - Extensions
 
-extension SnapNavigationScreen {
+extension SnapNavigationDestination {
 	public var id: Int { self.hashValue }
 }
 
-extension Array: @retroactive Identifiable where Element: SnapNavigationScreen {
+extension Array: @retroactive Identifiable where Element: SnapNavigationDestination {
 	public var id: Int { hashValue }
 }
 
 
-// MARK: - Screen Definition
+// MARK: - Destination Definition
 
 extension SnapNavigation {
 	
-	public struct ScreenDefinition<Screen: SnapNavigationScreen> {
+	public struct ScreenDefinition<Destination: SnapNavigationDestination> {
 		
 		public var title: String
 		
@@ -44,7 +44,7 @@ extension SnapNavigation {
 		
 		public var presentationStyle: PresentationStyle
 		
-		public typealias DestinationFactory = @MainActor (Screen) -> (any View)
+		public typealias DestinationFactory = @MainActor (Destination) -> (any View)
 		public var destination: DestinationFactory?
 
 		public init(title: String, icon: (any Hashable)?, style: PresentationStyle = .push, destination: DestinationFactory? = nil) {

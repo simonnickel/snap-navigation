@@ -11,8 +11,8 @@ extension SnapNavigation {
 	@Observable
 	final public class Navigator<NavigationProvider: SnapNavigationProvider> {
 		
-		public typealias Screen = NavigationProvider.Screen
-		public typealias Path = [Screen]
+		public typealias Destination = NavigationProvider.Destination
+		public typealias Path = [Destination]
 		
 		private let navigationProvider: NavigationProvider
 
@@ -27,18 +27,18 @@ extension SnapNavigation {
 		// MARK: - State
 		
 		private struct State: Sendable {
-			internal var selected: Screen
-			internal var pathForSelection: [Screen : Path] = [:]
+			internal var selected: Destination
+			internal var pathForSelection: [Destination : Path] = [:]
 			
-			internal var modals: [RouteEntry<Screen>] = []
+			internal var modals: [RouteEntry<Destination>] = []
 		}
 		
 		
 		// MARK: - Navigation
 		
 		@MainActor
-		public func navigate(to screen: Screen) {
-			var route = navigationProvider.route(to: screen)
+		public func navigate(to destination: Destination) {
+			var route = navigationProvider.route(to: destination)
 			
 			// Select
 			guard let firstEntry = route.first, firstEntry.style == .select else {
@@ -50,9 +50,9 @@ extension SnapNavigation {
 			
 			// Push
 			if let entry = route.first, entry.style == .push {
-				setPath([entry.root] + entry.path, for: .selection(screen: state.selected))
+				setPath([entry.root] + entry.path, for: .selection(destination: state.selected))
 			} else {
-				setPath([], for: .selection(screen: state.selected))
+				setPath([], for: .selection(destination: state.selected))
 			}
 			
 			// Modals
@@ -66,21 +66,21 @@ extension SnapNavigation {
 		// MARK: Present
 		
 		@MainActor
-		public func present(screen: Screen, style styleOverride: PresentationStyle? = nil) {
-			let style = styleOverride ?? screen.definition.presentationStyle
+		public func present(destination: Destination, style styleOverride: PresentationStyle? = nil) {
+			let style = styleOverride ?? destination.definition.presentationStyle
 			switch style {
 				case .select:
 					state.modals = []
-					setPath([], for: .selection(screen: screen))
-					state.selected = screen
+					setPath([], for: .selection(destination: destination))
+					state.selected = destination
 					
 				case .push:
 					var path = getPath(for: pathContextCurrent)
-					path.append(screen)
+					path.append(destination)
 					setPath(path, for: pathContextCurrent)
 					
 				case .modal:
-					state.modals.append(RouteEntry(root: screen, path: [], style: .modal))
+					state.modals.append(RouteEntry(root: destination, path: [], style: .modal))
 			}
 		}
 
@@ -108,14 +108,14 @@ extension SnapNavigation {
 		// MARK: - Paths
 		
 		internal enum PathContext: Hashable {
-			case selection(screen: Screen)
+			case selection(destination: Destination)
 			case modal(level: ModalLevel)
 		}
 		
 		private func getPath(for context: PathContext) -> Path {
 			switch context {
-				case .selection(let screen):
-					return state.pathForSelection[screen] ?? []
+				case .selection(let destination):
+					return state.pathForSelection[destination] ?? []
 					
 				case .modal(let level):
 					guard state.modals.count > level else { return [] }
@@ -125,15 +125,15 @@ extension SnapNavigation {
 		
 		private func setPath(_ path: Path, for context: PathContext) {
 			switch context {
-				case .selection(let screen):
+				case .selection(let destination):
 #if os(macOS)
 					// macOS uses SplitView, where a selection in the sidebar clears the path.
 					// Wrapping this in Task applies the new path after the purge.
 					Task {
-						state.pathForSelection[screen] = path
+						state.pathForSelection[destination] = path
 					}
 #else
-					state.pathForSelection[screen] = path
+					state.pathForSelection[destination] = path
 #endif
 					
 				case .modal(let level):
@@ -157,11 +157,11 @@ extension SnapNavigation {
 			}
 			let binding: Binding<Path>
 			switch context {
-				case .selection(let screen):
+				case .selection(let destination):
 					binding = Binding<Path> { [weak self] in
-						self?.getPath(for: .selection(screen: screen)) ?? []
+						self?.getPath(for: .selection(destination: destination)) ?? []
 					} set: { [weak self] path in
-						self?.setPath(path, for: .selection(screen: screen))
+						self?.setPath(path, for: .selection(destination: destination))
 					}
 					
 				case .modal(let level):
@@ -211,7 +211,7 @@ extension SnapNavigation.Navigator {
 	
 	// MARK: State
 	
-	internal var selected: Screen {
+	internal var selected: Destination {
 		get { state.selected }
 		set { state.selected = newValue }
 	}
@@ -232,14 +232,14 @@ extension SnapNavigation.Navigator {
 		if modalLevelCurrent >= 0 {
 			return .modal(level: modalLevelCurrent)
 		} else {
-			return .selection(screen: state.selected)
+			return .selection(destination: state.selected)
 		}
 	}
 	
-	internal func root(for context: PathContext) -> Screen? {
+	internal func root(for context: PathContext) -> Destination? {
 		switch context {
-			case .selection(let screen):
-				return screen
+			case .selection(let destination):
+				return destination
 				
 			case .modal(let level):
 				guard state.modals.count > level else { return nil }
@@ -252,12 +252,12 @@ extension SnapNavigation.Navigator {
 	
 	// MARK: NavigationProvider
 	
-	public var screens: [Screen] {
-		navigationProvider.selectableScreens
+	public var destinations: [Destination] {
+		navigationProvider.selectableDestinations
 	}
 	
-	public func parent(for screen: Screen) -> Screen? {
-		navigationProvider.parent(of: screen)
+	public func parent(for destination: Destination) -> Destination? {
+		navigationProvider.parent(of: destination)
 	}
 	
 }

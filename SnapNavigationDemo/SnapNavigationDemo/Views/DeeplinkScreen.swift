@@ -10,7 +10,7 @@ struct DeeplinkScreen: View {
 	
 	@Environment(Navigator.self) private var navigator
 
-	let screen: Screen
+	let destination: AppDestination
 	
 	var body: some View {
 		ScrollView {
@@ -18,30 +18,30 @@ struct DeeplinkScreen: View {
 				VStack(alignment: .leading, spacing: 4) {
 					Text("Deeplink").font(.headline)
 					HStack {
-						DeeplinkButton(title: "Rectangle", screen: .rectangle)
-						DeeplinkButton(title: "Rectangle 2", screen: .rectangleItem(level: 2))
-						DeeplinkButton(title: "Rectangle 3", screen: .rectangleItem(level: 3))
-						DeeplinkButton(title: "Rectangle 7", screen: .rectangleItem(level: 7))
-						DeeplinkButton(title: "Rectangle 8", screen: .rectangleItem(level: 8))
+						DeeplinkButton(title: "Rectangle", destination: .rectangle)
+						DeeplinkButton(title: "Rectangle 2", destination: .rectangleItem(level: 2))
+						DeeplinkButton(title: "Rectangle 3", destination: .rectangleItem(level: 3))
+						DeeplinkButton(title: "Rectangle 7", destination: .rectangleItem(level: 7))
+						DeeplinkButton(title: "Rectangle 8", destination: .rectangleItem(level: 8))
 					}
 					
 					HStack {
-						DeeplinkButton(title: "Circle", screen: .circle)
-						DeeplinkButton(title: "Circle 3", screen: .circleItem(level: 3))
+						DeeplinkButton(title: "Circle", destination: .circle)
+						DeeplinkButton(title: "Circle 3", destination: .circleItem(level: 3))
 					}
 				}
 				
 				VStack(alignment: .leading, spacing: 4) {
 					Text("Present").font(.headline)
-					PresentButton(title: "Rectangle", screen: .rectangle)
-					PresentButton(title: "Circle", screen: .circle)
+					PresentButton(title: "Rectangle", destination: .rectangle)
+					PresentButton(title: "Circle", destination: .circle)
 				}
 				
 				VStack(alignment: .leading, spacing: 4) {
 					Text("Push").font(.headline)
-					PushButton(title: "Infinity", screen: .infinity)
+					PushButton(title: "Infinity", destination: .infinity)
 					
-					NavigationLink(value: Screen.infinity) {
+					NavigationLink(value: AppDestination.infinity) {
 						Text("NavigationLink: Infinity")
 					}
 				}
@@ -58,7 +58,7 @@ struct DeeplinkScreen: View {
 						navigator.dismissModals()
 					}
 					
-					NavigationLink(value: Screen.infinity) {
+					NavigationLink(value: AppDestination.infinity) {
 						Text("NavigationLink: Infinity")
 					}
 				}

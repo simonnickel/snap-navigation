@@ -6,7 +6,7 @@
 import SwiftUI
 import SnapNavigation
 
-enum Screen: SnapNavigationScreen {
+enum AppDestination: SnapNavigationDestination {
 		
 	case triangle
 	case rectangle, rectangleItem(level: Int)
@@ -45,7 +45,7 @@ enum Screen: SnapNavigationScreen {
 	
 	@MainActor
 	var destination: any View {
-		definition.destination?(self) ?? DeeplinkScreen(screen: self)
+		definition.destination?(self) ?? DeeplinkScreen(destination: self)
 	}
 	
 }

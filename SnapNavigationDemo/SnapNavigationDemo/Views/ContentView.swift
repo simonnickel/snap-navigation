@@ -20,12 +20,12 @@ struct ContentView: View {
         .tabViewSidebarFooter {
 			VStack {
 				Text("Footer")
-				DeeplinkButton(title: "Rectangle", screen: .rectangle)
+				DeeplinkButton(title: "Rectangle", destination: .rectangle)
 			}
 			.font(.footnote)
         }
         .tabViewSidebarBottomBar {
-			DeeplinkButton(title: "Circle 10", screen: .circleItem(level: 10))
+			DeeplinkButton(title: "Circle 10", destination: .circleItem(level: 10))
         }
         .tint(.green)
 	}

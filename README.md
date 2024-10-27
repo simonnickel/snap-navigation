@@ -16,9 +16,9 @@ Define the navigation structure of your SwiftUI app decoupled from it's presenta
 
 SnapNavigation allows you to define the navigation hierarchy of your app in a generic way. Screens can be displayed by selection, pushes (on selected or current modal stack) or modal presentation. It also allows to deeplink to a specific Screen with the whole hierarchy being setup. 
 
-The package provides `SnapNavigationScreen` to setup Screens and `SnapNavigationProvider` to define how to navigate between them.
+The package provides `SnapNavigationDestination` to define Screens and `SnapNavigationProvider` to define how to navigate between them.
 
-The presentation is independent and could easily be replaced by a different style. The `SnapNavigationView` shows the Screens in a SwiftUI TabView with sidebar when suitable. It manages the `Navigator`, which can be used to trigger navigation actions.
+The presentation is independent and could easily be replaced by a different style. The `SnapNavigationView` shows the Destinations in a SwiftUI TabView with sidebar when suitable. It manages the `Navigator`, which can be used to trigger navigation actions.
 
 Supports:
  - iOS, iPadOS, macOS
@@ -37,10 +37,10 @@ The [demo project](/SnapNavigationDemo) shows a navigation hierarchy with 3 top 
 
 ## How to use
 
-Define Screens the App can navigate to:
+Define Destinations the App can navigate to:
 
 ```
-enum Screen: SnapNavigationScreen {		
+enum Destination: SnapNavigationDestination {		
 	case triangle, rectangle, circle
 	
 	var definition: SnapNavigation.ScreenDefinition<Self> {
@@ -52,16 +52,16 @@ enum Screen: SnapNavigationScreen {
 }
 ```
 
-Implement a `SnapNavigationProvider` to define the structure of reachable screens:
+Implement a `SnapNavigationProvider` to define the structure of reachable destinations:
 
 ```
 struct NavigationProvider: SnapNavigationProvider {
-	var initialSelection: Screen { .triangle }
+	var initialSelection: Destination { .triangle }
 	
-	var selectableScreens: [Screen] { [.triangle, .rectangle, .circle] }
+	var selectableDestinations: [Destination] { [.triangle, .rectangle, .circle] }
 	
-	func parent(of screen: Screen) -> Screen? {
-		switch screen {
+	func parent(of destination: Destination) -> Destination? {
+		switch destination {
 			case .triangle, .rectangle, .circle: nil
 		}
 	}
