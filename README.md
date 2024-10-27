@@ -97,3 +97,5 @@ Supporting a mix of .sheet() and .fullScreenCover() causes some animation issues
 Decision: Not supporting .fullScreenCover() for now. Modal presentation uses .sheet().
 
 // TODO: Define FullScreenCover as additional PresentationStyle, which can only be present once as last item with a path to show, no modals. (Or even with its own complete SnapNavigationView and State).
+
+// TODO: Fix tapping in background when 2 modals are open closes all modals. (on iPad)
