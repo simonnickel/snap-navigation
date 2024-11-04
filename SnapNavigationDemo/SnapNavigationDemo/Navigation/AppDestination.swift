@@ -13,6 +13,7 @@ enum AppDestination: SnapNavigationDestination {
 	case circle, circleItem(level: Int)
     case infinity
 	
+	case settings
 	case feature(_ destination: FeatureDestination)
 
 	var definition: SnapNavigation.ScreenDefinition {
@@ -35,6 +36,8 @@ enum AppDestination: SnapNavigationDestination {
 			case .circleItem(level: let level): .init(title: "Circle \(level)", icon: "\(level).circle")
             
             case .infinity: .init(title: "Infinity", icon: "infinity")
+				
+			case .settings: .init(title: "Settings", icon: "gear") { Text("Settings").frame(width: 300, height: 200) }
 				
 			case .feature(let destination): destination.definition
 				

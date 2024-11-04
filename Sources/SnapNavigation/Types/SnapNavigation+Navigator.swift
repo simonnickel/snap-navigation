@@ -16,7 +16,7 @@ extension SnapNavigation {
 		public typealias Path = [Destination]
 		
 		internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
-		public typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider>
+		public typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider.Destination>
 
 		private weak var navigationManager: NavigationManager?
 		
@@ -28,19 +28,25 @@ extension SnapNavigation {
 			self.navigationManager = navigationManager
 			self.scene = scene
 			
-			if case .window(id: _, style: _, content: let content) = scene {
-				switch content {
-						
-					case .destination(let destination):
-						self.state = State(selected: destination)
-						
-					case .route(to: let destination):
-						let route = navigationManager.navigationProvider.route(to: destination)
-						self.state = State(route: route)
-						
-				}
-			} else {
-				self.state = State(selected: navigationManager.navigationProvider.initialSelection)
+			switch scene {
+				case .main:
+					self.state = State(selected: navigationManager.navigationProvider.initial(for: .main))
+					
+				case .settings:
+					self.state = State(selected: navigationManager.navigationProvider.initial(for: .settings))
+					
+				case .window(id: _, style: _, content: let content):
+					switch content {
+							
+						case .destination(let destination):
+							self.state = State(selected: destination)
+							
+						case .route(to: let destination):
+							let route = navigationManager.navigationProvider.route(to: destination)
+							self.state = State(route: route)
+							
+					}
+					
 			}
 		}
 		

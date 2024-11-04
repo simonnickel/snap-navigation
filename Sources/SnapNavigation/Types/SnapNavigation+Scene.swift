@@ -7,14 +7,7 @@ import Foundation
 
 extension SnapNavigation {
 	
-	public indirect enum NavigationScene<NavigationProvider: SnapNavigationProvider>: Codable, Hashable {
-		
-		public enum Content: Codable, Hashable {
-			case destination(Destination)
-			case route(to: Destination)
-		}
-		
-		public typealias Destination = NavigationProvider.Destination
+	public indirect enum NavigationScene<Destination: SnapNavigationDestination>: Codable, Hashable {
 		
 		/// The main app window.
 		case main
@@ -31,6 +24,31 @@ extension SnapNavigation {
 				case .window(_, let style, _): style
 			}
 		}
+		
+		
+		// MARK: - Content
+		
+		/// Content types of a window.
+		public enum Content: Codable, Hashable {
+			case destination(Destination)
+			case route(to: Destination)
+		}
+		
+		
+		// MARK: - Initializable
+		
+		/// A subset of `NavigationScene` with cases that need an initial Destination.
+		public enum Initializable {
+			case main, settings
+			
+			internal var scene: NavigationScene {
+				switch self {
+					case .main: .main
+					case .settings: .settings
+				}
+			}
+		}
+		
 	}
 	
 }

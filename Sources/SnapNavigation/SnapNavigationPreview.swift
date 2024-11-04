@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct SnapNavigationPreview<NavigationProvider: SnapNavigationProvider>: View {
 	
-	public typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider>
+	public typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider.Destination>
 
 	private let provider: NavigationProvider
 	private let scene: NavigationScene

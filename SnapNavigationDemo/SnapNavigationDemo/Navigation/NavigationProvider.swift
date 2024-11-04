@@ -11,13 +11,18 @@ struct NavigationProvider: SnapNavigationProvider {
 	
 	typealias Destination = AppDestination
 	
-	var initialSelection: Destination { .triangle }
+	func initial(for scene: SnapNavigation.NavigationScene<Destination>.Initializable) -> Destination {
+		switch scene {
+			case .main: .triangle
+			case .settings: .settings
+		}
+	}
 	
 	var selectableDestinations: [Destination] { [.triangle, .rectangle, .circle] }
 	
 	func parent(of destination: Destination) -> Destination? {
 		switch destination {
-			case .triangle, .rectangle, .circle, .infinity, .feature(_): nil
+			case .triangle, .rectangle, .circle, .infinity, .settings, .feature(_): nil
 			case .rectangleItem(let level):
 				level > 1 ? .rectangleItem(level: level - 1) : .rectangle
 			case .circleItem(let level):

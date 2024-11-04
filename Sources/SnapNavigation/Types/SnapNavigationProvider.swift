@@ -8,7 +8,7 @@ public protocol SnapNavigationProvider {
 	
 	associatedtype Destination: SnapNavigationDestination
 	
-	var initialSelection: Destination { get }
+	func initial(for scene: SnapNavigation.NavigationScene<Destination>.Initializable) -> Destination
 	
 	var selectableDestinations: [Destination] { get }
 	

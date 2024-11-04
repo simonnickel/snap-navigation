@@ -12,6 +12,7 @@ extension SnapNavigation {
 		
 		internal typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
 		internal typealias Destination = NavigationProvider.Destination
+		internal typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider.Destination>
 
 		internal let navigationProvider: NavigationProvider
 		
@@ -26,10 +27,10 @@ extension SnapNavigation {
 		// MARK: - Navigator
 
 		@MainActor
-		private var navigatorForScene: [NavigationScene<NavigationProvider>: Navigator] = [:]
+		private var navigatorForScene: [NavigationScene: Navigator] = [:]
 		
 		@MainActor
-		internal func navigator(for scene: NavigationScene<NavigationProvider>) -> Navigator {
+		internal func navigator(for scene: NavigationScene) -> Navigator {
 			if let navigator = navigatorForScene[scene] {
 				return navigator
 			} else {
@@ -40,7 +41,7 @@ extension SnapNavigation {
 		}
 		
 		@MainActor
-		internal func removeNavigator(for scene: NavigationScene<NavigationProvider>) {
+		internal func removeNavigator(for scene: NavigationScene) {
 			navigatorForScene.removeValue(forKey: scene)
 		}
 		

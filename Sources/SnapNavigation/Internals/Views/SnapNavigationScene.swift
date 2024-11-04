@@ -11,7 +11,7 @@ internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider, 
 	@Environment(\.openWindow) private var openWindow
 	
 	internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
-	internal typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider>
+	internal typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider.Destination>
 	internal typealias SceneSetup = SnapNavigationWindows<NavigationProvider, SceneContent>.SceneSetup
 	
 	private let manager: NavigationManager
