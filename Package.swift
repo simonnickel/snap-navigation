@@ -14,11 +14,18 @@ let package = Package(
             name: "SnapNavigation",
             targets: ["SnapNavigation"]),
     ],
+	dependencies: [
+		// Dependencies declare other packages that this package depends on.
+		.package(url: "https://github.com/simonnickel/snap-foundation.git", branch: "main"),
+	],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "SnapNavigation"
+            name: "SnapNavigation",
+			dependencies: [
+				.product(name: "SnapFoundation", package: "snap-foundation")
+			]
 		),
     ]
 )

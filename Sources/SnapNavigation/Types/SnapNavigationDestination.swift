@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-public protocol SnapNavigationDestination: Identifiable, Hashable, Equatable, Sendable {
+public protocol SnapNavigationDestination: Codable, Identifiable, Hashable, Equatable, Sendable {
 	
 	var definition: SnapNavigation.ScreenDefinition { get }
 	

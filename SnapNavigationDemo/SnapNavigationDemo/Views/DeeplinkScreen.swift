@@ -9,6 +9,7 @@ import SnapNavigation
 struct DeeplinkScreen: View {
 	
 	@Environment(Navigator.self) private var navigator
+	@Environment(AppState.self) private var appState
 
 	let destination: AppDestination
 	
@@ -35,6 +36,12 @@ struct DeeplinkScreen: View {
 					Text("Present").font(.headline)
 					PresentButton(title: "Rectangle", destination: .rectangle)
 					PresentButton(title: "Circle", destination: .circle)
+					NavigationButton(title: "New Window: .rectangle7") {
+						navigator.window(.destination(.rectangleItem(level: 7)), style: .single)
+					}
+					NavigationButton(title: "New Window: Route .rectangle7") {
+						navigator.window(.route(to: .rectangleItem(level: 7)), style: .single)
+					}
 				}
 				
 				VStack(alignment: .leading, spacing: 4) {
@@ -68,6 +75,16 @@ struct DeeplinkScreen: View {
 					
 					NavigationLink(value: AppDestination.infinity) {
 						Text("NavigationLink: Infinity")
+					}
+				}
+				
+				VStack(alignment: .leading, spacing: 4) {
+					Text("Style").font(.headline)
+					NavigationButton(title: "Single") {
+						appState.navigationStyle = .single
+					}
+					NavigationButton(title: "Tabs") {
+						appState.navigationStyle = .tabsAdaptable
 					}
 				}
 				

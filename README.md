@@ -18,14 +18,20 @@ SnapNavigation allows you to define the navigation hierarchy of your app in a ge
 
 The package provides `SnapNavigationDestination` to define Screens and `SnapNavigationProvider` to define how to navigate between them.
 
-The presentation is independent and could easily be replaced by a different style. The `SnapNavigationView` shows the Destinations in a SwiftUI TabView with sidebar when suitable. It manages the `Navigator`, which can be used to trigger navigation actions.
+Use `SnapNavigationWindows` in your App definition to let SnapNavigation handle the presentation and window management. It provides a `Navigator` via Environment to trigger navigation actions. It supports different presentation styles like tabs or single page, which can be changed on the fly without losing the navigation state. 
+
+Scene == Window
+Destination == Screen
+
 
 Supports:
  - iOS, iPadOS, macOS
  - iPadOS SplitView, resizing without loosing state
+ - multiple windows on macOS and iPadOS
+ - Deeplinking to Screens, Modals and Windows 
  - DynamicType
  
- // TODO: keyboard navigation, better accessibility support, multi window, sidebar reordering
+ // TODO: keyboard navigation, better accessibility support, sidebar reordering
 
 
 ## Demo project
@@ -68,18 +74,22 @@ struct NavigationProvider: SnapNavigationProvider {
 }
 ```
 
-Use the `SnapNavigationView`:
+Use `SnapNavigationScene` as Scene in your App definition:
 ```
-SnapNavigationView(
-	provider: NavigationProvider()
-)
-.tabViewSidebarHeader {
-	...
-}
-.tabViewSidebarFooter {
-	...
-}
-```
+@main
+struct SnapNavigationDemoApp: App {
+	
+    var body: some Scene {
+		
+		SnapNavigationScene(provider: NavigationProvider()) { scene, content in
+			content
+				.navigationStyle(.single)
+				// ... setup more global stuff ... 
+		}
+		
+    }
+	
+}```
 
 
 ## Considerations
@@ -95,6 +105,14 @@ Decision: Not supporting TabSection for now.
 Supporting a mix of .sheet() and .fullScreenCover() causes some animation issues in deeplink handling.
 
 Decision: Not supporting .fullScreenCover() for now. Modal presentation uses .sheet().
+
+### macOS: TabView sidebarAdaptable clicking label does not select
+Happening since macOS 15.1 [FB15680632](https://github.com/simonnickel/FB15680632-SwiftUImacOS-TabView-sidebarAdaptable-labelNotSelectable)
+// TODO FB15680632: Check if issue is solved
+
+### macOS: TabView with .sidebarAdaptable does not maintain state of Tab / Sidebar Item.
+Decision: Did not find a way to maintain the navigation state, not worth it at the moment. Reconsider in the future.
+
 
 // TODO: Define FullScreenCover as additional PresentationStyle, which can only be present once as last item with a path to show, no modals. (Or even with its own complete SnapNavigationView and State).
 

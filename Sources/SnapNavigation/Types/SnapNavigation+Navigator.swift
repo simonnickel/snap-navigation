@@ -5,6 +5,7 @@
 
 import SwiftUI
 import Observation
+import OSLog
 
 extension SnapNavigation {
 	
@@ -14,23 +15,38 @@ extension SnapNavigation {
 		public typealias Destination = NavigationProvider.Destination
 		public typealias Path = [Destination]
 		
-		private let navigationProvider: NavigationProvider
+		internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
+		public typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider>
 
+		private weak var navigationManager: NavigationManager?
+		
+		internal let scene: NavigationScene
+		
 		private var state: State
-
-		public init(provider: NavigationProvider) {
-			self.navigationProvider = provider
-			self.state = State(selected: provider.initialSelection)
+		
+		internal init(navigationManager: NavigationManager, scene: NavigationScene) {
+			self.navigationManager = navigationManager
+			self.scene = scene
+			
+			if case .window(id: _, style: _, content: let content) = scene {
+				switch content {
+						
+					case .destination(let destination):
+						self.state = State(selected: destination)
+						
+					case .route(to: let destination):
+						let route = navigationManager.navigationProvider.route(to: destination)
+						self.state = State(route: route)
+						
+				}
+			} else {
+				self.state = State(selected: navigationManager.navigationProvider.initialSelection)
+			}
 		}
 		
-		
-		// MARK: - State
-		
-		private struct State: Sendable {
-			internal var selected: Destination
-			internal var pathForSelection: [Destination : Path] = [:]
-			
-			internal var modals: [RouteEntry<Destination>] = []
+		private var navigationProvider: NavigationProvider {
+			guard let navigationManager else { fatalError("NavigationManager not available!") }
+			return navigationManager.navigationProvider
 		}
 		
 		
@@ -39,27 +55,32 @@ extension SnapNavigation {
 		@MainActor
 		public func navigate(to destination: Destination) {
 			var route = navigationProvider.route(to: destination)
-			
-			// Select
-			guard let firstEntry = route.first, firstEntry.style == .select else {
+			state.update(route)
+		}
+		
+		
+		// MARK: Open Window
+		
+		public var supportsMultipleWindows: Bool { navigationManager?.supportsMultipleWindows ?? false}
+		
+		@MainActor
+		public func window(_ content: NavigationScene.Content, style: NavigationStyle) {
+			guard ProcessInfo.isPreview == false else {
+				Logger.navigation.warning("Multiple windows are not supported in Previews!")
 				return
 			}
-
-			self.state.selected = firstEntry.root
-			route.removeFirst()
 			
-			// Push
-			if let entry = route.first, entry.style == .push {
-				setPath([entry.root] + entry.path, for: .selection(destination: state.selected))
-			} else {
-				setPath([], for: .selection(destination: state.selected))
+			guard let openWindow = navigationManager?.openWindow else {
+				fatalError("Navigation Managers open window action is not set!")
 			}
 			
-			// Modals
-			dismissModals()
-			for entry in route.filter({ $0.style == .modal }) {
-				state.modals.append(entry)
+			guard supportsMultipleWindows else {
+				Logger.navigation.warning("Tried to open a window in an environment where `supportsMultipleWindows == false`!")
+				return
 			}
+			
+			let scene = NavigationScene.window(id: UUID(), style: style, content: content)
+			openWindow(value: scene)
 		}
 		
 		
@@ -124,24 +145,9 @@ extension SnapNavigation {
 		}
 		
 		private func setPath(_ path: Path, for context: PathContext) {
-			switch context {
-				case .selection(let destination):
-#if os(macOS)
-					// macOS uses SplitView, where a selection in the sidebar clears the path.
-					// Wrapping this in Task applies the new path after the purge.
-					state.pathForSelection[destination] = path
-#else
-					state.pathForSelection[destination] = path
-#endif
-					
-				case .modal(let level):
-					if state.modals.count > level {
-						var entry = state.modals[level]
-						entry.path = path
-						state.modals[level] = entry
-					}
-			}
+			state.update(path, for: context)
 		}
+		
 		
 		// MARK: - Path Bindings
 		
