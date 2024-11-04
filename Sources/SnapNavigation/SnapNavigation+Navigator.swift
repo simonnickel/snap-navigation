@@ -129,9 +129,7 @@ extension SnapNavigation {
 #if os(macOS)
 					// macOS uses SplitView, where a selection in the sidebar clears the path.
 					// Wrapping this in Task applies the new path after the purge.
-//					Task {
-						state.pathForSelection[destination] = path
-//					}
+					state.pathForSelection[destination] = path
 #else
 					state.pathForSelection[destination] = path
 #endif
