@@ -16,7 +16,7 @@ extension SnapNavigation {
 		public typealias Path = [Destination]
 		
 		internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
-		public typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider.Destination>
+		public typealias NavigationScene = SnapNavigation.NavigationScene<Destination>
 
 		private weak var navigationManager: NavigationManager?
 		
