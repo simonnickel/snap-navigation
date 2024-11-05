@@ -15,25 +15,25 @@ extension SnapNavigation {
 		public typealias Destination = NavigationProvider.Destination
 		public typealias Path = [Destination]
 		
-		internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 		public typealias NavigationScene = SnapNavigation.NavigationScene<Destination>
 
-		private weak var navigationManager: NavigationManager?
-		
+		private let provider: NavigationProvider
 		internal let scene: NavigationScene
 		
 		private var state: State
 		
-		internal init(navigationManager: NavigationManager, scene: NavigationScene) {
-			self.navigationManager = navigationManager
+		internal init(provider: NavigationProvider, scene: NavigationScene, supportsMultipleWindows: Bool, openWindow: OpenWindowAction) {
+			self.provider = provider
 			self.scene = scene
+			self.supportsMultipleWindows = supportsMultipleWindows
+			self.openWindow = openWindow
 			
 			switch scene {
 				case .main:
-					self.state = State(selected: navigationManager.navigationProvider.initial(for: .main))
+					self.state = State(selected: provider.initial(for: .main))
 					
 				case .settings:
-					self.state = State(selected: navigationManager.navigationProvider.initial(for: .settings))
+					self.state = State(selected: provider.initial(for: .settings))
 					
 				case .window(id: _, style: _, content: let content):
 					switch content {
@@ -42,7 +42,7 @@ extension SnapNavigation {
 							self.state = State(selected: destination)
 							
 						case .route(to: let destination):
-							let route = navigationManager.navigationProvider.route(to: destination)
+							let route = provider.route(to: destination)
 							self.state = State(route: route)
 							
 					}
@@ -50,34 +50,26 @@ extension SnapNavigation {
 			}
 		}
 		
-		private var navigationProvider: NavigationProvider {
-			guard let navigationManager else { fatalError("NavigationManager not available!") }
-			return navigationManager.navigationProvider
-		}
-		
 		
 		// MARK: - Navigation
 		
 		@MainActor
 		public func navigate(to destination: Destination) {
-			var route = navigationProvider.route(to: destination)
+			var route = provider.route(to: destination)
 			state.update(route)
 		}
 		
 		
 		// MARK: Open Window
 		
-		public var supportsMultipleWindows: Bool { navigationManager?.supportsMultipleWindows ?? false}
+		public let supportsMultipleWindows: Bool
+		private let openWindow: OpenWindowAction
 		
 		@MainActor
 		public func window(_ content: NavigationScene.Content, style: NavigationStyle) {
 			guard ProcessInfo.isPreview == false else {
 				Logger.navigation.warning("Multiple windows are not supported in Previews!")
 				return
-			}
-			
-			guard let openWindow = navigationManager?.openWindow else {
-				fatalError("Navigation Managers open window action is not set!")
 			}
 			
 			guard supportsMultipleWindows else {
@@ -263,11 +255,11 @@ extension SnapNavigation.Navigator {
 	// MARK: NavigationProvider
 	
 	public var destinations: [Destination] {
-		navigationProvider.selectableDestinations
+		provider.selectableDestinations
 	}
 	
 	public func parent(for destination: Destination) -> Destination? {
-		navigationProvider.parent(of: destination)
+		provider.parent(of: destination)
 	}
 	
 }

@@ -7,9 +7,6 @@ import SwiftUI
 
 internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider, SceneContent: View>: View {
 	
-	@Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
-	@Environment(\.openWindow) private var openWindow
-	
 	internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 	internal typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider.Destination>
 	internal typealias SceneSetup = SnapNavigationWindows<NavigationProvider, SceneContent>.SceneSetup
@@ -32,10 +29,6 @@ internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider, 
 			} else {
 				SnapNavigationView(manager: manager, scene: scene)
 			}
-		}
-		.onAppear {
-			manager.supportsMultipleWindows = supportsMultipleWindows
-			manager.openWindow = openWindow
 		}
 		
 	}

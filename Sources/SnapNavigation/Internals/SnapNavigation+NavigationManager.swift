@@ -20,9 +20,6 @@ extension SnapNavigation {
 			self.navigationProvider = provider
 		}
 		
-		internal var supportsMultipleWindows: Bool = false
-		internal var openWindow: OpenWindowAction? = nil
-		
 		
 		// MARK: - Navigator
 
@@ -30,11 +27,11 @@ extension SnapNavigation {
 		private var navigatorForScene: [NavigationScene: Navigator] = [:]
 		
 		@MainActor
-		internal func navigator(for scene: NavigationScene) -> Navigator {
+		internal func navigator(for scene: NavigationScene, supportsMultipleWindows: Bool, openWindow: OpenWindowAction) -> Navigator {
 			if let navigator = navigatorForScene[scene] {
 				return navigator
 			} else {
-				let navigator = Navigator(navigationManager: self, scene: scene)
+				let navigator = Navigator(provider: navigationProvider, scene: scene, supportsMultipleWindows: supportsMultipleWindows, openWindow: openWindow)
 				navigatorForScene[scene] = navigator
 				return navigator
 			}

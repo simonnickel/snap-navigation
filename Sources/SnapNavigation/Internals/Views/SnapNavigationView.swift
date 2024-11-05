@@ -7,6 +7,9 @@ import SwiftUI
 
 // Has to be public to be available in SceneSetup closure.
 public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: View {
+	
+	@Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
+	@Environment(\.openWindow) private var openWindow
 
     internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 	internal typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider.Destination>
@@ -26,7 +29,7 @@ public struct SnapNavigationView<NavigationProvider: SnapNavigationProvider>: Vi
 
 	public var body: some View {
 
-		SnapNavigationContainer(navigator: manager.navigator(for: scene))
+		SnapNavigationContainer(navigator: manager.navigator(for: scene, supportsMultipleWindows: supportsMultipleWindows, openWindow: openWindow))
         
     }
     
