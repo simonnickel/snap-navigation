@@ -9,7 +9,7 @@ internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider, 
 	
 	internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 	internal typealias NavigationScene = SnapNavigation.NavigationScene<NavigationProvider.Destination>
-	internal typealias SceneSetup = SnapNavigationWindows<NavigationProvider, SceneContent>.SceneSetup
+	internal typealias SceneSetup = NavigationProvider.SceneSetup<SceneContent>
 	
 	private let manager: NavigationManager
 	private let scene: NavigationScene
@@ -23,12 +23,10 @@ internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider, 
 	
 	var body: some View {
 		
-		Group {
-			if let setup {
-				setup(scene, SnapNavigationView(manager: manager, scene: scene))
-			} else {
-				SnapNavigationView(manager: manager, scene: scene)
-			}
+		if let setup {
+			setup(scene, SnapNavigationView(manager: manager, scene: scene))
+		} else {
+			SnapNavigationView(manager: manager, scene: scene)
 		}
 		
 	}

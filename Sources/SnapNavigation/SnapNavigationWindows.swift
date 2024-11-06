@@ -5,14 +5,20 @@
 
 import SwiftUI
 
+public extension SnapNavigationProvider {
+	
+	public typealias SceneSetup<Content: View> = (SnapNavigation.NavigationScene<Destination>, SnapNavigationView<Self>) -> Content
+
+}
+
 public struct SnapNavigationWindows<NavigationProvider: SnapNavigationProvider, SceneContent: View>: Scene {
 	
 	private typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 	public typealias Destination = NavigationProvider.Destination
+	public typealias SceneSetup = NavigationProvider.SceneSetup<SceneContent>
 
 	private let manager: NavigationManager
 	
-	public typealias SceneSetup = (SnapNavigation.NavigationScene<Destination>, SnapNavigationView<NavigationProvider>) -> SceneContent
 	private let setupScene: SceneSetup?
 	
 	public init(provider: NavigationProvider, setupScene: SceneSetup? = nil) {
