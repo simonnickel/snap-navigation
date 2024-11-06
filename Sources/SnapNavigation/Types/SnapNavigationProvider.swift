@@ -14,4 +14,6 @@ public protocol SnapNavigationProvider {
 	
 	func parent(of destination: Destination) -> Destination?
 	
+	func translate(_ destination: any SnapNavigationDestination) -> Destination?
+	
 }

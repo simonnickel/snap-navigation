@@ -28,6 +28,7 @@ extension SnapNavigation {
 		
 		// MARK: - Content
 		
+		// TODO: Rename
 		/// Content types of a window.
 		public enum Content: Codable, Hashable {
 			case destination(Destination)

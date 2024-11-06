@@ -27,6 +27,7 @@ internal struct SnapNavigationContainer<NavigationProvider: SnapNavigationProvid
 		}
 		.modifier(SnapNavigation.ModalPresentationModifier<NavigationProvider>(level: navigator.modalLevelCurrent))
 		.environment(navigator)
+		.environment(navigator.translator)
 	}
 	
 }

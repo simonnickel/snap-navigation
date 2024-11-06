@@ -30,4 +30,12 @@ struct NavigationProvider: SnapNavigationProvider {
 		}
 	}
 	
+	func translate(_ destination: any SnapNavigationDestination) -> AppDestination? {
+		switch destination {
+			case let destination as AppDestination: destination
+			case let destination as FeatureDestination: .feature(destination)
+			default: nil
+		}
+	}
+	
 }

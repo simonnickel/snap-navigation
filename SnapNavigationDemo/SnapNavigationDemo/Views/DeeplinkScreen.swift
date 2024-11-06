@@ -9,6 +9,7 @@ import SnapNavigation
 struct DeeplinkScreen: View {
 	
 	@Environment(Navigator.self) private var navigator
+	@Environment(SnapNavigation.NavigatorTranslator.self) private var navigatorTranslator
 	@Environment(AppState.self) private var appState
 
 	let destination: AppDestination
@@ -49,8 +50,9 @@ struct DeeplinkScreen: View {
 					NavigationButton(title: "Infinity") {
 						navigator.present(destination: .infinity, style: .push)
 					}
-					NavigationButton(title: "Feature Pentagon") {
-						navigator.present(destination: .feature(.pentagon), style: .push)
+					NavigationButton(title: "Any Feature Pentagon") {
+						navigatorTranslator.present(destination: FeatureDestination.pentagon)
+//						navigator.present(destination: .feature(.pentagon), style: .push)
 					}
 					NavigationButton(title: "Feature Hexagon") {
 						navigator.present(destination: .feature(.hexagon), style: .push)

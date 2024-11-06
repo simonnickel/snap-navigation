@@ -9,6 +9,8 @@ import OSLog
 
 extension SnapNavigation {
 	
+	// TODO: MainActor
+	
 	@Observable
 	final public class Navigator<NavigationProvider: SnapNavigationProvider> {
 		
@@ -17,7 +19,7 @@ extension SnapNavigation {
 		
 		public typealias NavigationScene = SnapNavigation.NavigationScene<Destination>
 
-		private let provider: NavigationProvider
+		internal let provider: NavigationProvider
 		internal let scene: NavigationScene
 		
 		private var state: State
