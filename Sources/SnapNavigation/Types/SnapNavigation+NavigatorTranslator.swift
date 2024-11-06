@@ -5,7 +5,7 @@
 
 import Observation
 
-public extension SnapNavigation {
+extension SnapNavigation {
 	
 	@MainActor
 	@Observable

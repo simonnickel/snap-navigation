@@ -57,7 +57,7 @@ extension SnapNavigation {
 		
 		@MainActor
 		public func navigate(to destination: Destination) {
-			var route = provider.route(to: destination)
+			let route = provider.route(to: destination)
 			state.update(route)
 		}
 		

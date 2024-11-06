@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-public extension SnapNavigationProvider {
+extension SnapNavigationProvider {
 	
 	public typealias SceneSetup<Content: View> = (SnapNavigation.NavigationScene<Destination>, SnapNavigationView<Self>) -> Content
 
