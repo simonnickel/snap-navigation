@@ -9,8 +9,7 @@ import OSLog
 
 extension SnapNavigation {
 	
-	// TODO: MainActor
-	
+	@MainActor
 	@Observable
 	final public class Navigator<NavigationProvider: SnapNavigationProvider> {
 		
@@ -55,7 +54,6 @@ extension SnapNavigation {
 		
 		// MARK: - Navigation
 		
-		@MainActor
 		public func navigate(to destination: Destination) {
 			let route = provider.route(to: destination)
 			state.update(route)
@@ -67,7 +65,6 @@ extension SnapNavigation {
 		public let supportsMultipleWindows: Bool
 		private let openWindow: OpenWindowAction
 		
-		@MainActor
 		public func window(_ content: NavigationScene.Content, style: NavigationStyle) {
 			guard ProcessInfo.isPreview == false else {
 				Logger.navigation.warning("Multiple windows are not supported in Previews!")
@@ -86,7 +83,6 @@ extension SnapNavigation {
 		
 		// MARK: Present
 		
-		@MainActor
 		public func present(destination: Destination, style styleOverride: PresentationStyle? = nil) {
 			let style = styleOverride ?? destination.definition.presentationStyle
 			switch style {
@@ -108,19 +104,16 @@ extension SnapNavigation {
 		
 		// MARK: Dismiss
 		
-		@MainActor
 		public func dismissCurrentModal() {
 			if state.modals.count > 0 {
 				state.modals.removeLast()
 			}
 		}
 		
-		@MainActor
 		public func dismissModals() {
 			state.modals = []
 		}
 		
-		@MainActor
 		public func popCurrentToRoot() {
 			setPath([], for: pathContextCurrent)
 		}
@@ -154,7 +147,6 @@ extension SnapNavigation {
 		@ObservationIgnored
 		private var pathBindingsForContext: [PathContext: Binding<Path>] = [:]
 		
-		@MainActor
 		internal func pathBinding(for context: PathContext) -> Binding<Path> {
 			if let binding = pathBindingsForContext[context] {
 				return binding
@@ -186,7 +178,6 @@ extension SnapNavigation {
 		@ObservationIgnored
 		private var modalBindingsForLevel: [ModalLevel: Binding<Bool>] = [:]
 		
-		@MainActor
 		internal func modalBinding(for level: ModalLevel) -> Binding<Bool> {
 			if let binding = modalBindingsForLevel[level] {
 				return binding
