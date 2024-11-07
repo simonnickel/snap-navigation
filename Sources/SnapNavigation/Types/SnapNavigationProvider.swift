@@ -10,7 +10,7 @@ public protocol SnapNavigationProvider {
 	
 	func initial(for scene: SnapNavigation.NavigationScene<Destination>.Initializable) -> Destination
 	
-	var selectableDestinations: [Destination] { get }
+	func selectableDestinations(for scene: SnapNavigation.NavigationScene<Destination>) -> [Destination]
 	
 	func parent(of destination: Destination) -> Destination?
 	

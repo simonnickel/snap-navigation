@@ -256,8 +256,8 @@ extension SnapNavigation.Navigator {
 	
 	// MARK: NavigationProvider
 	
-	public var destinations: [Destination] {
-		provider.selectableDestinations
+	public var selectableDestinations: [Destination] {
+		provider.selectableDestinations(for: scene)
 	}
 	
 	public func parent(for destination: Destination) -> Destination? {

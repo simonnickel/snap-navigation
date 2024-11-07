@@ -18,7 +18,7 @@ internal struct SnapNavigationTabView<NavigationProvider: SnapNavigationProvider
 	var body: some View {
 		
 		TabView(selection: $navigator.selected) {
-			ForEach(navigator.destinations) { destination in
+			ForEach(navigator.selectableDestinations) { destination in
 				
 				tab(for: destination)
 				

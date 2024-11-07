@@ -37,11 +37,14 @@ struct DeeplinkScreen: View {
 					Text("Present").font(.headline)
 					PresentButton(title: "Rectangle", destination: .rectangle)
 					PresentButton(title: "Circle", destination: .circle)
-					NavigationButton(title: "New Window: .rectangle7") {
+					NavigationButton(title: "New single Window: .rectangle7") {
 						navigator.window(.destination(.rectangleItem(level: 7)), style: .single)
 					}
-					NavigationButton(title: "New Window: Route .rectangle7") {
+					NavigationButton(title: "New single Window: Route .rectangle7") {
 						navigator.window(.route(to: .rectangleItem(level: 7)), style: .single)
+					}
+					NavigationButton(title: "New tabs Window: Route .rectangle7") {
+						navigator.window(.route(to: .rectangleItem(level: 7)), style: .tabsAdaptable)
 					}
 				}
 				
