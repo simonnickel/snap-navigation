@@ -58,7 +58,6 @@ extension SnapNavigation {
 
 extension SnapNavigation.Navigator {
 	
-	@MainActor
 	internal var translator: SnapNavigation.NavigatorTranslator {
 		SnapNavigation.NavigatorTranslator(
 			navigateTo: { destination in
