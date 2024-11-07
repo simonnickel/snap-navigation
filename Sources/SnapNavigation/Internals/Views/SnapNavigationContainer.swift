@@ -12,6 +12,12 @@ internal struct SnapNavigationContainer<NavigationProvider: SnapNavigationProvid
 	@Environment(\.navigationStyle) private var navigationStyle
 
 	let navigator: Navigator
+	let navigatorTranslator: SnapNavigation.NavigatorTranslator
+	
+	init(navigator: Navigator) {
+		self.navigator = navigator
+		self.navigatorTranslator = navigator.translator
+	}
 	
 	var body: some View {
 		Group {
@@ -27,7 +33,7 @@ internal struct SnapNavigationContainer<NavigationProvider: SnapNavigationProvid
 		}
 		.modifier(SnapNavigation.ModalPresentationModifier<NavigationProvider>(level: navigator.modalLevelCurrent))
 		.environment(navigator)
-		.environment(navigator.translator)
+		.environment(navigatorTranslator)
 	}
 	
 }
