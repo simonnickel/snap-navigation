@@ -15,11 +15,11 @@ enum FeatureDestination: SnapNavigationDestination {
 		switch self {
 				
 			case .pentagon: .init(title: "Pentagon", icon: "pentagon") {
-				FeatureView(destination: self)
-			}
-			
-			case .hexagon: .init(title: "Hexagon", icon: "hexagon") {
-				FeatureView(destination: self)
+                DeeplinkScreen(destination: .feature(.pentagon))
+            }
+            
+            case .hexagon: .init(title: "Hexagon", icon: "hexagon") {
+                DeeplinkScreen(destination: .feature(.pentagon))
 			}
 
 		}
@@ -36,16 +36,6 @@ enum FeatureDestination: SnapNavigationDestination {
 	@MainActor
 	var destination: any View {
 		definition.destination?() ?? EmptyView()
-	}
-	
-}
-
-struct FeatureView: View {
-	
-	let destination: FeatureDestination
-	
-	var body: some View {
-		AnyView(destination.label)
 	}
 	
 }
