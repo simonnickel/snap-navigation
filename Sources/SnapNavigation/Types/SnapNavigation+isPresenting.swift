@@ -32,7 +32,7 @@ extension SnapNavigation.Navigator.State {
         switch context {
         case .modal(level: let level):
             guard modals.count > level else {
-                fatalError("Trying to access a non existing modal level.")
+                return false
             }
             let modal = modals[level]
             
