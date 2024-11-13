@@ -21,7 +21,7 @@ extension SnapNavigation {
 		internal let provider: NavigationProvider
 		internal let scene: NavigationScene
 		
-		private var state: State
+		internal var state: State
 		
 		internal init(provider: NavigationProvider, scene: NavigationScene, supportsMultipleWindows: Bool, openWindow: OpenWindowAction) {
 			self.provider = provider

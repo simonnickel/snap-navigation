@@ -28,7 +28,10 @@ internal struct SnapNavigationStack<NavigationProvider: SnapNavigationProvider>:
             }
             
         }
-		
+        .environment(\.isPresentingDestination, { destination in
+            navigator.isPresenting(destination, in: context)
+        })
+        
     }
     
 }

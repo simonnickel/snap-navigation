@@ -11,6 +11,8 @@ struct DeeplinkScreen: View {
 	@Environment(Navigator.self) private var navigator
 	@Environment(SnapNavigation.NavigatorTranslator.self) private var navigatorTranslator
 	@Environment(AppState.self) private var appState
+    
+    @Environment(\.isPresentingDestination) private var isPresentingDestination
 
 	let destination: AppDestination
 	
@@ -92,6 +94,11 @@ struct DeeplinkScreen: View {
 						appState.navigationStyle = .tabsAdaptable
 					}
 				}
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Contains .rectangleItem(2): \(isPresentingDestination(AppDestination.rectangleItem(level: 2)))")
+                    Text("Contains .feature(.pentagon): \(isPresentingDestination(FeatureDestination.pentagon))")
+                }
 				
 			}
 			.frame(maxWidth: .infinity, alignment: .leading)
