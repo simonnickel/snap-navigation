@@ -10,7 +10,7 @@ import OSLog
 extension SnapNavigation {
 	
 	@MainActor
-	@Observable
+	@Observable // Is Observable to be Bindable and used as EnvironmentObject.
 	final public class Navigator<NavigationProvider: SnapNavigationProvider> {
 		
 		public typealias Destination = NavigationProvider.Destination

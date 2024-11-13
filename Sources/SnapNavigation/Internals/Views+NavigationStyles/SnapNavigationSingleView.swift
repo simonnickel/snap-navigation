@@ -9,7 +9,7 @@ internal struct SnapNavigationSingleView<NavigationProvider: SnapNavigationProvi
 
 	typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
 
-	@Bindable private var navigator: Navigator
+	private var navigator: Navigator
 
 	init(navigator: Navigator) {
 		self.navigator = navigator
