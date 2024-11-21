@@ -5,14 +5,15 @@
 
 import SwiftUI
 
-internal struct SnapNavigationStack<NavigationProvider: SnapNavigationProvider>: View {
+internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider>: View {
 
-	typealias Destination = NavigationProvider.Destination
+    typealias Destination = NavigationProvider.Destination
+    typealias Scene = SnapNavigation.Scene<Destination>
 	
 	typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
 	@Environment(Navigator.self) private var navigator
 	
-	let context: Navigator.PathContext
+    let context: Scene.Context
 
     var body: some View {
         

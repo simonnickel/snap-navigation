@@ -96,9 +96,16 @@ struct DeeplinkScreen: View {
 				}
                 
                 VStack(alignment: .leading, spacing: 4) {
+                    Text("Info").font(.headline)
                     Text("Contains .rectangleItem(2): \(isPresentingDestination(AppDestination.rectangleItem(level: 2)))")
                     Text("Contains .feature(.pentagon): \(isPresentingDestination(FeatureDestination.pentagon))")
                 }
+//                .onChange(of: navigator.stateHash) { oldValue, newValue in
+//                    print("Navigator State hash changed: \(newValue)")
+//                }
+//                .onChange(of: navigatorTranslator.stateHash) { oldValue, newValue in
+//                    print("Translator State hash changed: \(newValue)")
+//                }
 				
 			}
 			.frame(maxWidth: .infinity, alignment: .leading)
@@ -109,4 +116,20 @@ struct DeeplinkScreen: View {
 		
 	}
 	
+}
+
+#Preview("Preview Content") {
+    @Previewable let appState = AppState()
+    
+    SnapNavigationPreview(provider: NavigationProvider()) {
+        DeeplinkScreen(destination: .circle)
+    }
+    .environment(appState)
+}
+
+#Preview("Preview Destination") {
+    @Previewable let appState = AppState()
+    
+    SnapNavigationPreview(provider: NavigationProvider(), window: .window(id: UUID(), style: .single, initial: .destination(.circle)))
+        .environment(appState)
 }

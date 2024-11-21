@@ -11,15 +11,15 @@ struct NavigationProvider: SnapNavigationProvider {
 	
 	typealias Destination = AppDestination
 	
-	func initial(for scene: SnapNavigation.NavigationScene<Destination>.Initializable) -> Destination {
-		switch scene {
+	func initial(for window: SnapNavigation.Window<Destination>.Initializable) -> Destination {
+		switch window {
 			case .main: .triangle
 			case .settings: .settings
 		}
 	}
 	
-	func selectableDestinations(for scene: SnapNavigation.NavigationScene<Destination>) -> [Destination] {
-		switch scene {
+	func selectableDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination] {
+		switch window {
 			case .main: [.triangle, .rectangle, .circle]
 			case .window(_, let style, let content):
 				if style != .single, case .route(to: _) = content {

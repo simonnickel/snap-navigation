@@ -7,22 +7,22 @@ import Foundation
 
 extension SnapNavigationProvider {
 	
-	internal typealias RouteEntry = SnapNavigation.RouteEntry
-	internal typealias Route = [RouteEntry<Destination>]
+    internal typealias Scene = SnapNavigation.Scene<Destination>
+    internal typealias Route = SnapNavigation.Route<Destination>
 	
 	internal func route(to destination: Destination) -> Route {
-		let route = routeEntries(to: destination)
-		return route.condense()
+		let entries = entriesOnRoute(to: destination)
+        return Route(entries: entries)
 	}
 	
 	/// Get all entries of the route to a destination by traversing parents up to the root.
-	private func routeEntries(to destination: Destination) -> Route {
+    private func entriesOnRoute(to destination: Destination) -> [Route.Entry] {
 		guard let parent = parent(of: destination) else {
-			return [RouteEntry(root: destination, path: [], style: .select)]
+            return [Route.Entry(destination: destination, style: .select)]
 		}
 		
-		var routeToParent = routeEntries(to: parent)
-		routeToParent.append(RouteEntry(root: destination, path: [], style: destination.definition.presentationStyle))
+		var routeToParent = entriesOnRoute(to: parent)
+        routeToParent.append(Route.Entry(destination: destination, style: destination.definition.presentationStyle))
 		
 		return routeToParent
 	}

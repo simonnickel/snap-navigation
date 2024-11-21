@@ -18,10 +18,11 @@ SnapNavigation allows you to define the navigation hierarchy of your app in a ge
 
 The package provides `SnapNavigationDestination` to define Screens and `SnapNavigationProvider` to define how to navigate between them.
 
-Use `SnapNavigationWindows` in your App definition to let SnapNavigation handle the presentation and window management. It provides a `Navigator` via Environment to trigger navigation actions. It supports different presentation styles like tabs or single page, which can be changed on the fly without losing the navigation state. 
+Use `SnapNavigationApp` in your App definition to let SnapNavigation handle the presentation and window management. It provides a `Navigator` via Environment to trigger navigation actions. It supports different presentation styles like tabs or single page, which can be changed on the fly without losing the navigation state. 
 
-Scene == Window
-Destination == Screen
+Window = App Window
+Scene = NavigationStack
+Destination = Screen
 
 
 Supports:
@@ -74,14 +75,14 @@ struct NavigationProvider: SnapNavigationProvider {
 }
 ```
 
-Use `SnapNavigationScene` as Scene in your App definition:
+Use `SnapNavigationApp` in your @main App definition:
 ```
 @main
 struct SnapNavigationDemoApp: App {
 	
     var body: some Scene {
 		
-		SnapNavigationScene(provider: NavigationProvider()) { scene, content in
+        SnapNavigationApp(provider: NavigationProvider()) { window, content in
 			content
 				.navigationStyle(.single)
 				// ... setup more global stuff ... 

@@ -10,6 +10,9 @@ extension SnapNavigation {
 	@MainActor
 	@Observable
 	public class NavigatorTranslator {
+        
+        public var stateHash: Int = 0
+        
 		let translationNavigateTo: (_ destination: any SnapNavigationDestination) -> Void
 		let translationPresent: (_ destination: any SnapNavigationDestination, _ style: PresentationStyle?) -> Void
 		let translationDismissCurrentModal: () -> Void
@@ -50,15 +53,16 @@ extension SnapNavigation {
 			translationPopCurrentToRoot()
 		}
 		
-		// TODO: translation to open window
-		
 	}
 	
 }
 
+
+// MARK: - Navigator Extension
+
 extension SnapNavigation.Navigator {
 	
-	internal var translator: SnapNavigation.NavigatorTranslator {
+	internal func createTranslator() -> SnapNavigation.NavigatorTranslator {
 		SnapNavigation.NavigatorTranslator(
 			navigateTo: { destination in
 				if let destination = self.provider.translate(destination) {

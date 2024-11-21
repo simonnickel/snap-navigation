@@ -17,9 +17,9 @@ struct SnapNavigationDemoApp: App {
 	
     var body: some Scene {
 		
-		SnapNavigationWindows(provider: NavigationProvider()) { scene, content in
+		SnapNavigationApp(provider: NavigationProvider()) { window, content in
 			content
-				.navigationStyle(scene == .main ? appState.navigationStyle : nil)
+				.navigationStyle(window == .main ? appState.navigationStyle : nil)
 				.environment(appState)
 				.tabViewSidebarHeader {
 					Text("Header")
@@ -46,7 +46,7 @@ struct SnapNavigationDemoApp: App {
 #Preview {
 	@Previewable let appState = AppState()
 	
-	SnapNavigationPreview(provider: NavigationProvider(), scene: .main)
-		.navigationStyle(.tabsAdaptable)
-		.environment(appState)
+    SnapNavigationPreview(provider: NavigationProvider())
+        .navigationStyle(.tabsAdaptable)
+        .environment(appState)
 }

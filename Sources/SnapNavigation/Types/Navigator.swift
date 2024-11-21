@@ -11,32 +11,48 @@ extension SnapNavigation {
 	
 	@MainActor
 	@Observable // Is Observable to be Bindable and used as EnvironmentObject.
-	final public class Navigator<NavigationProvider: SnapNavigationProvider> {
-		
-		public typealias Destination = NavigationProvider.Destination
-		public typealias Path = [Destination]
-		
-		public typealias NavigationScene = SnapNavigation.NavigationScene<Destination>
+    final public class Navigator<NavigationProvider: SnapNavigationProvider> {
+        
+        public typealias Window = SnapNavigation.Window<Destination>
+        public typealias Destination = NavigationProvider.Destination
+        internal typealias Scene = NavigationProvider.Scene
+        internal typealias Route = NavigationProvider.Route
+        public typealias Path = [Destination]
 
 		internal let provider: NavigationProvider
-		internal let scene: NavigationScene
+		internal let window: Window
 		
-		internal var state: State
+        internal var state: State {
+            didSet {
+                stateHash = state.hashValue
+            }
+        }
+        
+        public var stateHash: Int = 0 {
+            didSet {
+                translator.stateHash = stateHash
+            }
+        }
+        
+        @ObservationIgnored
+        internal lazy var translator: NavigatorTranslator = {
+            createTranslator()
+        }()
 		
-		internal init(provider: NavigationProvider, scene: NavigationScene, supportsMultipleWindows: Bool, openWindow: OpenWindowAction) {
+		internal init(provider: NavigationProvider, window: Window, supportsMultipleWindows: Bool, openWindow: OpenWindowAction) {
 			self.provider = provider
-			self.scene = scene
+			self.window = window
 			self.supportsMultipleWindows = supportsMultipleWindows
 			self.openWindow = openWindow
 			
-			switch scene {
+			switch window {
 				case .main:
 					self.state = State(selected: provider.initial(for: .main))
 					
 				case .settings:
 					self.state = State(selected: provider.initial(for: .settings))
 					
-				case .window(id: _, style: _, content: let content):
+				case .window(id: _, style: _, initial: let content):
 					switch content {
 							
 						case .destination(let destination):
@@ -56,16 +72,22 @@ extension SnapNavigation {
 		
 		public func navigate(to destination: Destination) {
 			let route = provider.route(to: destination)
-			state.update(route)
+            state.setup(route.scenes)
+            state.selected = route.selection
 		}
 		
 		
 		// MARK: Open Window
 		
-		public let supportsMultipleWindows: Bool
-		private let openWindow: OpenWindowAction
+		public private(set) var supportsMultipleWindows: Bool
+		private var openWindow: OpenWindowAction
+        
+        internal func update(supportsMultipleWindows: Bool, openWindow: OpenWindowAction) {
+            self.supportsMultipleWindows = supportsMultipleWindows
+            self.openWindow = openWindow
+        }
 		
-		public func window(_ content: NavigationScene.Content, style: NavigationStyle) {
+		public func window(_ initial: Window.InitialContent, style: NavigationStyle) {
 			guard ProcessInfo.isPreview == false else {
 				Logger.navigation.warning("Multiple windows are not supported in Previews!")
 				return
@@ -76,8 +98,8 @@ extension SnapNavigation {
 				return
 			}
 			
-			let scene = NavigationScene.window(id: UUID(), style: style, content: content)
-			openWindow(value: scene)
+			let window = Window.window(id: UUID(), style: style, initial: initial)
+			openWindow(value: window)
 		}
 		
 		
@@ -87,17 +109,15 @@ extension SnapNavigation {
 			let style = styleOverride ?? destination.definition.presentationStyle
 			switch style {
 				case .select:
-					state.modals = []
-					setPath([], for: .selection(destination: destination))
+                    state.dropAllModals()
+                    state.clearPath(for: .selection(destination: destination))
 					state.selected = destination
 					
 				case .push:
-					var path = getPath(for: pathContextCurrent)
-					path.append(destination)
-					setPath(path, for: pathContextCurrent)
+                    state.push(destination, in: currentSceneContext)
 					
 				case .modal:
-					state.modals.append(RouteEntry(root: destination, path: [], style: .modal))
+                    state.modalAdd(with: destination)
 			}
 		}
 
@@ -105,49 +125,26 @@ extension SnapNavigation {
 		// MARK: Dismiss
 		
 		public func dismissCurrentModal() {
-			if state.modals.count > 0 {
-				state.modals.removeLast()
+			if state.modalCount > 0 {
+                state.modalDropLast()
 			}
 		}
 		
 		public func dismissModals() {
-			state.modals = []
+            state.dropAllModals()
 		}
 		
 		public func popCurrentToRoot() {
-			setPath([], for: pathContextCurrent)
-		}
-		
-		
-		// MARK: - Paths
-		
-		internal enum PathContext: Hashable {
-			case selection(destination: Destination)
-			case modal(level: ModalLevel)
-		}
-		
-		private func getPath(for context: PathContext) -> Path {
-			switch context {
-				case .selection(let destination):
-					return state.pathForSelection[destination] ?? []
-					
-				case .modal(let level):
-					guard state.modals.count > level else { return [] }
-					return state.modals[level].path
-			}
-		}
-		
-		private func setPath(_ path: Path, for context: PathContext) {
-			state.update(path, for: context)
+            state.clearPath(for: currentSceneContext)
 		}
 		
 		
 		// MARK: - Path Bindings
 		
 		@ObservationIgnored
-		private var pathBindingsForContext: [PathContext: Binding<Path>] = [:]
+        private var pathBindingsForContext: [Scene.Context: Binding<Path>] = [:]
 		
-		internal func pathBinding(for context: PathContext) -> Binding<Path> {
+        internal func pathBinding(for context: Scene.Context) -> Binding<Path> {
 			if let binding = pathBindingsForContext[context] {
 				return binding
 			}
@@ -155,16 +152,16 @@ extension SnapNavigation {
 			switch context {
 				case .selection(let destination):
 					binding = Binding<Path> { [weak self] in
-						self?.getPath(for: .selection(destination: destination)) ?? []
+                        self?.state.getPath(for: .selection(destination: destination)) ?? []
 					} set: { [weak self] path in
-						self?.setPath(path, for: .selection(destination: destination))
+                        self?.state.set(path, for: .selection(destination: destination))
 					}
 					
 				case .modal(let level):
 					binding = Binding<Path> { [weak self] in
-						self?.getPath(for: .modal(level: level)) ?? []
+                        self?.state.getPath(for: .modal(level: level)) ?? []
 					} set: { [weak self] path in
-						self?.setPath(path, for: .modal(level: level))
+                        self?.state.set(path, for: .modal(level: level))
 					}
 			}
 			
@@ -184,16 +181,17 @@ extension SnapNavigation {
 			}
 			
 			let binding = Binding(get: { [weak self] in
-				self?.state.modals.count ?? 0 > level
+				self?.state.modalCount ?? 0 > level
 			}, set: { [weak self] isPresented in
-				if !isPresented && self?.state.modals.count ?? 0 > level {
-					self?.state.modals.remove(at: level)
+				if !isPresented && self?.state.modalCount ?? 0 > level {
+                    self?.state.modalRemove(at: level)
 				}
 			})
 			
 			modalBindingsForLevel[level] = binding
 			return binding
 		}
+        
 	}
 	
 }
@@ -203,6 +201,14 @@ extension SnapNavigation {
 
 extension SnapNavigation.Navigator {
 	
+    private var currentSceneContext: Scene.Context {
+        if modalLevelCurrent >= 0 {
+            return .modal(level: modalLevelCurrent)
+        } else {
+            return .selection(destination: state.selected)
+        }
+    }
+    
 	
 	// MARK: State
 	
@@ -210,45 +216,25 @@ extension SnapNavigation.Navigator {
 		get { state.selected }
 		set { state.selected = newValue }
 	}
-	
+    
+    internal func root(for context: Scene.Context) -> Destination? {
+        state.getRoot(for: context)
+    }
+    
 	
 	// MARK: Modals
 	
-	internal var modalLevelCurrent: SnapNavigation.ModalLevel { state.modals.count - 1 }
+    internal var modalLevelCurrent: SnapNavigation.ModalLevel { state.modalCount - 1 }
 	
 	internal func modalLevelInverted(_ level: SnapNavigation.ModalLevel) -> SnapNavigation.ModalLevel {
-		return state.modals.count - 1 - level
-	}
-	
-	
-	// MARK: Navigator
-	
-	private var pathContextCurrent: PathContext {
-		if modalLevelCurrent >= 0 {
-			return .modal(level: modalLevelCurrent)
-		} else {
-			return .selection(destination: state.selected)
-		}
-	}
-	
-	internal func root(for context: PathContext) -> Destination? {
-		switch context {
-			case .selection(let destination):
-				return destination
-				
-			case .modal(let level):
-				guard state.modals.count > level else { return nil }
-				
-				let entry = state.modals[level]
-				return entry.root
-		}
+		return state.modalCount - 1 - level
 	}
 	
 	
 	// MARK: NavigationProvider
 	
 	public var selectableDestinations: [Destination] {
-		provider.selectableDestinations(for: scene)
+		provider.selectableDestinations(for: window)
 	}
 	
 	public func parent(for destination: Destination) -> Destination? {

@@ -27,7 +27,7 @@ extension SnapNavigation {
 			if level >= SnapNavigation.Constants.modalLevelMin {
 				content
 					.sheet(isPresented: navigator.modalBinding(for: level)) {
-						SnapNavigationStack<NavigationProvider>(context: .modal(level: level))
+						SnapNavigationScene<NavigationProvider>(context: .modal(level: level))
 							.modifier(ModalPresentationModifier(level: levelIteration - 1))
 							.environment(navigator)
 					}

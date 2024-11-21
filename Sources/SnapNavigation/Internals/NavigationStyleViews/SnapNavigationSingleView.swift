@@ -18,7 +18,7 @@ internal struct SnapNavigationSingleView<NavigationProvider: SnapNavigationProvi
 	var body: some View {
 		
 		let selection = navigator.selected
-		SnapNavigationStack<NavigationProvider>(context: .selection(destination: selection))
+		SnapNavigationScene<NavigationProvider>(context: .selection(destination: selection))
 		
 	}
 	

@@ -7,13 +7,13 @@ import Foundation
 
 extension SnapNavigation {
 	
-	public indirect enum NavigationScene<Destination: SnapNavigationDestination>: Codable, Hashable {
+	public indirect enum Window<Destination: SnapNavigationDestination>: Codable, Hashable {
 		
 		/// The main app window.
 		case main
 		
 		/// A window.
-		case window(id: UUID, style: NavigationStyle, content: Content)
+		case window(id: UUID, style: NavigationStyle, initial: InitialContent)
 
 		/// A special case of window.
 		case settings
@@ -28,9 +28,8 @@ extension SnapNavigation {
 		
 		// MARK: - Content
 		
-		// TODO: Rename
-		/// Content types of a window.
-		public enum Content: Codable, Hashable {
+		/// Content types a window can be opened with.
+		public enum InitialContent: Codable, Hashable {
 			case destination(Destination)
 			case route(to: Destination)
 		}
@@ -38,11 +37,11 @@ extension SnapNavigation {
 		
 		// MARK: - Initializable
 		
-		/// A subset of `NavigationScene` with cases that need an initial Destination.
+		/// A subset of `NavigationWindow` with cases that need an initial Destination.
 		public enum Initializable {
 			case main, settings
 			
-			internal var scene: NavigationScene {
+			internal var window: Window {
 				switch self {
 					case .main: .main
 					case .settings: .settings

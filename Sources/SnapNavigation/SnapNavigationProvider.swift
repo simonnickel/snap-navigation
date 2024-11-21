@@ -8,9 +8,9 @@ public protocol SnapNavigationProvider {
 	
 	associatedtype Destination: SnapNavigationDestination
 	
-	func initial(for scene: SnapNavigation.NavigationScene<Destination>.Initializable) -> Destination
+	func initial(for window: SnapNavigation.Window<Destination>.Initializable) -> Destination
 	
-	func selectableDestinations(for scene: SnapNavigation.NavigationScene<Destination>) -> [Destination]
+	func selectableDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination]
 	
 	func parent(of destination: Destination) -> Destination?
 	
