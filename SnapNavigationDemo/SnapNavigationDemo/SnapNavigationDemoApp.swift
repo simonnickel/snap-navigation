@@ -3,8 +3,8 @@
 //  Created by Simon Nickel
 //
 
-import SwiftUI
 import SnapNavigation
+import SwiftUI
 
 @Observable class AppState {
 	var navigationStyle: SnapNavigation.NavigationStyle = .tabsAdaptable
