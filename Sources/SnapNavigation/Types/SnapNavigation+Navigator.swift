@@ -3,9 +3,9 @@
 //  Created by Simon Nickel
 //
 
-import SwiftUI
 import Observation
 import OSLog
+import SwiftUI
 
 extension SnapNavigation {
 	
