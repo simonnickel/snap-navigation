@@ -39,13 +39,13 @@ struct DeeplinkScreen: View {
 					PresentButton(title: "Rectangle", destination: .rectangle)
 					PresentButton(title: "Circle", destination: .circle)
 					NavigationButton(title: "New single Window: .rectangle7") {
-                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), buildRoute: false, style: .single))
+                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), configuration: .init(shouldBuildRoute: false, style: .single)))
 					}
 					NavigationButton(title: "New single Window: Route .rectangle7") {
-                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), buildRoute: true, style: .single))
+                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), configuration: .init(shouldBuildRoute: true, style: .single)))
 					}
 					NavigationButton(title: "New tabs Window: Route .rectangle7") {
-                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), buildRoute: true, style: .tabsAdaptable))
+                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), configuration: .init(shouldBuildRoute: true, style: .tabsAdaptable)))
 					}
 				}
 				
@@ -123,19 +123,14 @@ struct DeeplinkScreen: View {
         .environment(appState)
 }
 
-#Preview("SnapNavigationPreview") {
-    @Previewable let appState = AppState()
-    
-    // TODO: Is this still useful? Sheets work, but pushes do not. Could completely remove it.
-    SnapNavigationPreview(provider: NavigationProvider()) {
-        DeeplinkScreen(destination: .circle)
-    }
-    .environment(appState)
-}
-
 #Preview("SnapNavigationPreview Destination") {
     @Previewable let appState = AppState()
     
-    SnapNavigationPreview(provider: NavigationProvider(), window: .window(id: UUID(), destination: .circle, buildRoute: false, style: .single))
-        .environment(appState)
+    SnapNavigationPreview(
+        provider: NavigationProvider(),
+        destination: AppDestination.circleItem(level: 2),
+        configuration: .init(shouldBuildRoute: true, style: .tabsAdaptable)
+    )
+    .environment(appState)
+
 }

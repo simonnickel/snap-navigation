@@ -43,8 +43,8 @@ extension SnapNavigation {
 				case .settings:
 					self.state = State(selected: provider.initial(for: .settings))
 					
-                case .window(id: _, destination: let destination, buildRoute: let buildRoute, style: _):
-                    if buildRoute {
+                case .window(let destination, let configuration):
+                    if configuration.shouldBuildRoute {
                         let route = provider.route(to: destination)
                         self.state = State(route: route)
                     } else {
@@ -74,7 +74,7 @@ extension SnapNavigation {
             self.openWindow = openWindow
         }
 		
-        internal func window(_ destination: Destination, buildRoute: Bool, style: NavigationStyle) {
+        internal func window(destination: Destination, configuration: WindowConfiguration) {
 			guard ProcessInfo.isPreview == false else {
 				Logger.navigation.warning("Multiple windows are not supported in Previews!")
 				return
@@ -85,7 +85,7 @@ extension SnapNavigation {
 				return
 			}
 			
-            let window = Window.window(id: UUID(), destination: destination, buildRoute: buildRoute, style: style)
+            let window: Window = .window(destination: destination, configuration: configuration)
 			openWindow(value: window)
 		}
 		

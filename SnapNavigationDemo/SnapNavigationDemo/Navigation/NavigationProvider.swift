@@ -19,8 +19,8 @@ struct NavigationProvider: SnapNavigationProvider {
 	func selectableDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination] {
 		switch window {
 			case .main: [.triangle, .rectangle, .circle]
-            case .window(_, _, buildRoute: let buildRoute, let style):
-                if style != .single, buildRoute {
+            case .window(_, let configuration):
+            if configuration.style != .single, configuration.shouldBuildRoute {
 					selectableDestinations(for: .main)
 				} else {
 					[]

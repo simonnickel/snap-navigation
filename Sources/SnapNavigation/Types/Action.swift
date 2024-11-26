@@ -17,8 +17,7 @@ public extension SnapNavigation {
         
         case popCurrentToRoot
         
-        // TODO: buildRoute param?
-        case window(destination: any SnapNavigationDestination, buildRoute: Bool, style: NavigationStyle)
+        case window(destination: any SnapNavigationDestination, configuration: SnapNavigation.WindowConfiguration = .init(shouldBuildRoute: false, style: .single))
         
     }
     
@@ -48,9 +47,9 @@ extension SnapNavigation.Navigator {
             case .popCurrentToRoot:
                 self.dismissCurrentModal()
             
-            case .window(destination: let destination, buildRoute: let buildRoute, style: let style):
+            case .window(let destination, let configuration):
                 if let translated = provider.translate(destination) {
-                    self.window(translated, buildRoute: buildRoute, style: style)
+                    self.window(destination: translated, configuration: configuration)
                 }
             
         }

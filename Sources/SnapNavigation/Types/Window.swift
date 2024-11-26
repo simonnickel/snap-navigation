@@ -6,6 +6,18 @@
 import Foundation
 
 extension SnapNavigation {
+    
+    public struct WindowConfiguration: Codable, Hashable {
+        internal let id: UUID
+        public let shouldBuildRoute: Bool
+        public let style: NavigationStyle
+        
+        public init(id: UUID = UUID(), shouldBuildRoute: Bool, style: SnapNavigation.NavigationStyle) {
+            self.id = id
+            self.shouldBuildRoute = shouldBuildRoute
+            self.style = style
+        }
+    }
 	
 	public indirect enum Window<Destination: SnapNavigationDestination>: Codable, Hashable {
 		
@@ -13,7 +25,7 @@ extension SnapNavigation {
 		case main
 		
 		/// A window.
-        case window(id: UUID, destination: Destination, buildRoute: Bool, style: NavigationStyle)
+        case window(destination: Destination, configuration: WindowConfiguration)
 
 		/// A special case of window.
 		case settings
@@ -21,7 +33,7 @@ extension SnapNavigation {
 		internal var style: NavigationStyle {
 			switch self {
 				case .main, .settings: .fallback
-				case .window(_, _, _, let style): style
+                case .window(_, let configuration): configuration.style
 			}
 		}
 		

@@ -11,37 +11,42 @@ public struct SnapNavigationPreview<NavigationProvider: SnapNavigationProvider, 
     
     @Environment(\.openWindow) private var openWindow
 	
+    internal typealias Destination = NavigationProvider.Destination
     internal typealias WindowManager = SnapNavigation.WindowManager<NavigationProvider>
-	public typealias Window = SnapNavigation.Window<NavigationProvider.Destination>
+    internal typealias Window = SnapNavigation.Window<Destination>
 
+    private let provider: NavigationProvider
     private let manager: WindowManager
-    private let window: Window
+    private let destination: (any SnapNavigationDestination)?
+    private let configuration: SnapNavigation.WindowConfiguration
     
-    public typealias ContentBuilder = () -> Content
-    private let content: ContentBuilder?
-	
-    public init(provider: NavigationProvider, content: @escaping ContentBuilder) {
+    public init(
+        provider: NavigationProvider,
+        destination: (any SnapNavigationDestination)? = nil,
+        configuration: SnapNavigation.WindowConfiguration = .init(shouldBuildRoute: false, style: .single)
+    ) where Content == EmptyView {
+        self.provider = provider
         self.manager = WindowManager(provider: provider)
-        self.window = .main
-        self.content = content
-	}
-    
-    public init(provider: NavigationProvider, window: Window = .main) where Content == EmptyView {
-        self.manager = WindowManager(provider: provider)
-        self.window = window
-        self.content = nil
+        self.destination = destination
+        self.configuration = configuration
     }
 	
 	public var body: some View {
-		
-        if let content {
-            SnapNavigation.ContainerView(navigator: manager.navigator(for: window, supportsMultipleWindows: false, openWindow: openWindow)) { navigator in
-                content()
-            }
-        } else {
+        
+        if let destination = destination, let translated = provider.translate(destination) {
+            
+            let window: Window = .window(destination: translated, configuration: configuration)
+            
             SnapNavigation.WindowView(manager: manager, window: window) { _, content in
                 content
             }
+            
+        } else {
+            
+            SnapNavigation.WindowView(manager: manager, window: .main) { _, content in
+                content
+            }
+            
         }
 		
 	}
