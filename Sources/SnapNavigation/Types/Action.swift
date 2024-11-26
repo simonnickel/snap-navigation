@@ -45,7 +45,7 @@ extension SnapNavigation.Navigator {
                 self.dismissModals()
             
             case .popCurrentToRoot:
-                self.dismissCurrentModal()
+                self.popCurrentToRoot()
             
             case .window(let destination, let configuration):
                 if let translated = provider.translate(destination) {
