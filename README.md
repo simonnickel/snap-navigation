@@ -114,6 +114,9 @@ Happening since macOS 15.1 [FB15680632](https://github.com/simonnickel/FB1568063
 ### macOS: TabView with .sidebarAdaptable does not maintain state of Tab / Sidebar Item.
 Decision: Did not find a way to maintain the navigation state, not worth it at the moment. Reconsider in the future.
 
+### AppDestinations + Navigator: Navigator Actions via Environment do not support a generic constraint to a Destination Type.
+Decision: Implementation is possible, but causes a lot of boilerplate and redundancy. Left it out for now to encourage using different Destination enums for Features.
+
 
 // TODO: Define FullScreenCover as additional PresentationStyle, which can only be present once as last item with a path to show, no modals. (Or even with its own complete SnapNavigationView and State).
 
