@@ -5,8 +5,6 @@
 
 import SnapNavigation
 
-typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
-
 struct NavigationProvider: SnapNavigationProvider {
 	
 	typealias Destination = AppDestination
@@ -21,8 +19,8 @@ struct NavigationProvider: SnapNavigationProvider {
 	func selectableDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination] {
 		switch window {
 			case .main: [.triangle, .rectangle, .circle]
-			case .window(_, let style, let content):
-				if style != .single, case .route(to: _) = content {
+            case .window(_, _, buildRoute: let buildRoute, let style):
+                if style != .single, buildRoute {
 					selectableDestinations(for: .main)
 				} else {
 					[]

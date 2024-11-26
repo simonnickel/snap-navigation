@@ -11,13 +11,13 @@ extension SnapNavigation {
 	
 	@MainActor
 	@Observable // Is Observable to be Bindable and used as EnvironmentObject.
-    final public class Navigator<NavigationProvider: SnapNavigationProvider> {
+    final internal class Navigator<NavigationProvider: SnapNavigationProvider> {
         
-        public typealias Window = SnapNavigation.Window<Destination>
-        public typealias Destination = NavigationProvider.Destination
+        internal typealias Window = SnapNavigation.Window<Destination>
+        internal typealias Destination = NavigationProvider.Destination
         internal typealias Scene = NavigationProvider.Scene
         internal typealias Route = NavigationProvider.Route
-        public typealias Path = [Destination]
+        internal typealias Path = [Destination]
 
 		internal let provider: NavigationProvider
 		internal let window: Window
@@ -28,16 +28,7 @@ extension SnapNavigation {
             }
         }
         
-        public var stateHash: Int = 0 {
-            didSet {
-                translator.stateHash = stateHash
-            }
-        }
-        
-        @ObservationIgnored
-        internal lazy var translator: NavigatorTranslator = {
-            createTranslator()
-        }()
+        internal var stateHash: Int = 0
 		
 		internal init(provider: NavigationProvider, window: Window, supportsMultipleWindows: Bool, openWindow: OpenWindowAction) {
 			self.provider = provider
@@ -52,17 +43,13 @@ extension SnapNavigation {
 				case .settings:
 					self.state = State(selected: provider.initial(for: .settings))
 					
-				case .window(id: _, style: _, initial: let content):
-					switch content {
-							
-						case .destination(let destination):
-							self.state = State(selected: destination)
-							
-						case .route(to: let destination):
-							let route = provider.route(to: destination)
-							self.state = State(route: route)
-							
-					}
+                case .window(id: _, destination: let destination, buildRoute: let buildRoute, style: _):
+                    if buildRoute {
+                        let route = provider.route(to: destination)
+                        self.state = State(route: route)
+                    } else {
+                        self.state = State(selected: destination)
+                    }
 					
 			}
 		}
@@ -70,7 +57,7 @@ extension SnapNavigation {
 		
 		// MARK: - Navigation
 		
-		public func navigate(to destination: Destination) {
+		internal func navigate(to destination: Destination) {
 			let route = provider.route(to: destination)
             state.setup(route.scenes)
             state.selected = route.selection
@@ -79,7 +66,7 @@ extension SnapNavigation {
 		
 		// MARK: Open Window
 		
-		public private(set) var supportsMultipleWindows: Bool
+		internal private(set) var supportsMultipleWindows: Bool
 		private var openWindow: OpenWindowAction
         
         internal func update(supportsMultipleWindows: Bool, openWindow: OpenWindowAction) {
@@ -87,7 +74,7 @@ extension SnapNavigation {
             self.openWindow = openWindow
         }
 		
-		public func window(_ initial: Window.InitialContent, style: NavigationStyle) {
+        internal func window(_ destination: Destination, buildRoute: Bool, style: NavigationStyle) {
 			guard ProcessInfo.isPreview == false else {
 				Logger.navigation.warning("Multiple windows are not supported in Previews!")
 				return
@@ -98,14 +85,14 @@ extension SnapNavigation {
 				return
 			}
 			
-			let window = Window.window(id: UUID(), style: style, initial: initial)
+            let window = Window.window(id: UUID(), destination: destination, buildRoute: buildRoute, style: style)
 			openWindow(value: window)
 		}
 		
 		
 		// MARK: Present
 		
-		public func present(destination: Destination, style styleOverride: PresentationStyle? = nil) {
+		internal func present(destination: Destination, style styleOverride: PresentationStyle? = nil) {
 			let style = styleOverride ?? destination.definition.presentationStyle
 			switch style {
 				case .select:
@@ -124,17 +111,17 @@ extension SnapNavigation {
 		
 		// MARK: Dismiss
 		
-		public func dismissCurrentModal() {
+		internal func dismissCurrentModal() {
 			if state.modalCount > 0 {
                 state.modalDropLast()
 			}
 		}
 		
-		public func dismissModals() {
+        internal func dismissModals() {
             state.dropAllModals()
 		}
 		
-		public func popCurrentToRoot() {
+        internal func popCurrentToRoot() {
             state.clearPath(for: currentSceneContext)
 		}
 		
@@ -233,11 +220,11 @@ extension SnapNavigation.Navigator {
 	
 	// MARK: NavigationProvider
 	
-	public var selectableDestinations: [Destination] {
+    internal var selectableDestinations: [Destination] {
 		provider.selectableDestinations(for: window)
 	}
 	
-	public func parent(for destination: Destination) -> Destination? {
+    internal func parent(for destination: Destination) -> Destination? {
 		provider.parent(of: destination)
 	}
 	

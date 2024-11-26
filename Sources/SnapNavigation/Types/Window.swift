@@ -13,7 +13,7 @@ extension SnapNavigation {
 		case main
 		
 		/// A window.
-		case window(id: UUID, style: NavigationStyle, initial: InitialContent)
+        case window(id: UUID, destination: Destination, buildRoute: Bool, style: NavigationStyle)
 
 		/// A special case of window.
 		case settings
@@ -21,17 +21,8 @@ extension SnapNavigation {
 		internal var style: NavigationStyle {
 			switch self {
 				case .main, .settings: .fallback
-				case .window(_, let style, _): style
+				case .window(_, _, _, let style): style
 			}
-		}
-		
-		
-		// MARK: - Content
-		
-		/// Content types a window can be opened with.
-		public enum InitialContent: Codable, Hashable {
-			case destination(Destination)
-			case route(to: Destination)
 		}
 		
 		

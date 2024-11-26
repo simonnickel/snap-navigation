@@ -8,8 +8,7 @@ import SwiftUI
 
 struct DeeplinkScreen: View {
 	
-	@Environment(Navigator.self) private var navigator
-	@Environment(SnapNavigation.NavigatorTranslator.self) private var navigatorTranslator
+    @Environment(\.navigator) private var navigator
 	@Environment(AppState.self) private var appState
     
     @Environment(\.isPresentingDestination) private var isPresentingDestination
@@ -40,27 +39,26 @@ struct DeeplinkScreen: View {
 					PresentButton(title: "Rectangle", destination: .rectangle)
 					PresentButton(title: "Circle", destination: .circle)
 					NavigationButton(title: "New single Window: .rectangle7") {
-						navigator.window(.destination(.rectangleItem(level: 7)), style: .single)
+                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), buildRoute: false, style: .single))
 					}
 					NavigationButton(title: "New single Window: Route .rectangle7") {
-						navigator.window(.route(to: .rectangleItem(level: 7)), style: .single)
+                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), buildRoute: true, style: .single))
 					}
 					NavigationButton(title: "New tabs Window: Route .rectangle7") {
-						navigator.window(.route(to: .rectangleItem(level: 7)), style: .tabsAdaptable)
+                        navigator(.window(destination: AppDestination.rectangleItem(level: 7), buildRoute: true, style: .tabsAdaptable))
 					}
 				}
 				
 				VStack(alignment: .leading, spacing: 4) {
 					Text("Push").font(.headline)
 					NavigationButton(title: "Infinity") {
-						navigator.present(destination: .infinity, style: .push)
+                        navigator(.present(destination: AppDestination.infinity, style: .push))
 					}
 					NavigationButton(title: "Any Feature Pentagon") {
-						navigatorTranslator.present(destination: FeatureDestination.pentagon)
-//						navigator.present(destination: .feature(.pentagon), style: .push)
+						navigator(.present(destination: FeatureDestination.pentagon))
 					}
 					NavigationButton(title: "Feature Hexagon") {
-						navigator.present(destination: .feature(.hexagon), style: .push)
+						navigator(.present(destination: AppDestination.feature(.hexagon), style: .push))
 					}
 					
 					NavigationLink(value: AppDestination.infinity) {
@@ -71,13 +69,13 @@ struct DeeplinkScreen: View {
 				VStack(alignment: .leading, spacing: 4) {
 					Text("Dismiss").font(.headline)
 					NavigationButton(title: "Pop to Root") {
-						navigator.popCurrentToRoot()
+                        navigator(.popCurrentToRoot)
 					}
 					NavigationButton(title: "Dismiss Current Modal") {
-						navigator.dismissCurrentModal()
+						navigator(.dismissCurrentModal)
 					}
 					NavigationButton(title: "Dismiss Modals") {
-						navigator.dismissModals()
+						navigator(.dismissModals)
 					}
 					
 					NavigationLink(value: AppDestination.infinity) {
@@ -118,18 +116,26 @@ struct DeeplinkScreen: View {
 	
 }
 
-#Preview("Preview Content") {
+#Preview("Preview") {
     @Previewable let appState = AppState()
     
+    DeeplinkScreen(destination: .circle)
+        .environment(appState)
+}
+
+#Preview("SnapNavigationPreview") {
+    @Previewable let appState = AppState()
+    
+    // TODO: Is this still useful? Sheets work, but pushes do not. Could completely remove it.
     SnapNavigationPreview(provider: NavigationProvider()) {
         DeeplinkScreen(destination: .circle)
     }
     .environment(appState)
 }
 
-#Preview("Preview Destination") {
+#Preview("SnapNavigationPreview Destination") {
     @Previewable let appState = AppState()
     
-    SnapNavigationPreview(provider: NavigationProvider(), window: .window(id: UUID(), style: .single, initial: .destination(.circle)))
+    SnapNavigationPreview(provider: NavigationProvider(), window: .window(id: UUID(), destination: .circle, buildRoute: false, style: .single))
         .environment(appState)
 }

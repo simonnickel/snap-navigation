@@ -8,28 +8,28 @@ import SwiftUI
 
 struct DeeplinkButton: View {
 	
-	@Environment(Navigator.self) private var navigator
+    @Environment(\.navigator) private var navigator
 
 	let title: String
 	let destination: AppDestination
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigator.navigate(to: destination)
+            navigator(.navigate(to: destination))
 		}
 	}
 }
 
 struct PresentButton: View {
 	
-	@Environment(Navigator.self) private var navigator
+    @Environment(\.navigator) private var navigator
 
 	let title: String
 	let destination: AppDestination
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigator.present(destination: destination, style: .modal)
+			navigator(.present(destination: destination, style: .modal))
 		}
 	}
 }
