@@ -92,6 +92,14 @@ struct SnapNavigationDemoApp: App {
 	
 }```
 
+Use `\.navigator` to navigate in your App:
+```
+    @Environment(\.navigator) private var navigator
+    
+    navigator(.present(Destination.infinity))
+
+```
+
 
 ## Considerations
 

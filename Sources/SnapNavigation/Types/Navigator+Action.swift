@@ -23,7 +23,7 @@ extension SnapNavigation {
         
         case navigate(to: any SnapNavigationDestination)
         
-        case present(destination: any SnapNavigationDestination, style: PresentationStyle? = nil)
+        case present(_ destination: any SnapNavigationDestination, style: PresentationStyle? = nil)
         
         case dismissCurrentModal
         

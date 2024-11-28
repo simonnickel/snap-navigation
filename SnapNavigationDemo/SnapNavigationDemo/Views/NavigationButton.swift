@@ -29,7 +29,7 @@ struct PresentButton: View {
 
 	var body: some View {
 		NavigationButton(title: title) {
-			navigator(.present(destination: destination, style: .modal))
+			navigator(.present(destination, style: .modal))
 		}
 	}
 }

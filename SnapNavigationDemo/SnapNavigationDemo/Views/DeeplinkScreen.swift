@@ -52,13 +52,13 @@ struct DeeplinkScreen: View {
 				VStack(alignment: .leading, spacing: 4) {
 					Text("Push").font(.headline)
 					NavigationButton(title: "Infinity") {
-                        navigator(.present(destination: AppDestination.infinity, style: .push))
+                        navigator(.present(AppDestination.infinity))
 					}
 					NavigationButton(title: "Any Feature Pentagon") {
-						navigator(.present(destination: FeatureDestination.pentagon))
+						navigator(.present(FeatureDestination.pentagon))
 					}
 					NavigationButton(title: "Feature Hexagon") {
-						navigator(.present(destination: AppDestination.feature(.hexagon), style: .push))
+						navigator(.present(AppDestination.feature(.hexagon), style: .push))
 					}
 					
 					NavigationLink(value: AppDestination.infinity) {
