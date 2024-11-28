@@ -13,7 +13,7 @@ extension SnapNavigation {
 		
 		internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 		internal typealias Destination = NavigationProvider.Destination
-		internal typealias Window = SnapNavigation.Window<NavigationProvider.Destination>
+		internal typealias Window = SnapNavigation.Window<Destination>
 
 		internal let navigationProvider: NavigationProvider
 		

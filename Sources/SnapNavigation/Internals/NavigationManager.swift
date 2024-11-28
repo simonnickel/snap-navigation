@@ -13,8 +13,8 @@ extension SnapNavigation {
 	@Observable // Is Observable to be Bindable and used as EnvironmentObject.
     final internal class NavigationManager<NavigationProvider: SnapNavigationProvider> {
         
-        internal typealias Window = SnapNavigation.Window<Destination>
         internal typealias Destination = NavigationProvider.Destination
+        internal typealias Window = SnapNavigation.Window<Destination>
         internal typealias Scene = NavigationProvider.Scene
         internal typealias Route = NavigationProvider.Route
         internal typealias Path = [Destination]

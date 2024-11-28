@@ -11,8 +11,8 @@ public struct SnapNavigationPreview<NavigationProvider: SnapNavigationProvider, 
     
     @Environment(\.openWindow) private var openWindow
 	
-    internal typealias Destination = NavigationProvider.Destination
     internal typealias WindowManager = SnapNavigation.WindowManager<NavigationProvider>
+    internal typealias Destination = NavigationProvider.Destination
     internal typealias Window = SnapNavigation.Window<Destination>
 
     private let provider: NavigationProvider
