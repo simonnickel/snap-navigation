@@ -15,10 +15,20 @@ public struct SnapNavigationApp<NavigationProvider: SnapNavigationProvider, Wind
 	
 	private let setupWindow: WindowSetupHandler?
 	
-	public init(provider: NavigationProvider, setupWindow: WindowSetupHandler? = nil) {
+    public init(
+        provider: NavigationProvider,
+        setupWindow: @escaping WindowSetupHandler
+    ) {
 		self.windowManager = WindowManager(provider: provider)
 		self.setupWindow = setupWindow
 	}
+    
+    public init(
+        provider: NavigationProvider
+    ) where WindowContent == AnyView {
+        self.windowManager = WindowManager(provider: provider)
+        self.setupWindow = nil
+    }
 
 	public var body: some Scene {
 		WindowGroup {
