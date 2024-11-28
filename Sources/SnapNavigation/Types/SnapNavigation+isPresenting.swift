@@ -5,15 +5,15 @@
 
 import SwiftUI
 
-public extension SnapNavigation {
+extension SnapNavigation {
     
-    typealias IsPresenting = (any SnapNavigationDestination) -> Bool
+    public typealias IsPresenting = (any SnapNavigationDestination) -> Bool
     
 }
 
-public extension EnvironmentValues {
+extension EnvironmentValues {
     
-    @Entry var isPresentingDestination: SnapNavigation.IsPresenting = { _ in false }
+    @Entry public var isPresentingDestination: SnapNavigation.IsPresenting = { _ in false }
     
 }
 

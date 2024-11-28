@@ -20,16 +20,16 @@ extension SnapNavigation {
 
 // MARK: - Environment
 
-internal extension EnvironmentValues {
-	@Entry var navigationStyle: SnapNavigation.NavigationStyle? = nil
+extension EnvironmentValues {
+	@Entry internal var navigationStyle: SnapNavigation.NavigationStyle? = nil
 }
 
 
 // MARK: - ViewModifier
 
-public extension View {
+extension View {
 	
-	func navigationStyle(_ style: SnapNavigation.NavigationStyle?) -> some View {
+    public func navigationStyle(_ style: SnapNavigation.NavigationStyle?) -> some View {
 		modifier(NavigationStyleModifier(style: style))
 	}
 	

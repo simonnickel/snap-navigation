@@ -3,9 +3,9 @@
 //  Created by Simon Nickel
 //
 
-internal extension SnapNavigation {
+extension SnapNavigation {
 	
-	struct Scene<Destination: SnapNavigationDestination>: Equatable, Identifiable, Hashable, Sendable {
+    internal struct Scene<Destination: SnapNavigationDestination>: Equatable, Identifiable, Hashable, Sendable {
 		
 		internal typealias Path = [Destination]
 		

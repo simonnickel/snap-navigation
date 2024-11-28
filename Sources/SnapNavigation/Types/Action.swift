@@ -3,9 +3,9 @@
 //  Created by Simon Nickel
 //
 
-public extension SnapNavigation {
+extension SnapNavigation {
     
-    enum Action {
+    public enum Action {
         
         case navigate(to: any SnapNavigationDestination)
         
@@ -25,7 +25,7 @@ public extension SnapNavigation {
 
 extension SnapNavigation.Navigator {
     
-    func handle(action: SnapNavigation.Action) {
+    internal func handle(action: SnapNavigation.Action) {
         switch action {
             
             case .navigate(to: let destination):
