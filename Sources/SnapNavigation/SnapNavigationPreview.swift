@@ -16,7 +16,7 @@ public struct SnapNavigationPreview<NavigationProvider: SnapNavigationProvider, 
     internal typealias Window = SnapNavigation.Window<Destination>
 
     private let provider: NavigationProvider
-    private let manager: WindowManager
+    private let windowManager: WindowManager
     private let destination: (any SnapNavigationDestination)?
     private let configuration: SnapNavigation.WindowConfiguration
     
@@ -26,7 +26,7 @@ public struct SnapNavigationPreview<NavigationProvider: SnapNavigationProvider, 
         configuration: SnapNavigation.WindowConfiguration = .init(shouldBuildRoute: false, style: .single)
     ) where Content == EmptyView {
         self.provider = provider
-        self.manager = WindowManager(provider: provider)
+        self.windowManager = WindowManager(provider: provider)
         self.destination = destination
         self.configuration = configuration
     }
@@ -37,13 +37,13 @@ public struct SnapNavigationPreview<NavigationProvider: SnapNavigationProvider, 
             
             let window: Window = .window(destination: translated, configuration: configuration)
             
-            SnapNavigation.WindowView(manager: manager, window: window) { _, content in
+            SnapNavigation.WindowView(windowManager: windowManager, window: window) { _, content in
                 content
             }
             
         } else {
             
-            SnapNavigation.WindowView(manager: manager, window: .main) { _, content in
+            SnapNavigation.WindowView(windowManager: windowManager, window: .main) { _, content in
                 content
             }
             

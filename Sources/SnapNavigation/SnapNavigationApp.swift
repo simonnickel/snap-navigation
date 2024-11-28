@@ -11,26 +11,26 @@ public struct SnapNavigationApp<NavigationProvider: SnapNavigationProvider, Wind
 	public typealias Destination = NavigationProvider.Destination
 	public typealias WindowSetupHandler = SnapNavigation.Window<Destination>.WindowSetupHandler<WindowContent>
 
-	private let manager: WindowManager
+	private let windowManager: WindowManager
 	
 	private let setupWindow: WindowSetupHandler?
 	
 	public init(provider: NavigationProvider, setupWindow: WindowSetupHandler? = nil) {
-		self.manager = WindowManager(provider: provider)
+		self.windowManager = WindowManager(provider: provider)
 		self.setupWindow = setupWindow
 	}
 
 	public var body: some Scene {
 		WindowGroup {
-            SnapNavigation.WindowView(manager: manager, window: .main, setup: setupWindow)
+            SnapNavigation.WindowView(windowManager: windowManager, window: .main, setup: setupWindow)
 		}
 		
 		WindowGroup(for: SnapNavigation.Window<Destination>.self) { $window in
 			if let window {
-                SnapNavigation.WindowView(manager: manager, window: window, setup: setupWindow)
+                SnapNavigation.WindowView(windowManager: windowManager, window: window, setup: setupWindow)
 					.onDisappear() {
 						// On Disappear is called when the window is closed.
-						manager.removeNavigator(for: window)
+                        windowManager.removeNavigator(for: window)
 					}
 			} else {
 				EmptyView()
@@ -39,7 +39,7 @@ public struct SnapNavigationApp<NavigationProvider: SnapNavigationProvider, Wind
 		
 #if os(macOS)
 		Settings {
-            SnapNavigation.WindowView(manager: manager, window: .settings, setup: setupWindow)
+            SnapNavigation.WindowView(windowManager: windowManager, window: .settings, setup: setupWindow)
 		}
 #endif
 		

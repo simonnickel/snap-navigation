@@ -23,12 +23,12 @@ extension SnapNavigation {
         internal typealias Window = SnapNavigation.Window<NavigationProvider.Destination>
         internal typealias WindowSetupHandler = Window.WindowSetupHandler<WindowContent>
         
-        private let manager: WindowManager
+        private let windowManager: WindowManager
         private let window: Window
         private let setup: WindowSetupHandler?
         
-        internal init(manager: WindowManager, window: Window, setup: WindowSetupHandler? = nil) {
-            self.manager = manager
+        internal init(windowManager: WindowManager, window: Window, setup: WindowSetupHandler? = nil) {
+            self.windowManager = windowManager
             self.window = window
             self.setup = setup
         }
@@ -45,7 +45,7 @@ extension SnapNavigation {
         
         private var content: some View {
             
-            SnapNavigation.ContainerView(navigator: manager.navigator(for: window, supportsMultipleWindows: supportsMultipleWindows, openWindow: openWindow)) { navigator in
+            SnapNavigation.ContainerView(navigator: windowManager.navigator(for: window, supportsMultipleWindows: supportsMultipleWindows, openWindow: openWindow)) { navigator in
                 return Content(navigator: navigator)
             }
             
