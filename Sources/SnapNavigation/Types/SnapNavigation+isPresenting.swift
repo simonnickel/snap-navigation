@@ -17,7 +17,7 @@ extension EnvironmentValues {
     
 }
 
-extension SnapNavigation.Navigator {
+extension SnapNavigation.NavigationManager {
     
     internal func isPresenting(_ destination: any SnapNavigationDestination, in context: Scene.Context) -> Bool {
         guard let translated = provider.translate(destination) else { return false }
@@ -26,7 +26,7 @@ extension SnapNavigation.Navigator {
     
 }
 
-extension SnapNavigation.Navigator.State {
+extension SnapNavigation.NavigationManager.State {
     
     internal func isPresenting(_ destination: Destination, in context: Scene.Context) -> Bool {
         let path = getPath(for: context)

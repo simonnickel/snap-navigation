@@ -10,16 +10,16 @@ internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider>:
     typealias Destination = NavigationProvider.Destination
     typealias Scene = SnapNavigation.Scene<Destination>
 	
-	typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
-	@Environment(Navigator.self) private var navigator
+	typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
+	@Environment(NavigationManager.self) private var navigationManager
 	
     let context: Scene.Context
 
     var body: some View {
         
-        NavigationStack(path: navigator.pathBinding(for: context)) {
+        NavigationStack(path: navigationManager.pathBinding(for: context)) {
             
-            if let root = navigator.root(for: context) {
+            if let root = navigationManager.root(for: context) {
                 
                 SnapNavigationDestinationScreen(destination: root)
                     .navigationDestination(for: Destination.self) { destination in
@@ -30,7 +30,7 @@ internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider>:
             
         }
         .environment(\.isPresentingDestination, { destination in
-            navigator.isPresenting(destination, in: context)
+            navigationManager.isPresenting(destination, in: context)
         })
         
     }

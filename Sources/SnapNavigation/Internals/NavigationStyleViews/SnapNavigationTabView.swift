@@ -7,18 +7,18 @@ import SwiftUI
 
 internal struct SnapNavigationTabView<NavigationProvider: SnapNavigationProvider>: View {
 
-	typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
+	typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 
-    @Bindable private var navigator: Navigator
+    @Bindable private var navigationManager: NavigationManager
 
-    init(navigator: Navigator) {
-        self.navigator = navigator
+    init(navigationManager: NavigationManager) {
+        self.navigationManager = navigationManager
     }
 
 	var body: some View {
 		
-		TabView(selection: $navigator.selected) {
-			ForEach(navigator.selectableDestinations) { destination in
+		TabView(selection: $navigationManager.selected) {
+			ForEach(navigationManager.selectableDestinations) { destination in
 				
 				tab(for: destination)
 				

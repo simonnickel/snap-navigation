@@ -10,8 +10,8 @@ extension SnapNavigation {
 	/// A modifier to present multiple modals by recursively applying itself for each level of presentation visible.
 	internal struct ModalPresentationModifier<NavigationProvider: SnapNavigationProvider>: ViewModifier {
 		
-		typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
-		@Environment(Navigator.self) private var navigator
+		typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
+		@Environment(NavigationManager.self) private var navigationManager
 		
 		private let levelIteration: Int
 		
@@ -22,14 +22,14 @@ extension SnapNavigation {
 		func body(content: Content) -> some View {
 			// ModalPresentationModifier has to start with highest visible level to recursively present modals.
 			// Therefore it has to invert the level to get the correct bindings.
-			let level = navigator.modalLevelInverted(levelIteration)
+			let level = navigationManager.modalLevelInverted(levelIteration)
 			
 			if level >= SnapNavigation.Constants.modalLevelMin {
 				content
-					.sheet(isPresented: navigator.modalBinding(for: level)) {
+					.sheet(isPresented: navigationManager.modalBinding(for: level)) {
 						SnapNavigationScene<NavigationProvider>(context: .modal(level: level))
 							.modifier(ModalPresentationModifier(level: levelIteration - 1))
-							.environment(navigator)
+							.environment(navigationManager)
 					}
 			} else {
 				content

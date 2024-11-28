@@ -99,7 +99,7 @@ struct DeeplinkScreen: View {
                     Text("Contains .feature(.pentagon): \(isPresentingDestination(FeatureDestination.pentagon))")
                 }
 //                .onChange(of: navigator.stateHash) { oldValue, newValue in
-//                    print("Navigator State hash changed: \(newValue)")
+//                    print("NavigationManager State hash changed: \(newValue)")
 //                }
 //                .onChange(of: navigatorTranslator.stateHash) { oldValue, newValue in
 //                    print("Translator State hash changed: \(newValue)")

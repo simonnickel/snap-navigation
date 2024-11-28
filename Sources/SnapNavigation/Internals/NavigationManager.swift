@@ -11,7 +11,7 @@ extension SnapNavigation {
 	
 	@MainActor
 	@Observable // Is Observable to be Bindable and used as EnvironmentObject.
-    final internal class Navigator<NavigationProvider: SnapNavigationProvider> {
+    final internal class NavigationManager<NavigationProvider: SnapNavigationProvider> {
         
         internal typealias Window = SnapNavigation.Window<Destination>
         internal typealias Destination = NavigationProvider.Destination
@@ -186,7 +186,7 @@ extension SnapNavigation {
 
 // MARK: - Convenience
 
-extension SnapNavigation.Navigator {
+extension SnapNavigation.NavigationManager {
 	
     private var currentSceneContext: Scene.Context {
         if modalLevelCurrent >= 0 {

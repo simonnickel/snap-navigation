@@ -3,9 +3,23 @@
 //  Created by Simon Nickel
 //
 
+import SwiftUI
+
+
+// MARK: - Environment
+
+extension EnvironmentValues {
+    
+    @Entry public var navigator: (SnapNavigation.NavigatorAction) -> Void = { _ in }
+    
+}
+
+
+// MARK: - NavigatorAction
+
 extension SnapNavigation {
     
-    public enum Action {
+    public enum NavigatorAction {
         
         case navigate(to: any SnapNavigationDestination)
         
@@ -23,9 +37,12 @@ extension SnapNavigation {
     
 }
 
-extension SnapNavigation.Navigator {
+
+// MARK: - NavigationManager Handle
+
+extension SnapNavigation.NavigationManager {
     
-    internal func handle(action: SnapNavigation.Action) {
+    internal func handle(action: SnapNavigation.NavigatorAction) {
         switch action {
             
             case .navigate(to: let destination):

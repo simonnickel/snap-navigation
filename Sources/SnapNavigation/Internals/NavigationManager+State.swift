@@ -3,7 +3,7 @@
 //  Created by Simon Nickel
 //
 
-extension SnapNavigation.Navigator {
+extension SnapNavigation.NavigationManager {
 	
 	internal struct State: Hashable, Sendable {
 		

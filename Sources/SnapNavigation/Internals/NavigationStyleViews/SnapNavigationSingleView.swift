@@ -7,17 +7,17 @@ import SwiftUI
 
 internal struct SnapNavigationSingleView<NavigationProvider: SnapNavigationProvider>: View {
 
-	typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
+	typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 
-	private var navigator: Navigator
+	private var navigationManager: NavigationManager
 
-	init(navigator: Navigator) {
-		self.navigator = navigator
+	init(navigationManager: NavigationManager) {
+		self.navigationManager = navigationManager
 	}
 
 	var body: some View {
 		
-		let selection = navigator.selected
+		let selection = navigationManager.selected
 		SnapNavigationScene<NavigationProvider>(context: .selection(destination: selection))
 		
 	}

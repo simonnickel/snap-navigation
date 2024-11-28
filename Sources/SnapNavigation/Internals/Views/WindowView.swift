@@ -19,7 +19,7 @@ extension SnapNavigation {
         @Environment(\.openWindow) private var openWindow
         
         internal typealias WindowManager = SnapNavigation.WindowManager<NavigationProvider>
-        internal typealias Navigator = SnapNavigation.Navigator<NavigationProvider>
+        internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
         internal typealias Window = SnapNavigation.Window<NavigationProvider.Destination>
         internal typealias WindowSetupHandler = Window.WindowSetupHandler<WindowContent>
         
@@ -45,8 +45,8 @@ extension SnapNavigation {
         
         private var content: some View {
             
-            SnapNavigation.ContainerView(navigator: windowManager.navigator(for: window, supportsMultipleWindows: supportsMultipleWindows, openWindow: openWindow)) { navigator in
-                return Content(navigator: navigator)
+            SnapNavigation.ContainerView(navigationManager: windowManager.navigationManager(for: window, supportsMultipleWindows: supportsMultipleWindows, openWindow: openWindow)) { navigationManager in
+                return Content(navigationManager: navigationManager)
             }
             
         }
@@ -55,16 +55,16 @@ extension SnapNavigation {
             
             @Environment(\.navigationStyle) private var navigationStyle
             
-            internal let navigator: Navigator
+            internal let navigationManager: NavigationManager
             
             var body: some View {
-                switch navigationStyle ?? navigator.window.style {
+                switch navigationStyle ?? navigationManager.window.style {
                     
                 case .single:
-                    SnapNavigationSingleView(navigator: navigator)
+                    SnapNavigationSingleView(navigationManager: navigationManager)
                     
                 case .tabsAdaptable:
-                    SnapNavigationTabView(navigator: navigator)
+                    SnapNavigationTabView(navigationManager: navigationManager)
                     
                 }
             }

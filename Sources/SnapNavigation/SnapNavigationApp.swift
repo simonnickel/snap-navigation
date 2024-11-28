@@ -30,7 +30,7 @@ public struct SnapNavigationApp<NavigationProvider: SnapNavigationProvider, Wind
                 SnapNavigation.WindowView(windowManager: windowManager, window: window, setup: setupWindow)
 					.onDisappear() {
 						// On Disappear is called when the window is closed.
-                        windowManager.removeNavigator(for: window)
+                        windowManager.removeNavigationManager(for: window)
 					}
 			} else {
 				EmptyView()
