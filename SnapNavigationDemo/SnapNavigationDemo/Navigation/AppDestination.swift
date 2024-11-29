@@ -49,7 +49,7 @@ enum AppDestination: SnapNavigationDestination {
 
 	@MainActor
 	var label: any View {
-		definition.label
+        Label(definition.title, systemImage: definition.icon as? String ?? "")
 	}
 	
 	@MainActor

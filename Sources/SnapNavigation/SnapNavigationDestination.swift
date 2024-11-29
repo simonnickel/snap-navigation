@@ -54,17 +54,6 @@ extension SnapNavigation {
 			self.destination = factory
 		}
 		
-		@MainActor
-		public var label: any View {
-			Label {
-				Text(title)
-			} icon: {
-				if let icon = icon as? String {
-					Image(systemName: icon)
-				}
-			}
-		}
-		
 	}
 	
 }
