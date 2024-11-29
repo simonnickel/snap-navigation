@@ -30,6 +30,7 @@ extension SnapNavigation {
                 .environment(\.navigator) { action in
                     navigationManager.handle(action: action)
                 }
+                .environment(\.navigationState, navigationManager.stateHash)
         }
         
     }

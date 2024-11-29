@@ -11,12 +11,6 @@ extension SnapNavigation {
     
 }
 
-extension EnvironmentValues {
-    
-    @Entry public var isPresentingDestination: SnapNavigation.IsPresenting = { _ in false }
-    
-}
-
 extension SnapNavigation.NavigationManager {
     
     internal func isPresenting(_ destination: any SnapNavigationDestination, in context: Scene.Context) -> Bool {

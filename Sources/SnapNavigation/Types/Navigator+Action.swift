@@ -6,15 +6,6 @@
 import SwiftUI
 
 
-// MARK: - Environment
-
-extension EnvironmentValues {
-    
-    @Entry public var navigator: (SnapNavigation.NavigatorAction) -> Void = { _ in }
-    
-}
-
-
 // MARK: - NavigatorAction
 
 extension SnapNavigation {
