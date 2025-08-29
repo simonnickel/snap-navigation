@@ -220,8 +220,8 @@ extension SnapNavigation.NavigationManager {
 	
 	// MARK: NavigationProvider
 	
-    internal var selectableDestinations: [Destination] {
-		provider.selectableDestinations(for: window)
+    internal var rootDestinations: [Destination] {
+		provider.rootDestinations(for: window)
 	}
 	
     internal func parent(for destination: Destination) -> Destination? {

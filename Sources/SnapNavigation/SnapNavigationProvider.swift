@@ -9,8 +9,12 @@ public protocol SnapNavigationProvider {
 	associatedtype Destination: SnapNavigationDestination
 	
 	func initial(for window: SnapNavigation.Window<Destination>.Initializable) -> Destination
+    
+    /// Destinations _available_ for selection as navigation flow root, e.g. as tabs in a tabbed navigation.
+    var rootDestinationOptions: [Destination] { get }
 	
-	func selectableDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination]
+    /// Destinations _enabled_ as navigation flow root for a window (e.g. as tabs in a tabbed navigation).
+	func rootDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination]
 	
 	func parent(of destination: Destination) -> Destination?
 	

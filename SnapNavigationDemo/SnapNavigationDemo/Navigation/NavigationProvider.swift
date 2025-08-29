@@ -15,13 +15,17 @@ struct NavigationProvider: SnapNavigationProvider {
 			case .settings: .settings
 		}
 	}
+    
+    var rootDestinationOptions: [AppDestination] {
+        [.triangle, .rectangle, .circle]
+    }
 	
-	func selectableDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination] {
+	func rootDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination] {
 		switch window {
-			case .main: [.triangle, .rectangle, .circle]
+			case .main: rootDestinationOptions // Can be replaced by a subset, selected via configuration.
             case .window(_, let configuration):
             if configuration.style != .single, configuration.shouldBuildRoute {
-					selectableDestinations(for: .main)
+					rootDestinations(for: .main)
 				} else {
 					[]
 				}
