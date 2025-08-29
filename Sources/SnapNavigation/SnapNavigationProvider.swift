@@ -11,7 +11,7 @@ public protocol SnapNavigationProvider {
 	func initial(for window: SnapNavigation.Window<Destination>.Initializable) -> Destination
     
     /// Destinations _available_ for selection as navigation flow root, e.g. as tabs in a tabbed navigation.
-    var rootDestinationOptions: [Destination] { get }
+    static var rootDestinationOptions: [Destination] { get }
 	
     /// Destinations _enabled_ as navigation flow root for a window (e.g. as tabs in a tabbed navigation).
 	func rootDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination]
