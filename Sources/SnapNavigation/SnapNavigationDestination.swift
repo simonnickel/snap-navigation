@@ -23,12 +23,8 @@ public protocol SnapNavigationDestination: Codable, Identifiable, Hashable, Equa
 
 // MARK: - Extensions
 
-extension SnapNavigationDestination {
-	public var id: Int { self.hashValue }
-}
-
 extension Array: @retroactive Identifiable where Element: SnapNavigationDestination {
-	public var id: Int { hashValue }
+    public var id: [Element.ID] { self.map(\.id) }
 }
 
 
