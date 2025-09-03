@@ -129,3 +129,5 @@ Decision: Implementation is possible, but causes a lot of boilerplate and redund
 // TODO: Define FullScreenCover as additional PresentationStyle, which can only be present once as last item with a path to show, no modals. (Or even with its own complete SnapNavigationView and State).
 
 // TODO: Fix tapping in background when 2 modals are open closes all modals. (on iPad)
+
+// TODO: 26 style tab navigation comes with sidebar. Is there still a need for .tabbar and .sidebar?
