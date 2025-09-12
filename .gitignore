@@ -13,3 +13,6 @@ DerivedData/
 .swiftpm/configuration/registries.json
 .swiftpm/config/registries.json
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+
+# Project
+config-private.xcconfig
