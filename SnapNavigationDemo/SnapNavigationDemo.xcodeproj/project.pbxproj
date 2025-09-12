@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A45FEC52E7434590054D1E4 /* SnapNavigationDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A45FEBE2E7434590054D1E4 /* SnapNavigationDemoApp.swift */; };
 		5A91E4DC2C6F64CA005B0688 /* SnapNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 5A91E4DB2C6F64CA005B0688 /* SnapNavigation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A45FEBE2E7434590054D1E4 /* SnapNavigationDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapNavigationDemoApp.swift; sourceTree = "<group>"; };
 		5A5D52E32C6F63B400F14BEA /* SnapNavigationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapNavigationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		5A5D52E52C6F63B400F14BEA /* SnapNavigationDemo */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SnapNavigationDemo; sourceTree = "<group>"; };
+		5A45FEC82E7434680054D1E4 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
+		5A45FECE2E7434680054D1E4 /* Navigation */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Navigation; sourceTree = "<group>"; };
+		5A45FED22E7434680054D1E4 /* Project */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Project; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,10 +34,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A45FEBF2E7434590054D1E4 /* SnapNavigationDemo */ = {
+			isa = PBXGroup;
+			children = (
+				5A45FEBE2E7434590054D1E4 /* SnapNavigationDemoApp.swift */,
+				5A45FECE2E7434680054D1E4 /* Navigation */,
+				5A45FEC82E7434680054D1E4 /* Views */,
+				5A45FED22E7434680054D1E4 /* Project */,
+			);
+			path = SnapNavigationDemo;
+			sourceTree = "<group>";
+		};
 		5A5D52DA2C6F63B400F14BEA = {
 			isa = PBXGroup;
 			children = (
-				5A5D52E52C6F63B400F14BEA /* SnapNavigationDemo */,
+				5A45FEBF2E7434590054D1E4 /* SnapNavigationDemo */,
 				5A5D52E42C6F63B400F14BEA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,7 +77,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				5A5D52E52C6F63B400F14BEA /* SnapNavigationDemo */,
+				5A45FEC82E7434680054D1E4 /* Views */,
+				5A45FECE2E7434680054D1E4 /* Navigation */,
 			);
 			name = SnapNavigationDemo;
 			packageProductDependencies = (
@@ -123,6 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A45FEC52E7434590054D1E4 /* SnapNavigationDemoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,7 +267,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SnapNavigationDemo/SnapNavigationDemo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SnapNavigationDemo/Project/SnapNavigationDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -289,7 +306,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SnapNavigationDemo/SnapNavigationDemo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SnapNavigationDemo/Project/SnapNavigationDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
