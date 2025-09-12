@@ -224,6 +224,8 @@
 		};
 		5A5D52F12C6F63BC00F14BEA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5A45FED22E7434680054D1E4 /* Project */;
+			baseConfigurationReferenceRelativePath = "config-private.xcconfig";
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
