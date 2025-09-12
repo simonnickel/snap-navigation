@@ -8,11 +8,10 @@ import SwiftUI
 
 extension SnapNavigation {
 	
-	public enum NavigationStyle: Codable, Sendable {
+	public enum NavigationStyle: Codable, Sendable, CaseIterable {
+        case automatic
 		case single
 		case tabsAdaptable
-		
-		static var fallback: Self { .single }
 	}
 	
 }

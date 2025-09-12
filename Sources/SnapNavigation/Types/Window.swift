@@ -32,7 +32,7 @@ extension SnapNavigation {
 		
 		internal var style: NavigationStyle {
 			switch self {
-				case .main, .settings: .fallback
+				case .main, .settings: .automatic
                 case .window(_, let configuration): configuration.style
 			}
 		}

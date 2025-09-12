@@ -61,11 +61,11 @@ extension SnapNavigation {
             var body: some View {
                 switch navigationStyle ?? navigationManager.window.style {
                     
-                case .single:
-                    SnapNavigationSingleView(navigationManager: navigationManager)
-                    
-                case .tabsAdaptable:
-                    SnapNavigationTabView(navigationManager: navigationManager)
+                    case .automatic, .single:
+                        SnapNavigationSingleView(navigationManager: navigationManager)
+                        
+                    case .tabsAdaptable:
+                        SnapNavigationTabView(navigationManager: navigationManager)
                     
                 }
             }
