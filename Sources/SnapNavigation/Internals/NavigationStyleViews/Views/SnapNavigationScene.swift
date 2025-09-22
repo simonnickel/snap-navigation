@@ -5,6 +5,7 @@
 
 import SwiftUI
 
+// TODO: extension SnapNavigation like in WindowView
 internal struct SnapNavigationScene<NavigationProvider: SnapNavigationProvider>: View {
 
     typealias Destination = NavigationProvider.Destination
