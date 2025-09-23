@@ -13,9 +13,9 @@ extension SnapNavigation {
 		typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 		@Environment(NavigationManager.self) private var navigationManager
 		
-		private let levelIteration: Int
+		private let levelIteration: ModalLevel
 		
-		init(level: Int) {
+		init(level: ModalLevel) {
 			self.levelIteration = level
 		}
 		

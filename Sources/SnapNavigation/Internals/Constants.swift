@@ -7,7 +7,7 @@ import Foundation
 
 extension SnapNavigation {
 	
-	internal typealias ModalLevel = Int
+	public typealias ModalLevel = Int
 	
 	internal enum Constants {
 		static let modalLevelMin: ModalLevel = 0

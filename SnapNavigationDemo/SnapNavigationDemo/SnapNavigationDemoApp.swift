@@ -54,6 +54,9 @@ struct WindowSetupModifier<Destination: SnapNavigationDestination>: ViewModifier
     }
 }
 
+
+// MARK: - Preview
+
 #Preview {
 	@Previewable let appState = AppState()
 	
