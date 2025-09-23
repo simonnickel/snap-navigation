@@ -12,6 +12,8 @@ extension SnapNavigation {
 		
 		typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
 		@Environment(NavigationManager.self) private var navigationManager
+        
+        @Environment(\.navigationElevationKeyPath) private var navigationElevationKeyPath
 		
 		private let levelIteration: ModalLevel
 		
@@ -30,8 +32,10 @@ extension SnapNavigation {
 						SnapNavigationScene<NavigationProvider>(context: .modal(level: level))
 							.modifier(ModalPresentationModifier(level: levelIteration - 1))
 							.environment(navigationManager)
-					}
-			} else {
+                    }
+                    .environment(\.navigationElevation, level)
+                    .environment(navigationElevationKeyPath ?? \.navigationElevation, level)
+            } else {
 				content
 			}
 		}
