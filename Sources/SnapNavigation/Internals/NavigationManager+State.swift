@@ -34,7 +34,7 @@ extension SnapNavigation.NavigationManager {
                     case .selection(destination: let destination):
                         sceneForSelection[destination] = scene
                     
-                    case .modal(level: _):
+                    case .modal:
                         modals.append(scene)
                     
                 }
@@ -49,16 +49,16 @@ extension SnapNavigation.NavigationManager {
                 case .selection(let destination):
                     return destination
                     
-                case .modal(let level):
-                    guard let modal = getModal(at: level) else { return nil }
+                case .modal(let elevation):
+                    guard let modal = getModal(at: elevation) else { return nil }
                     return modal.root
             }
         }
         
-        private func getModal(at level: SnapNavigation.ModalLevel) -> Scene? {
-            guard modalCount > level else { return nil }
+        private func getModal(at elevation: SnapNavigation.Elevation) -> Scene? {
+            guard modalCount > elevation else { return nil }
             
-            return modals[level]
+            return modals[elevation]
         }
         
         
@@ -75,9 +75,9 @@ extension SnapNavigation.NavigationManager {
                 case .selection(let destination):
                     sceneForSelection[destination]?.path = []
                     
-                case .modal(let level):
-                    if modals.count > level {
-                        modals[level].path = []
+                case .modal(let elevation):
+                    if modals.count > elevation {
+                        modals[elevation].path = []
                     }
             }
         }
@@ -90,8 +90,8 @@ extension SnapNavigation.NavigationManager {
                 case .selection(let destination):
                     return sceneForSelection[destination]?.path ?? []
                     
-                case .modal(let level):
-                    guard let modal = getModal(at: level) else { return [] }
+                case .modal(let elevation):
+                    guard let modal = getModal(at: elevation) else { return [] }
                     return modal.path
             }
         }
@@ -106,9 +106,9 @@ extension SnapNavigation.NavigationManager {
                         sceneForSelection[destination] = Scene(context: context, root: destination, path: path)
                     }
                     
-                case .modal(let level):
-                    if modals.count > level {
-                        modals[level].path = path
+                case .modal(let elevation):
+                    if modals.count > elevation {
+                        modals[elevation].path = path
                     }
             }
         }
@@ -119,10 +119,10 @@ extension SnapNavigation.NavigationManager {
         internal var modalCount: Int { modals.count }
         
         mutating internal func modalAdd(with destination: Destination) {
-            modals.append(Scene(context: .modal(level: modalCount), root: destination, path: []))
+            modals.append(Scene(context: .modal(elevation: modalCount), root: destination, path: []))
         }
         
-        mutating internal func modalRemove(at level: SnapNavigation.ModalLevel) { modals.remove(at: level) }
+        mutating internal func modalRemove(at elevation: SnapNavigation.Elevation) { modals.remove(at: elevation) }
         
         mutating internal func modalDropLast() { modals.removeLast() }
         

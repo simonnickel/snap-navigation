@@ -144,11 +144,11 @@ extension SnapNavigation {
                         self?.state.set(path, for: .selection(destination: destination))
 					}
 					
-				case .modal(let level):
+				case .modal(let elevation):
 					binding = Binding<Path> { [weak self] in
-                        self?.state.getPath(for: .modal(level: level)) ?? []
+                        self?.state.getPath(for: .modal(elevation: elevation)) ?? []
 					} set: { [weak self] path in
-                        self?.state.set(path, for: .modal(level: level))
+                        self?.state.set(path, for: .modal(elevation: elevation))
 					}
 			}
 			
@@ -160,22 +160,22 @@ extension SnapNavigation {
 		// MARK: - Modal Bindings
 		
 		@ObservationIgnored
-		private var modalBindingsForLevel: [ModalLevel: Binding<Bool>] = [:]
+		private var modalBindingsForElevation: [Elevation: Binding<Bool>] = [:]
 		
-		internal func modalBinding(for level: ModalLevel) -> Binding<Bool> {
-			if let binding = modalBindingsForLevel[level] {
+		internal func modalBinding(for elevation: Elevation) -> Binding<Bool> {
+			if let binding = modalBindingsForElevation[elevation] {
 				return binding
 			}
 			
 			let binding = Binding(get: { [weak self] in
-				self?.state.modalCount ?? 0 > level
+				self?.state.modalCount ?? 0 > elevation
 			}, set: { [weak self] isPresented in
-				if !isPresented && self?.state.modalCount ?? 0 > level {
-                    self?.state.modalRemove(at: level)
+				if !isPresented && self?.state.modalCount ?? 0 > elevation {
+                    self?.state.modalRemove(at: elevation)
 				}
 			})
 			
-			modalBindingsForLevel[level] = binding
+			modalBindingsForElevation[elevation] = binding
 			return binding
 		}
         
@@ -189,8 +189,8 @@ extension SnapNavigation {
 extension SnapNavigation.NavigationManager {
 	
     private var currentSceneContext: Scene.Context {
-        if modalLevelCurrent >= 0 {
-            return .modal(level: modalLevelCurrent)
+        if elevationCurrent >= 0 {
+            return .modal(elevation: elevationCurrent)
         } else {
             return .selection(destination: state.selected)
         }
@@ -211,10 +211,10 @@ extension SnapNavigation.NavigationManager {
 	
 	// MARK: Modals
 	
-    internal var modalLevelCurrent: SnapNavigation.ModalLevel { state.modalCount - 1 }
+    internal var elevationCurrent: SnapNavigation.Elevation { state.modalCount - 1 }
 	
-	internal func modalLevelInverted(_ level: SnapNavigation.ModalLevel) -> SnapNavigation.ModalLevel {
-		return state.modalCount - 1 - level
+	internal func elevationInverted(_ elevation: SnapNavigation.Elevation) -> SnapNavigation.Elevation {
+		return state.modalCount - 1 - elevation
 	}
 	
 	

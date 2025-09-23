@@ -37,7 +37,7 @@ extension SnapNavigation {
                     
                     case .modal:
                         scenes.append(currentScene)
-                        currentScene = Scene(context: .modal(level: scenes.count - 1), root: entry.destination, path: [])
+                        currentScene = Scene(context: .modal(elevation: scenes.count - 1), root: entry.destination, path: [])
 
                 }
             }

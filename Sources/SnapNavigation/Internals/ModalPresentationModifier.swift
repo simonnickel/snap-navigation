@@ -15,26 +15,26 @@ extension SnapNavigation {
         
         @Environment(\.navigationElevationKeyPath) private var navigationElevationKeyPath
 		
-		private let levelIteration: ModalLevel
+		private let elevationIteration: Elevation
 		
-		init(level: ModalLevel) {
-			self.levelIteration = level
+		init(elevation: Elevation) {
+			self.elevationIteration = elevation
 		}
 		
 		func body(content: Content) -> some View {
-			// ModalPresentationModifier has to start with highest visible level to recursively present modals.
-			// Therefore it has to invert the level to get the correct bindings.
-			let level = navigationManager.modalLevelInverted(levelIteration)
+			// ModalPresentationModifier has to start with highest visible elevation to recursively present modals.
+			// Therefore it has to invert the elevation to get the correct bindings.
+			let elevation = navigationManager.elevationInverted(elevationIteration)
 			
-			if level >= SnapNavigation.Constants.modalLevelMin {
+			if elevation >= SnapNavigation.Constants.elevationMin {
 				content
-					.sheet(isPresented: navigationManager.modalBinding(for: level)) {
-						SnapNavigationScene<NavigationProvider>(context: .modal(level: level))
-							.modifier(ModalPresentationModifier(level: levelIteration - 1))
+					.sheet(isPresented: navigationManager.modalBinding(for: elevation)) {
+						SnapNavigationScene<NavigationProvider>(context: .modal(elevation: elevation))
+							.modifier(ModalPresentationModifier(elevation: elevationIteration - 1))
 							.environment(navigationManager)
                     }
-                    .environment(\.navigationElevation, level)
-                    .environment(navigationElevationKeyPath ?? \.navigationElevation, level)
+                    .environment(\.navigationElevation, elevation)
+                    .environment(navigationElevationKeyPath ?? \.navigationElevation, elevation)
             } else {
 				content
 			}

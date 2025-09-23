@@ -16,12 +16,12 @@ extension SnapNavigation {
         
         internal enum Context: Hashable, Identifiable {
             case selection(destination: Destination)
-            case modal(level: SnapNavigation.ModalLevel)
+            case modal(elevation: SnapNavigation.Elevation)
             
             var id: String {
                 switch self {
                 case .selection(let destination): "selection-\(destination.id)"
-                case .modal(let level): "modal-\(level)"
+                case .modal(let elevation): "modal-\(elevation)"
                 }
             }
         }
