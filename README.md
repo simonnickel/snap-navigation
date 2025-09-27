@@ -115,10 +115,6 @@ Supporting a mix of .sheet() and .fullScreenCover() causes some animation issues
 
 Decision: Not supporting .fullScreenCover() for now. Modal presentation uses .sheet().
 
-### macOS: TabView sidebarAdaptable clicking label does not select
-Happening since macOS 15.1 [FB15680632](https://github.com/simonnickel/FB15680632-SwiftUImacOS-TabView-sidebarAdaptable-labelNotSelectable)
-// TODO FB15680632: Check if issue is solved
-
 ### macOS: TabView with .sidebarAdaptable does not maintain state of Tab / Sidebar Item.
 Decision: Did not find a way to maintain the navigation state, not worth it at the moment. Reconsider in the future.
 
