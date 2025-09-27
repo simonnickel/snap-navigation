@@ -109,8 +109,6 @@ struct DeeplinkScreen: View {
 			.frame(maxWidth: .infinity, alignment: .leading)
 			.scenePadding()
 		}
-		// TODO FB15147353: TabView content behind toolbar. Adding `.offset(1)` or `.padding(1)` fixes it.
-		.offset(y: 1)
 		
 	}
 	
