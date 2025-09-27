@@ -29,7 +29,7 @@ extension SnapNavigation {
 			if elevation >= SnapNavigation.Constants.elevationMin {
 				content
 					.sheet(isPresented: navigationManager.modalBinding(for: elevation)) {
-						SnapNavigationScene<NavigationProvider>(context: .modal(elevation: elevation))
+                        SnapNavigation.SceneView<NavigationProvider>(context: .modal(elevation: elevation))
 							.modifier(ModalPresentationModifier(elevation: elevationIteration - 1))
 							.environment(navigationManager)
                     }
