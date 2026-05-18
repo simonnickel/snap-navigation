@@ -15,7 +15,7 @@ extension EnvironmentValues {
     
     @Entry public var navigationElevation: SnapNavigation.Elevation = 0
     
-    /// Set a `KeyPath` that points to a different `EnvironmentValue` SnapNavigation is supposed to set the Elevation to. Necessary to provide the elevation to a different package that should not now about SnapNavigation.
+    /// Set a `KeyPath` that points to a different `EnvironmentValue` SnapNavigation is supposed to set the Elevation to. Necessary to provide the elevation to a different package that should not know about SnapNavigation.
     @Entry public var navigationElevationKeyPath: WritableKeyPath<EnvironmentValues, SnapNavigation.Elevation>? = nil
     
 }
