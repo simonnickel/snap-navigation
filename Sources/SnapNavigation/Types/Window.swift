@@ -24,10 +24,10 @@ extension SnapNavigation {
 		/// The main app window.
 		case main
 		
-		/// A window.
+		/// A window opened programmatically for a specific destination.
         case window(destination: Destination, configuration: WindowConfiguration)
 
-		/// A special case of window.
+		/// The macOS Settings window, managed by the system as a dedicated scene.
 		case settings
 		
 		internal var style: NavigationStyle {
@@ -40,7 +40,7 @@ extension SnapNavigation {
 		
 		// MARK: - Initializable
 		
-		/// A subset of `NavigationWindow` with cases that need an initial Destination.
+		/// A subset of `Window` with cases that require an initial `Destination`.
 		public enum Initializable {
 			case main, settings
 			

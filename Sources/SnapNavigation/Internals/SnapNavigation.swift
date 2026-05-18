@@ -5,5 +5,5 @@
 
 import SwiftUI
 
-/// Just a wrapper to create a Namespace for `SnapNavigation` related types.
+/// Namespace for SnapNavigation types.
 public enum SnapNavigation { }

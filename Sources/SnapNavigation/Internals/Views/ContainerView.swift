@@ -24,9 +24,7 @@ extension SnapNavigation {
         internal var body: some View {
             content(navigationManager)
                 .modifier(SnapNavigation.ModalPresentationModifier<NavigationProvider>(elevation: navigationManager.elevationCurrent))
-                /// For internal use only.
                 .environment(navigationManager)
-                /// For handling navigation.
                 .environment(\.navigator) { action in
                     navigationManager.handle(action: action)
                 }

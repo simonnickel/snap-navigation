@@ -39,7 +39,7 @@ public struct SnapNavigationApp<NavigationProvider: SnapNavigationProvider, Wind
 			if let window {
                 SnapNavigation.WindowView(windowManager: windowManager, window: window, setup: setupWindow)
 					.onDisappear() {
-						// On Disappear is called when the window is closed.
+						// onDisappear only fires when the window is closed, not from regular view transitions.
                         windowManager.removeNavigationManager(for: window)
 					}
 			} else {

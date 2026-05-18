@@ -3,7 +3,7 @@
 //  Created by Simon Nickel
 //
 
-/// Implement a `SnapNavigationProvider` to provide the initial screen and `Destination`s to select. Also provides the navigation hierarchy for a deeplink by linking each destination to a parent.
+/// Implement to provide the initial screen, available `Destination`s, and routing logic. Also provides the navigation hierarchy for deeplinking by linking each destination to a parent.
 public protocol SnapNavigationProvider {
 	
 	associatedtype Destination: SnapNavigationDestination
@@ -18,6 +18,7 @@ public protocol SnapNavigationProvider {
 	
 	func parent(of destination: Destination) -> Destination?
 	
+	/// Casts an untyped destination to this provider's concrete `Destination` type, or returns nil if not recognized.
 	func translate(_ destination: any SnapNavigationDestination) -> Destination?
 	
 }

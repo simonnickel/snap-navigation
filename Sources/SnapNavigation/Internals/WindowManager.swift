@@ -8,7 +8,7 @@ import SwiftUI
 
 extension SnapNavigation {
 	
-    /// Manages multiple `Window`s by providing a `NavigationManager` for them, which windows are open is managed by SwiftUI.
+    /// Provides a `NavigationManager` per `Window`. Which windows are open is managed by SwiftUI.
 	final internal class WindowManager<NavigationProvider: SnapNavigationProvider> {
 		
 		internal typealias NavigationManager = SnapNavigation.NavigationManager<NavigationProvider>
@@ -30,7 +30,7 @@ extension SnapNavigation {
 		@MainActor
 		internal func navigationManager(for window: Window, supportsMultipleWindows: Bool, openWindow: OpenWindowAction) -> NavigationManager {
 			if let navigationManager = navigationManagerForWindow[window] {
-                /// Should usually not really be necessary. But for correctness, stability and future proofing this is called in case anything changed.
+                // Updates in case supportsMultipleWindows or openWindow changed since the manager was created.
                 navigationManager.update(supportsMultipleWindows: supportsMultipleWindows, openWindow: openWindow)
 				return navigationManager
 			} else {

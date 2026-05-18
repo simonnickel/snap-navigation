@@ -10,7 +10,7 @@ import SwiftUI
 extension SnapNavigation {
 	
 	@MainActor
-	@Observable // Is Observable to be Bindable and used as EnvironmentObject.
+	@Observable // Observable to be Bindable and injectable via environment.
     final internal class NavigationManager<NavigationProvider: SnapNavigationProvider> {
         
         internal typealias Destination = NavigationProvider.Destination
