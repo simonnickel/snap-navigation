@@ -7,7 +7,7 @@
 
 # SnapNavigation
 
-Define the navigation structure of your SwiftUI app decoupled from it's presentation.
+Define the navigation structure of your SwiftUI app decoupled from its presentation.
 
 [![Documentation][documentation badge]][documentation] 
 
@@ -26,8 +26,8 @@ Destination = Screen
 
 
 Supports:
- - iOS, iPadOS, macOS
- - iPadOS SplitView, resizing without loosing state
+ - iOS 18+, iPadOS 18+, macOS 15+
+ - iPadOS SplitView, resizing without losing state
  - multiple windows on macOS and iPadOS
  - Deeplinking to Screens, Modals and Windows 
  - DynamicType
@@ -53,9 +53,9 @@ Define Destinations the App can navigate to:
 enum Destination: SnapNavigationDestination {		
 	case triangle, rectangle, circle
 	
-	var definition: SnapNavigation.ScreenDefinition<Self> {
+	var definition: SnapNavigation.ScreenDefinition {
 		switch self {
-			case .triangle: .init(title: "Triangle", systemIcon: "triangle")
+			case .triangle: .init(title: "Triangle", icon: "triangle")
 			...
 		}
 	}
@@ -66,14 +66,22 @@ Implement a `SnapNavigationProvider` to define the structure of reachable destin
 
 ```
 struct NavigationProvider: SnapNavigationProvider {
-	var initialSelection: Destination { .triangle }
-	
-	var selectableDestinations: [Destination] { [.triangle, .rectangle, .circle] }
-	
+	func initial(for window: SnapNavigation.Window<Destination>.Initializable) -> Destination { .triangle }
+
+	static var rootDestinationOptions: [Destination] { [.triangle, .rectangle, .circle] }
+
+	func rootDestinations(for window: SnapNavigation.Window<Destination>) -> [Destination] {
+		Self.rootDestinationOptions
+	}
+
 	func parent(of destination: Destination) -> Destination? {
 		switch destination {
 			case .triangle, .rectangle, .circle: nil
 		}
+	}
+
+	func translate(_ destination: any SnapNavigationDestination) -> Destination? {
+		destination as? Destination
 	}
 }
 ```
@@ -94,6 +102,13 @@ struct SnapNavigationDemoApp: App {
     }
 	
 }```
+
+For Xcode Previews, use `SnapNavigationPreview` instead of `SnapNavigationApp`:
+```swift
+#Preview {
+    SnapNavigationPreview(provider: NavigationProvider(), destination: Destination.triangle)
+}
+```
 
 Use `\.navigator` to navigate in your App:
 ```
