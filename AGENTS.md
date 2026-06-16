@@ -1,4 +1,4 @@
-@../snap/agents/AGENTS.md
+@../snap/agents/AGENTS-shared.md
 
 # SnapNavigation
 
