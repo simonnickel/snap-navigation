@@ -26,7 +26,6 @@ Destination = Screen
 
 
 Supports:
- - iOS 18+, iPadOS 18+, macOS 15+
  - iPadOS SplitView, resizing without losing state
  - multiple windows on macOS and iPadOS
  - Deeplinking to Screens, Modals and Windows 
@@ -38,6 +37,13 @@ Supports:
   - sidebar reordering
 
 
+## Requirements
+
+- iOS 18+, macOS 15+
+- Swift 6.3
+- Dependencies: [snap-foundation](https://github.com/simonnickel/snap-foundation)
+
+
 ## Demo project
 
 The [demo project](/SnapNavigationDemo) shows a navigation hierarchy with 3 top level items to select. It allows infinite items to be pushed or presented as modals and a few deeplinks to navigate to a more complex state.
@@ -45,7 +51,7 @@ The [demo project](/SnapNavigationDemo) shows a navigation hierarchy with 3 top 
 <img src="/screenshot.png" height="400">
 
 
-## How to use
+## Usage
 
 Define Destinations the App can navigate to:
 
