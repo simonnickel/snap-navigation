@@ -30,11 +30,8 @@ Supports:
  - multiple windows on macOS and iPadOS
  - Deeplinking to Screens, Modals and Windows 
  - DynamicType
- 
- // TODO feature: 
-  - keyboard navigation
-  - better accessibility support
-  - sidebar reordering
+
+More is planned, see [TODO-2 to TODO-4](docs/todo/todos.md).
 
 
 ## Requirements
@@ -139,13 +136,10 @@ Supporting a mix of .sheet() and .fullScreenCover() causes some animation issues
 
 Decision: Not supporting .fullScreenCover() for now. Modal presentation uses .sheet().
 
-// TODO feature: Define FullScreenCover as additional PresentationStyle, which can only be present once as last item with a path to show, no modals. (Or even with its own complete SnapNavigationView and State).
+A full screen cover as presentation style is planned, see [TODO-5](docs/todo/todos.md).
 
 ### macOS: TabView with .sidebarAdaptable does not maintain state of Tab / Sidebar Item.
-Decision: Did not find a way to maintain the navigation state, not worth it at the moment. Reconsider in the future.
+Decision: Did not find a way to maintain the navigation state, not worth it at the moment. Reconsider in [TODO-6](docs/todo/todos.md).
 
 ### AppDestinations + Navigator: Navigator Actions via Environment do not support a generic constraint to a Destination Type.
 Decision: Implementation is possible, but causes a lot of boilerplate and redundancy. Left it out for now to encourage using different Destination enums for Features.
-
-
-// TODO: Fix tapping in background when 2 modals are open closes all modals. (on iPad)
