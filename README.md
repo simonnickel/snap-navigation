@@ -138,8 +138,8 @@ Decision: Not supporting .fullScreenCover() for now. Modal presentation uses .sh
 
 A full screen cover as presentation style is planned, see [TODO-5](docs/todo/todos.md).
 
-### macOS: TabView with .sidebarAdaptable does not maintain state of Tab / Sidebar Item.
+### macOS: TabView with .sidebarAdaptable does not maintain state of tab / sidebar item.
 Decision: Did not find a way to maintain the navigation state, not worth it at the moment. Reconsider in [TODO-6](docs/todo/todos.md).
 
-### AppDestinations + Navigator: Navigator Actions via Environment do not support a generic constraint to a Destination Type.
+### AppDestinations + Navigator: Navigator actions via Environment do not support a generic constraint to a Destination type.
 Decision: Implementation is possible, but causes a lot of boilerplate and redundancy. Left it out for now to encourage using different Destination enums for Features.
